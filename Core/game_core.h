@@ -1,0 +1,23 @@
+#pragma once
+#include <queue>
+#include <vector>
+namespace GameCore
+{
+	class GameModule
+	{
+	public:
+		GameInfo* info;
+	};
+	struct GameInfo
+	{
+		GameRule* rule;
+		std::queue<TetrisPiece> next_pieces(rule->n_pieces_knowahead);
+		TetrisPiece* current_piece;
+		std::vector<TetrisPiece> built_pieces;
+	};
+	struct GameRule
+	{
+		const int n_pieces_knowahead;
+		const int max_x, max_y;
+	};
+}

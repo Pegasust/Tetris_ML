@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)game_core.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)core_timing.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)core_timing.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameFeatures">
+      <UniqueIdentifier>{be464f7c-8651-4740-ac67-16ee22d14b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{1ebd0690-03f8-4f89-8695-157b189b0ebf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
