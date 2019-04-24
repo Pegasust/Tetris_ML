@@ -13,12 +13,18 @@ Global
 		Core.vcxitems*{c7d5cb17-0c8b-4575-a825-f02cbff79cbb}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DEBUG_TIMEBASED|x64 = DEBUG_TIMEBASED|x64
+		DEBUG_TIMEBASED|x86 = DEBUG_TIMEBASED|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.DEBUG_TIMEBASED|x64.ActiveCfg = DEBUG_TIMEBASED|x64
+		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.DEBUG_TIMEBASED|x64.Build.0 = DEBUG_TIMEBASED|x64
+		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.DEBUG_TIMEBASED|x86.ActiveCfg = DEBUG_TIMEBASED|Win32
+		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.DEBUG_TIMEBASED|x86.Build.0 = DEBUG_TIMEBASED|Win32
 		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.Debug|x64.ActiveCfg = Debug|x64
 		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.Debug|x64.Build.0 = Debug|x64
 		{93A94113-B7BF-4215-88E5-64BF2FEDBA2F}.Debug|x86.ActiveCfg = Debug|Win32
