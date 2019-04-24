@@ -1,9 +1,8 @@
 #include "tetris_piece.h"
 using namespace GameFeatures;
-TetrisPiece::Tetrimino* TetrisPiece::rotate_piece(TetrisPiece::Tetrimino* default_piece, TetrisPiece::Rotation rot)
+TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::Tetrimino* default_piece, TetrisPiece::Rotation rot)
 {
 	TetrisPiece::Tetrimino* new_piece;
-	rot = rot % 4;
 	//Initializing by x, y will not be pausible because new_piece is not initialized.
 	/*for (unsigned char x = 0; x < 4; x++)
 	{
@@ -54,4 +53,32 @@ TetrisPiece::Tetrimino* TetrisPiece::rotate_piece(TetrisPiece::Tetrimino* defaul
 		*new_piece[i] = *default_piece[j];
 	}
 	return new_piece;
+}
+
+TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::PieceType type, TetrisPiece::Rotation rot)
+{
+	return lazy_rotate_piece(TetrisPiece::StaticConstMap::pieces_map[type], rot);
+}
+void GameFeatures::TetrisPiece::rotate(Rotation rot)
+{
+	//prevent negativity on unsigned
+	if (rot == LEFT)
+	{
+		if (current_rot == 0) current_rot = LEFT;
+		else current_rot--;
+	}
+	//prevent further modulo
+	else if (rot == RIGHT)
+	{
+		if (current_rot == 3) current_rot = UP;
+		else current_rot++;
+	}
+	*data = lazy_rotate_piece(type, current_rot);
+}
+
+GameFeatures::TetrisPiece::TetrisPiece(PieceType type)
+{
+	this->type = type;
+	*data = pieces_map[type];
+	current_rot = UP;
 }

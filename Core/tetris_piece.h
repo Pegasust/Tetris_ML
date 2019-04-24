@@ -5,7 +5,7 @@ namespace GameFeatures
 	class TetrisPiece
 	{
 	public:
-		enum class PieceType
+		enum PieceType
 		{
 			I,
 			J,
@@ -108,9 +108,14 @@ namespace GameFeatures
 		};
 		const PieceMap StaticConstMap::pieces_map = StaticConstMap::create();
 		//static const PieceMap pieces_map;
-		Tetrimino* data;
+		PieceType type;
+		Tetrimino data;
 		Rotation current_rot;
-		Tetrimino* rotate_piece(Tetrimino* default_piece, Rotation rot);
+		//default_piece is *data at current_rot = UP
+		static Tetrimino* lazy_rotate_piece(Tetrimino* default_piece, Rotation rot);
+		static Tetrimino* lazy_rotate_piece(PieceType type, Rotation rot);
+		void rotate(Rotation rot);
+		TetrisPiece(PieceType type);
 	private:
 		typedef unsigned char Indexor;
 		//In up rotation only or in default indexing

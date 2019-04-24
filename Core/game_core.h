@@ -13,7 +13,7 @@ namespace GameCore
 	struct GameInfo
 	{
 		GameRule* rule;
-		std::queue<TetrisPiece> next_pieces(rule->n_pieces_knowahead);
+		std::queue<TetrisPiece> next_pieces;
 		TetrisPiece* current_piece;
 		std::vector<TetrisPiece> built_pieces;
 	};
