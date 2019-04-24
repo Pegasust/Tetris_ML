@@ -30,7 +30,7 @@ namespace CoreTiming
 		frame_clock::time_point last_update;
 		TimeModule()
 		{
-			last_update = frame_clock::now();
+			reset_clock();
 		}
 		int get_frames_updates();
 		void reset_clock();
@@ -39,9 +39,9 @@ namespace CoreTiming
 #endif
 
 
-		bool try_update(int nFrames, void(*update_func));
+		bool try_update(int nFrames, void(*update_func)());
 #ifdef TIMEBASED
 
 #endif
-	}
-}
+	};
+};

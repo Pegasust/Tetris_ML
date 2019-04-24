@@ -6,12 +6,18 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_piece.cpp">
+      <Filter>GameFeatures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)core_timing.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_piece.h">
+      <Filter>GameFeatures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

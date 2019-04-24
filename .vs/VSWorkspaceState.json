@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Core",
+    "\\DebugConsole",
     "\\WindowsRenderer"
   ],
-  "SelectedNode": "\\Core\\Core.sln",
+  "SelectedNode": "\\Core\\tetris_piece.h",
   "PreviewInSolutionExplorer": false
 }

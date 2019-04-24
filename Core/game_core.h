@@ -1,6 +1,8 @@
 #pragma once
 #include <queue>
 #include <vector>
+#include "tetris_piece.h"
+using namespace GameFeatures;
 namespace GameCore
 {
 	class GameModule

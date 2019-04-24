@@ -17,10 +17,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)core_timing.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_piece.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)core_timing.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)game_core.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_piece.cpp" />
   </ItemGroup>
 </Project>

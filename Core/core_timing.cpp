@@ -7,15 +7,30 @@ int CoreTiming::TimeModule::get_frames_updates()
 	int value = Rounding::round_nearest((double)span.count() / millis_per_frame);
 	if (value != 0)
 	{
-		last_update = frame_clock::now();
+		//reset timer to correct time
+		last_update = frame_clock::now() + 
+			(span - 
+				//cast from double to millis
+			std::chrono::duration<double, std::chrono::milliseconds>
+				//calculate difference in time
+				(static_cast<double>(value) * millis_per_frame));
 	}
 }
 
 void CoreTiming::TimeModule::reset_clock()
 {
+	last_update = frame_clock::now();
 }
 #endif
-bool CoreTiming::TimeModule::try_update(int nFrames, void(*update_func))
+bool CoreTiming::TimeModule::try_update(int nFrames, void(*update_func) ())
 {
+	if (nFrames > 0)
+	{
+		for (int i = 0; i < nFrames; i++)
+		{
+			(*update_func)();
+		}
+		return true;
+	}
 	return false;
 }
