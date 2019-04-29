@@ -6,6 +6,7 @@ namespace GameFeatures
 	class TetrisPiece
 	{
 	public:
+		typedef unsigned char Indexor;
 		enum PieceType:unsigned char
 		{
 			I,
@@ -16,11 +17,15 @@ namespace GameFeatures
 			Z,
 			T
 		};
-		typedef bool Tetrimino[16];
+		static const Indexor TETRIMINO_WIDTH = 4,
+			TETRIMINO_HEIGHT = 4;
+		static constexpr std::uint8_t TETRIMINO_LENGTH = TETRIMINO_WIDTH * TETRIMINO_HEIGHT;
+		typedef bool Tetrimino[TETRIMINO_HEIGHT*TETRIMINO_WIDTH];
 		typedef unsigned char Rotation;
 		typedef const std::unordered_map<PieceType, Tetrimino> PieceMap;
+		typedef std::uint16_t PositionIndex;
 
-		//0  deg
+		//0 deg
 		static const Rotation UP = 0;
 		//90 deg
 		static const Rotation RIGHT = 1;
@@ -109,26 +114,28 @@ namespace GameFeatures
 		};
 		const PieceMap StaticConstMap::pieces_map = StaticConstMap::create();
 		//static const PieceMap pieces_map;
-		PieceType type;
+		const PieceType type;
 		Tetrimino data;
 		Rotation current_rot;
+		PositionIndex positionId;
 		//default_piece is *data at current_rot = UP
-		static Tetrimino* lazy_rotate_piece(Tetrimino* default_piece, Rotation rot);
+		static Tetrimino* lazy_rotate_piece(const Tetrimino* default_piece, Rotation rot);
 		static Tetrimino* lazy_rotate_piece(PieceType type, Rotation rot);
 		static TetrisPiece* generate_random_piece(GameCore::GameRNG::RNGSeed* seed);
 		void rotate(Rotation rot);
 		TetrisPiece(PieceType type);
-	private:
-		typedef unsigned char Indexor;
+		static void posId2xy(PositionIndex i, int& x, int& y, GameCore::GameRule rule);
+		static void posId2xy(PositionIndex i, unsigned int& x, unsigned int& y, GameCore::GameRule rule);
+	public:
 		//In up rotation only or in default indexing
 		static Indexor xy2i(Indexor x, Indexor y)
 		{
 			return y * WIDTH + x;
 		}
-		static void i2xy(Indexor i, Indexor* x, Indexor* y)
+		static void i2xy(Indexor i, Indexor& x, Indexor& y)
 		{
-			*y = i / WIDTH;
-			*x = i - (WIDTH * (*y));
+			y = (i / WIDTH);
+			x = i - (WIDTH * (y));
 		}
 	};
 }

@@ -9,10 +9,13 @@ namespace GameCore
 {
 	struct GameInfo
 	{
+		typedef unsigned long Level;
+
 		const GameRule* rule;
 		std::queue<TetrisPiece*> next_pieces;
 		TetrisPiece* current_piece;
 		std::vector<TetrisPiece*> built_pieces;
+		Level current_level;
 	};
 	struct GameRule
 	{
@@ -77,7 +80,6 @@ namespace GameCore
 	class GameModule
 	{
 	public:
-		typedef unsigned long Level;
 		GameInfo* info;
 		//Initialize
 		GameModule(char args[]);

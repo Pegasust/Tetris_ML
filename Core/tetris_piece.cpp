@@ -1,6 +1,6 @@
 #include "tetris_piece.h"
 using namespace GameFeatures;
-TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::Tetrimino* default_piece, TetrisPiece::Rotation rot)
+TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(const TetrisPiece::Tetrimino* default_piece, TetrisPiece::Rotation rot)
 {
 	TetrisPiece::Tetrimino* new_piece;
 	//Initializing by x, y will not be pausible because new_piece is not initialized.
@@ -33,7 +33,7 @@ TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::Tetrimino* d
 	for (Indexor i = 0; i < 16; i++)
 	{
 		Indexor x, y;
-		TetrisPiece::i2xy(i, &x, &y); 
+		TetrisPiece::i2xy(i, x, y); 
 		Indexor j;
 		switch (rot)
 		{
@@ -59,6 +59,7 @@ TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::PieceType ty
 {
 	return lazy_rotate_piece(TetrisPiece::StaticConstMap::pieces_map[type], rot);
 }
+//Inputing UP or DOWN will not do anything. Filter before inputting.
 void GameFeatures::TetrisPiece::rotate(Rotation rot)
 {
 	//prevent negativity on unsigned
@@ -85,9 +86,23 @@ TetrisPiece* TetrisPiece::generate_random_piece(GameCore::GameRNG::RNGSeed* seed
 	return &return_piece;
 }
 
-GameFeatures::TetrisPiece::TetrisPiece(PieceType type)
+GameFeatures::TetrisPiece::TetrisPiece(PieceType assigning_type):type(assigning_type)
 {
-	this->type = type;
 	*data = pieces_map[type];
 	current_rot = UP;
 }
+
+void GameFeatures::TetrisPiece::posId2xy(PositionIndex i, int &x, int &y, GameCore::GameRule rule)
+{
+#define CONVERT y = i / rule.max_x; x = i - (rule.max_x) * y;
+	CONVERT
+}
+
+void GameFeatures::TetrisPiece::posId2xy(PositionIndex i, unsigned int& x, unsigned int& y, GameCore::GameRule rule)
+{
+	CONVERT
+}
+#undef CONVERT
+#ifdef CONVERT
+this should not be included alright
+#endif

@@ -15,7 +15,6 @@
 #ifdef TIMEBASED
 #include <chrono>
 #endif
-#include <math.h>
 #include "rounding.h"
 namespace CoreTiming
 {
