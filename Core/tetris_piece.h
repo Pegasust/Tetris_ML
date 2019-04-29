@@ -1,11 +1,12 @@
 #pragma once
 #include <unordered_map>
+#include <game_core.h>
 namespace GameFeatures
 {
 	class TetrisPiece
 	{
 	public:
-		enum PieceType
+		enum PieceType:unsigned char
 		{
 			I,
 			J,
@@ -114,6 +115,7 @@ namespace GameFeatures
 		//default_piece is *data at current_rot = UP
 		static Tetrimino* lazy_rotate_piece(Tetrimino* default_piece, Rotation rot);
 		static Tetrimino* lazy_rotate_piece(PieceType type, Rotation rot);
+		static TetrisPiece* generate_random_piece(GameCore::GameRNG::RNGSeed* seed);
 		void rotate(Rotation rot);
 		TetrisPiece(PieceType type);
 	private:

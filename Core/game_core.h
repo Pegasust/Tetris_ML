@@ -10,9 +10,9 @@ namespace GameCore
 	struct GameInfo
 	{
 		const GameRule* rule;
-		std::queue<TetrisPiece> next_pieces;
+		std::queue<TetrisPiece*> next_pieces;
 		TetrisPiece* current_piece;
-		std::vector<TetrisPiece> built_pieces;
+		std::vector<TetrisPiece*> built_pieces;
 	};
 	struct GameRule
 	{
@@ -28,6 +28,7 @@ namespace GameCore
 	public:
 		//I use 64-bit because its max value (18,446,744,073,709,551,615) is enough randomness
 		typedef uint64_t RNGSeed;
+#define RNGSEED_MAX 0xffffffffUL
 		typedef std::chrono::steady_clock RNGClock;
 		//https://en.wikipedia.org/wiki/Xorshift
 		//One of the fastest non-crypto rng algorithm.
@@ -59,20 +60,36 @@ namespace GameCore
 			//we throw a 0 as the seed.
 			return (x[0] / 2) + (y / 2);
 		}
+		static bool get_bool(RNGSeed state[1], double percentage)
+		{
+			bool val;
+			if (percentage >= 1.0) val = true;
+			else
+			{
+				val = (static_cast<double>(state[0]) / static_cast<double>(RNGSEED_MAX) > percentage);
+			}
+			state[0] = xorshift64(state);
+			return val;
+		}
 	};
 
 	//Game engine
 	class GameModule
 	{
 	public:
+		typedef unsigned long Level;
 		GameInfo* info;
 		//Initialize
 		GameModule(char args[]);
 		//Main loop; return false if there is a certain error
 		bool try_update();
-		//Manipulated rng
-		void start_game(GameRNG::RNGSeed seed);
-		//The real rng
-		GameRNG::RNGSeed start_game();
+		//Start game with a pre-existed seed. Returns false if seed is zero.
+		bool start_game(GameRNG::RNGSeed seed);
+		//Start game with a randomly generated seed.
+		GameRNG::RNGSeed start_game(void *);
+		
+	private:
+		bool first_start{ true };
+		void start_game_no_check(GameRNG::RNGSeed seed);
 	};
 }

@@ -4,7 +4,7 @@ int CoreTiming::TimeModule::get_frames_updates()
 {
 	auto invoke_time = frame_clock::now();
 	std::chrono::milliseconds span = std::chrono::duration_cast<std::chrono::milliseconds>(invoke_time - last_update);
-	int value = Rounding::round_nearest((double)span.count() / millis_per_frame);
+	int value = TMath::round_nearest((double)span.count() / millis_per_frame);
 	if (value != 0)
 	{
 		//reset timer to correct time
