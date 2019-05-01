@@ -2,10 +2,12 @@
 //
 
 #include <iostream>
+#include "renderer.h"
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	GameCore::GameModule tetris('\0');
+	Renderer::draw_to_console(tetris.info);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

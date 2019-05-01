@@ -11,7 +11,7 @@ namespace GameCore
 	{
 		typedef unsigned long Level;
 
-		const GameRule* rule;
+		GameRule* rule;
 		std::queue<TetrisPiece*> next_pieces;
 		TetrisPiece* current_piece;
 		std::vector<TetrisPiece*> built_pieces;
@@ -26,7 +26,7 @@ namespace GameCore
 	};
 	//I am using the xorshift algorithm because it can be manipulated, which might be useful
 	//for machine learnings that want to learn single seed run (back-tracking).
-	static class GameRNG
+	class GameRNG
 	{
 	public:
 		//I use 64-bit because its max value (18,446,744,073,709,551,615) is enough randomness

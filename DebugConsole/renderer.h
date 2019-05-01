@@ -11,8 +11,9 @@ namespace Renderer
 	typedef int R_Int;
 	typedef unsigned int R_Uint;
 
-	const char TETRIMINO_DISPLAY_CHAR[] = "XMNCOZS |";
+	const char TETRIMINO_DISPLAY_CHAR[] = "XMNCOZS #";
 	const GameFeatures::TetrisPiece::PositionIndex WIDTH = 50, HEIGHT = 100;
+	const GameFeatures::TetrisPiece::PositionIndex X_OFFSET = 5, Y_OFFSET = 10;
 	//Windows rendering
 	void draw_to_console(GameCore::GameInfo *info);
 	static R_Uint xy2i(R_Uint x, R_Uint y)

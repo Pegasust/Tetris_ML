@@ -1,6 +1,6 @@
 #include "renderer.h"
 using namespace Renderer;
-void draw_to_console(GameCore::GameInfo* info)
+void Renderer::draw_to_console(GameCore::GameInfo* info)
 {
 	std::unordered_set<GameFeatures::TetrisPiece::Indexor> occupied_indexes;
 	TetrisPiece::PieceType* abstract_screen =
@@ -27,12 +27,37 @@ void draw_to_console(GameCore::GameInfo* info)
 			}
 		}
 	}
-	//TODO: Do something with the uninitialized memory
-#ifdef _WINDOWS_
-	//Do something with the abstract_screen
-	//...
-	//Free abstract_screen mem
-	HANDLE hConsole = CreateConsoleScreenBuffer();
-#endif
+	for (TetrisPiece::Indexor i = 0; i < info->rule->max_x * info->rule->max_y; i++)
+	{
+		if (occupied_indexes.count(i) == 0) //if hashset does not have the value
+		{
+			abstract_screen[i] = TetrisPiece::BLANK;
+		}
+	}
+	wchar_t screen_text[WIDTH*HEIGHT];
+
+	for (R_Uint x = -1; x < WIDTH+1; x++)
+	{
+		for (R_Uint y = 0; y < HEIGHT+1; y++)
+		{
+			R_Uint render_x = x + X_OFFSET;
+			R_Uint render_y = y + Y_OFFSET;
+			if (x == -1 || x == WIDTH + 1 || y == HEIGHT+1) //boundaries
+			{
+				screen_text[xy2i(render_x, render_y)] = TETRIMINO_DISPLAY_CHAR[9];
+			}
+			else
+			{
+				screen_text[xy2i(render_x, render_y)] = TETRIMINO_DISPLAY_CHAR[abstract_screen[xy2i(x, y)]];
+			}
+		}
+	}
 	free(abstract_screen);
+#ifdef _WINDOWS_
+	HANDLE h_console = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleActiveScreenBuffer(h_console);
+	DWORD bytes_written = 0;
+	//Display
+	WriteConsoleOutputCharacter(h_console, screen_text, WIDTH * HEIGHT, { 0,0 }, &bytes_written);
+#endif
 }

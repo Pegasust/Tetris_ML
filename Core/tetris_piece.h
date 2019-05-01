@@ -3,6 +3,7 @@
 #include <game_core.h>
 namespace GameFeatures
 {
+	
 	class TetrisPiece
 	{
 	public:
@@ -15,14 +16,17 @@ namespace GameFeatures
 			O,
 			S,
 			Z,
-			T
+			T,
+			BLANK
 		};
+		static const unsigned char N_PIECE_TYPES = 7;
 		static const Indexor TETRIMINO_WIDTH = 4,
 			TETRIMINO_HEIGHT = 4;
 		static constexpr std::uint8_t TETRIMINO_LENGTH = TETRIMINO_WIDTH * TETRIMINO_HEIGHT;
 		typedef bool Tetrimino[TETRIMINO_HEIGHT*TETRIMINO_WIDTH];
 		typedef unsigned char Rotation;
-		typedef const std::unordered_map<PieceType, Tetrimino> PieceMap;
+		//typedef const std::unordered_map<PieceType, Tetrimino> PieceMap;
+		typedef const Tetrimino PieceMap[N_PIECE_TYPES];
 		typedef std::uint16_t PositionIndex;
 
 		//0 deg
@@ -35,85 +39,138 @@ namespace GameFeatures
 		static const Rotation LEFT = 3;
 		//Max x
 		static const unsigned char WIDTH = 4;
-		struct StaticConstMap
-		{
-			static PieceMap create()
-			{
-				PieceMap m;
+//		struct StaticConstMap
+//		{
+//			static PieceMap create()
+//			{
+//				PieceMap m;
+////				{
+////#define T true
+////#define F false
+////					{
+////						PieceType::I, 
+////						{
+////						F, F, T, F,
+////						F, F, T, F,
+////						F, F, T, F,
+////						F, F, T, F
+////						}
+////					}
+////#undef T
+////#undef F
+////				};
+//#define Y true
+//#define N false
+//				m[PieceType::I] =
 //				{
-//#define T true
-//#define F false
-//					{
-//						PieceType::I, 
-//						{
-//						F, F, T, F,
-//						F, F, T, F,
-//						F, F, T, F,
-//						F, F, T, F
-//						}
-//					}
-//#undef T
-//#undef F
+//					N, N, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N
 //				};
-#define Y true
-#define N false
-				m[PieceType::I] =
-				{
-					N, N, Y, N,
-					N, N, Y, N,
-					N, N, Y, N,
-					N, N, Y, N
-				};
-				m[PieceType::Z] =
-				{
-					N, N, Y, N,
-					N, Y, Y, N,
-					N, Y, N, N,
-					N, N, N, N
-				};
-				m[PieceType::S] =
-				{
-					N, Y, N, N,
-					N, Y, Y, N,
-					N, N, Y, N,
-					N, N, N, N
-				};
-				m[PieceType::O] =
-				{
-					N, N, N, N,
-					N, Y, Y, N,
-					N, Y, Y, N,
-					N, N, N, N
-				};
-				m[PieceType::T] =
-				{
-					N, N, Y, N,
-					N, Y, Y, N,
-					N, N, Y, N,
-					N, N, N, N
-				};
-				m[PieceType::L] =
-				{
-					N, N, N, N,
-					N, Y, Y, N,
-					N, N, Y, N,
-					N, N, Y, N
-				};				
-				m[ PieceType::J ] =
-				{
-					N, N, N, N,
-					N, Y, Y, N,
-					N, Y, N, N,
-					N, Y, N, N
-				};
-#undef T
-#undef F
-				return m;
-			}
-			static const PieceMap pieces_map;
-		};
-		const PieceMap StaticConstMap::pieces_map = StaticConstMap::create();
+//				m[PieceType::Z] =
+//				{
+//					N, N, Y, N,
+//					N, Y, Y, N,
+//					N, Y, N, N,
+//					N, N, N, N
+//				};
+//				m[PieceType::S] =
+//				{
+//					N, Y, N, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, N, N
+//				};
+//				m[PieceType::O] =
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, Y, Y, N,
+//					N, N, N, N
+//				};
+//				m[PieceType::T] =
+//				{
+//					N, N, Y, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, N, N
+//				};
+//				m[PieceType::L] =
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N
+//				};				
+//				m[ PieceType::J ] =
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, Y, N, N,
+//					N, Y, N, N
+//				};
+//#undef Y
+//#undef N
+//				return m;
+//			}
+//			static const PieceMap pieces_map;
+//		};
+//		const PieceMap StaticConstMap::pieces_map = StaticConstMap::create();
 		//static const PieceMap pieces_map;
+//		struct StaticConstMap
+//		{
+//			static const Tetrimino pieces_map[7];
+//		};
+//		const Tetrimino StaticConstMap::pieces_map[7] =
+//{
+//#define Y true
+//#define N false
+//				{
+//					N, N, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N
+//				},
+//				{
+//					N, N, Y, N,
+//					N, Y, Y, N,
+//					N, Y, N, N,
+//					N, N, N, N
+//				},
+//				{
+//					N, Y, N, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, N, N
+//				},
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, Y, Y, N,
+//					N, N, N, N
+//				},
+//				{
+//					N, N, Y, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, N, N
+//				},
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, N, Y, N,
+//					N, N, Y, N
+//				},
+//				{
+//					N, N, N, N,
+//					N, Y, Y, N,
+//					N, Y, N, N,
+//					N, Y, N, N
+//				}
+//#undef Y
+//#undef N
+//};
 		const PieceType type;
 		Tetrimino data;
 		Rotation current_rot;
@@ -137,5 +194,54 @@ namespace GameFeatures
 			y = (i / WIDTH);
 			x = i - (WIDTH * (y));
 		}
+	};
+	const TetrisPiece::Tetrimino pieces_map[] =
+	{
+#define Y true
+#define N false
+				{
+					N, N, Y, N,
+					N, N, Y, N,
+					N, N, Y, N,
+					N, N, Y, N
+				},
+				{
+					N, N, Y, N,
+					N, Y, Y, N,
+					N, Y, N, N,
+					N, N, N, N
+				},
+				{
+					N, Y, N, N,
+					N, Y, Y, N,
+					N, N, Y, N,
+					N, N, N, N
+				},
+				{
+					N, N, N, N,
+					N, Y, Y, N,
+					N, Y, Y, N,
+					N, N, N, N
+				},
+				{
+					N, N, Y, N,
+					N, Y, Y, N,
+					N, N, Y, N,
+					N, N, N, N
+				},
+				{
+					N, N, N, N,
+					N, Y, Y, N,
+					N, N, Y, N,
+					N, N, Y, N
+				},
+				{
+					N, N, N, N,
+					N, Y, Y, N,
+					N, Y, N, N,
+					N, Y, N, N
+				}
+#undef Y
+#undef N
 	};
 }

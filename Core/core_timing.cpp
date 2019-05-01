@@ -8,12 +8,10 @@ int CoreTiming::TimeModule::get_frames_updates()
 	if (value != 0)
 	{
 		//reset timer to correct time
-		last_update = frame_clock::now() + 
+		last_update = (frame_clock::now() + 
 			(span - 
 				//cast from double to millis
-			std::chrono::duration<double, std::chrono::milliseconds>
-				//calculate difference in time
-				(static_cast<double>(value) * millis_per_frame));
+			std::chrono::milliseconds(TMath::round_nearest(static_cast<double>(value) * millis_per_frame))));
 	}
 }
 

@@ -57,7 +57,7 @@ TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(const TetrisPiece::Tetrim
 
 TetrisPiece::Tetrimino* TetrisPiece::lazy_rotate_piece(TetrisPiece::PieceType type, TetrisPiece::Rotation rot)
 {
-	return lazy_rotate_piece(TetrisPiece::StaticConstMap::pieces_map[type], rot);
+	return lazy_rotate_piece(pieces_map[static_cast<unsigned char>(type)], rot);
 }
 //Inputing UP or DOWN will not do anything. Filter before inputting.
 void GameFeatures::TetrisPiece::rotate(Rotation rot)
@@ -79,7 +79,7 @@ void GameFeatures::TetrisPiece::rotate(Rotation rot)
 
 TetrisPiece* TetrisPiece::generate_random_piece(GameCore::GameRNG::RNGSeed* seed)
 {
-	unsigned char piece_id = *seed % StaticConstMap::pieces_map.size();
+	unsigned char piece_id = *seed % N_PIECE_TYPES;
 	PieceType key = static_cast<PieceType>(piece_id);
 	TetrisPiece return_piece = TetrisPiece(key);
 	*seed = GameCore::GameRNG::xorshift64(seed);
