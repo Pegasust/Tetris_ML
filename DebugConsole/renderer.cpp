@@ -11,7 +11,7 @@ void Renderer::draw_to_console(GameCore::GameInfo* info)
 		GameFeatures::TetrisPiece*& checking_piece = info->built_pieces[i];
 		//top left position
 		R_Uint x, y;
-		GameFeatures::TetrisPiece::posId2xy(checking_piece->positionId, x, y, *info->rule);
+		GameFeatures::TetrisPiece::posId2xy(checking_piece->positionId, x, y, info->rule->max_x, info->rule->max_y);
 		//Local loop
 		for (TetrisPiece::Indexor _y = 0; _y < TetrisPiece::TETRIMINO_HEIGHT; _y++)
 		{

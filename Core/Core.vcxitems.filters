@@ -9,6 +9,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)tetris_piece.cpp">
       <Filter>GameFeatures</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)tetris_piece.h">
       <Filter>GameFeatures</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameFeatures">

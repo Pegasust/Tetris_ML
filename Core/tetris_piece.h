@@ -1,6 +1,6 @@
 #pragma once
 #include <unordered_map>
-#include <game_core.h>
+#include "game_rng.h"
 namespace GameFeatures
 {
 	
@@ -181,8 +181,8 @@ namespace GameFeatures
 		static TetrisPiece* generate_random_piece(GameCore::GameRNG::RNGSeed* seed);
 		void rotate(Rotation rot);
 		TetrisPiece(PieceType type);
-		static void posId2xy(PositionIndex i, int& x, int& y, GameCore::GameRule rule);
-		static void posId2xy(PositionIndex i, unsigned int& x, unsigned int& y, GameCore::GameRule rule);
+		static void posId2xy(PositionIndex i, int& x, int& y, int max_x, int max_y);
+		static void posId2xy(PositionIndex i, unsigned int& x, unsigned int& y, int max_x, int max_y);
 	public:
 		//In up rotation only or in default indexing
 		static Indexor xy2i(Indexor x, Indexor y)

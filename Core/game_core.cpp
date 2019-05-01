@@ -3,12 +3,15 @@
 GameCore::GameModule::GameModule(char args[]) : first_start(true)
 {
 	//Normal initialization
-	//Classic tetris
-	GameRule classic_rule;
-	classic_rule.max_x = 10;
-	classic_rule.max_y = 20;
-	classic_rule.n_pieces_knowahead = 1;
-	info->rule = &classic_rule;
+	////Classic tetris
+	//GameRule classic_rule;
+	//classic_rule.max_x = 10;
+	//classic_rule.max_y = 20;
+	//classic_rule.n_pieces_knowahead = 1;
+	//info->rule= &classic_rule;
+	info->rule->max_x = 10;
+	info->rule->max_y = 20;
+	info->rule->n_pieces_knowahead = 1;
 }
 bool GameCore::GameModule::try_update()
 {
