@@ -7,6 +7,10 @@
 using namespace GameFeatures;
 namespace GameCore
 {
+	struct Input
+	{
+		double x, y;
+	};
 	struct GameRule
 	{
 	public:
@@ -14,10 +18,13 @@ namespace GameCore
 		int n_pieces_knowahead;
 		//length or width of the game
 		int max_x, max_y;
+		static const GameRule get_classic_tetris_rule()
+		{
+			return { 1, 10, 20 };
+		}
 	};
 	struct GameInfo
 	{
-	public:
 		typedef unsigned long Level;
 
 		GameRule *rule;
@@ -34,7 +41,7 @@ namespace GameCore
 		//Initialize
 		GameModule(char args[]);
 		//Main loop; return false if there is a certain error
-		bool try_update();
+		bool try_update(Input input);
 		//Start game with a pre-existed seed. Returns false if seed is zero.
 		bool start_game(GameRNG::RNGSeed seed);
 		//Start game with a randomly generated seed.

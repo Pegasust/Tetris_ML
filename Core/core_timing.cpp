@@ -13,6 +13,7 @@ int CoreTiming::TimeModule::get_frames_updates()
 				//cast from double to millis
 			std::chrono::milliseconds(TMath::round_nearest(static_cast<double>(value) * millis_per_frame))));
 	}
+	return value;
 }
 
 void CoreTiming::TimeModule::reset_clock()

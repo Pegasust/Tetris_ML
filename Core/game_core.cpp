@@ -3,19 +3,18 @@
 GameCore::GameModule::GameModule(char args[]) : first_start(true)
 {
 	//Normal initialization
-	////Classic tetris
-	//GameRule classic_rule;
-	//classic_rule.max_x = 10;
-	//classic_rule.max_y = 20;
-	//classic_rule.n_pieces_knowahead = 1;
-	//info->rule= &classic_rule;
-	info->rule->max_x = 10;
-	info->rule->max_y = 20;
-	info->rule->n_pieces_knowahead = 1;
+	//Classic tetris
+	GameRule classic_tetris = GameRule::get_classic_tetris_rule();
+	std::queue<TetrisPiece*> next_pieces;
+	std::vector<TetrisPiece*> built_pieces;
+	GameInfo::Level current_level = 0;
+	GameInfo classic_info = { &classic_tetris, next_pieces, nullptr, built_pieces, current_level };
+	info = &classic_info;
 }
-bool GameCore::GameModule::try_update()
+bool GameCore::GameModule::try_update(Input input)
 {
-
+	//Update physics
+	return false;
 }
 
 bool GameCore::GameModule::start_game(GameRNG::RNGSeed seed)
