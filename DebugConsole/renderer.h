@@ -15,7 +15,7 @@ namespace Renderer
 	const GameFeatures::TetrisPiece::PositionIndex WIDTH = 50, HEIGHT = 100;
 	const GameFeatures::TetrisPiece::PositionIndex X_OFFSET = 5, Y_OFFSET = 10;
 	//Windows rendering
-	void draw_to_console(GameCore::GameInfo *info);
+	void draw_to_console(GameCore::GameInfo& info);
 	static R_Uint xy2i(R_Uint x, R_Uint y)
 	{
 		return y * WIDTH + x;

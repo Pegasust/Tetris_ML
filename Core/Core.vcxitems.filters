@@ -10,6 +10,7 @@
       <Filter>GameFeatures</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)input_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
@@ -21,6 +22,7 @@
       <Filter>GameFeatures</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)input_interface.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameFeatures">

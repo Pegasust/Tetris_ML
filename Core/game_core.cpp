@@ -1,16 +1,21 @@
 #include "game_core.h"
-
 GameCore::GameModule::GameModule(char args[]) : first_start(true)
 {
 	//Normal initialization
 	//Classic tetris
-	GameRule classic_tetris = GameRule::get_classic_tetris_rule();
+	GameRule* classic_tetris = new GameRule(GameCore::classic_tetris);
 	std::queue<TetrisPiece*> next_pieces;
+	if (!next_pieces.empty())
+	{
+		throw(std::exception("Queue is not empty?"));
+	}
 	std::vector<TetrisPiece*> built_pieces;
-	GameInfo::Level current_level = 0;
-	GameInfo classic_info = { &classic_tetris, next_pieces, nullptr, built_pieces, current_level };
-	info = &classic_info;
+	std::cout << built_pieces.size() << std::endl;
+	GameInfo *classic_info = new GameInfo{ classic_tetris, next_pieces, nullptr, built_pieces, 0 };
+	info = classic_info;
+	std::cout << "module: " << this->info->rule->max_x << std::endl;
 }
+
 bool GameCore::GameModule::try_update(Input input)
 {
 	//Update physics
@@ -29,6 +34,13 @@ GameCore::GameRNG::RNGSeed GameCore::GameModule::start_game(void *)
 	GameRNG::RNGSeed initial_seed = GameRNG::generate_random_seed();
 	start_game(initial_seed);
 	return initial_seed;
+}
+
+const char* GameCore::GameModule::str_expr() const
+{
+	std::string str = "{ info: " + info->string_expr();
+	str += " }";
+	return str.c_str();
 }
 
 void GameCore::GameModule::start_game_no_check(GameCore::GameRNG::RNGSeed seed)

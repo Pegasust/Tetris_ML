@@ -21,8 +21,15 @@ void CoreTiming::TimeModule::reset_clock()
 	last_update = frame_clock::now();
 }
 #endif
-bool CoreTiming::TimeModule::try_update(int nFrames, void(*update_func) ())
+bool CoreTiming::TimeModule::try_update(void(*update_func) ()
+#ifdef FRAMEBASED
+	, int nFrames=1
+#endif
+)
 {
+#if TIMEBASED
+	nFrames = get_frames_update();
+#endif
 	if (nFrames > 0)
 	{
 		for (int i = 0; i < nFrames; i++)
@@ -32,4 +39,29 @@ bool CoreTiming::TimeModule::try_update(int nFrames, void(*update_func) ())
 		return true;
 	}
 	return false;
+}
+
+bool CoreTiming::TimeModule::try_update(
+#ifdef FRAMEBASED
+	int nFrames = 1
+#endif
+)
+{
+#if TIMEBASED
+	nFrames = get_frames_update();
+#endif
+	if (nFrames > 0)
+	{
+		for (int i = 0; i < nFrames; i++)
+		{
+			this->game_update_func();
+		}
+		return true;
+	}
+	return false;
+}
+
+CoreTiming::TimeModule::TimeModule(const void(*update_func)()):game_update_func(update_func)
+{
+
 }

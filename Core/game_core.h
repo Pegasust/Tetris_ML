@@ -1,16 +1,14 @@
 #pragma once
 #include <queue>
 #include <vector>
-#include "core_timing.h"
+#include <iostream>
+#include <string>
 #include "tetris_piece.h"
 #include "game_rng.h"
+#include "input_interface.h"
 using namespace GameFeatures;
 namespace GameCore
 {
-	struct Input
-	{
-		double x, y;
-	};
 	struct GameRule
 	{
 	public:
@@ -18,11 +16,24 @@ namespace GameCore
 		int n_pieces_knowahead;
 		//length or width of the game
 		int max_x, max_y;
-		static const GameRule get_classic_tetris_rule()
+		const char* str_expr() const
 		{
-			return { 1, 10, 20 };
+			std::string str = "{ know_ahead: " + std::to_string(n_pieces_knowahead);
+			str += ", max_x: " + std::to_string(max_x);
+			str += ", max y: " + std::to_string(max_y);
+			str += " }";
+			return str.c_str();
+		}
+		const std::string string_expr() const
+		{
+			std::string str = "{ know_ahead: " + std::to_string(n_pieces_knowahead);
+			str += ", max_x: " + std::to_string(max_x);
+			str += ", max y: " + std::to_string(max_y);
+			str += " }";
+			return str;
 		}
 	};
+	const GameRule classic_tetris = { 1, 10, 20 };
 	struct GameInfo
 	{
 		typedef unsigned long Level;
@@ -32,6 +43,14 @@ namespace GameCore
 		TetrisPiece* current_piece;
 		std::vector<TetrisPiece*> built_pieces;
 		Level current_level;
+
+		const std::string string_expr() const
+		{
+			std::string str = "{ rule: " + rule->string_expr();
+			str += ", current_level: " + std::to_string(current_level);
+			str += " }";
+			return str;
+		}
 	};
 	//Game engine
 	class GameModule
@@ -46,8 +65,9 @@ namespace GameCore
 		bool start_game(GameRNG::RNGSeed seed);
 		//Start game with a randomly generated seed.
 		GameRNG::RNGSeed start_game(void *);
-		
+		const char* str_expr() const;
 	private:
+		CoreTiming::TimeModule tmr;
 		bool first_start{ true };
 		void start_game_no_check(GameRNG::RNGSeed seed);
 	};

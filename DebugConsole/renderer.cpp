@@ -1,17 +1,19 @@
 #include "renderer.h"
 using namespace Renderer;
-void Renderer::draw_to_console(GameCore::GameInfo* info)
+void Renderer::draw_to_console(GameCore::GameInfo& info)
 {
-	std::unordered_set<GameFeatures::TetrisPiece::Indexor> occupied_indexes;
+	size_t abstract_screen_size = sizeof(TetrisPiece::PieceType);
+	abstract_screen_size *= info.rule->max_x;
+	abstract_screen_size *= info.rule->max_y;
 	TetrisPiece::PieceType* abstract_screen =
-		(TetrisPiece::PieceType*) malloc(sizeof(TetrisPiece::PieceType) * info->rule->max_x * info->rule->max_y);
-
-	for (unsigned char i = 0; i < info->built_pieces.size(); i++)
+		(TetrisPiece::PieceType*) malloc(abstract_screen_size);
+	std::unordered_set<GameFeatures::TetrisPiece::Indexor> occupied_indexes;
+	for (unsigned char i = 0; i < info.built_pieces.size(); i++)
 	{
-		GameFeatures::TetrisPiece*& checking_piece = info->built_pieces[i];
+		GameFeatures::TetrisPiece*& checking_piece = info.built_pieces[i];
 		//top left position
 		R_Uint x, y;
-		GameFeatures::TetrisPiece::posId2xy(checking_piece->positionId, x, y, info->rule->max_x, info->rule->max_y);
+		GameFeatures::TetrisPiece::posId2xy(checking_piece->positionId, x, y, info.rule->max_x, info.rule->max_y);
 		//Local loop
 		for (TetrisPiece::Indexor _y = 0; _y < TetrisPiece::TETRIMINO_HEIGHT; _y++)
 		{
@@ -27,7 +29,7 @@ void Renderer::draw_to_console(GameCore::GameInfo* info)
 			}
 		}
 	}
-	for (TetrisPiece::Indexor i = 0; i < info->rule->max_x * info->rule->max_y; i++)
+	for (TetrisPiece::Indexor i = 0; i < info.rule->max_x * info.rule->max_y; i++)
 	{
 		if (occupied_indexes.count(i) == 0) //if hashset does not have the value
 		{

@@ -4,15 +4,25 @@
 #include <iostream>
 #include "renderer.h"
 
-int main()
+GameCore::GameModule* tetris_ptr;
+
+void child_func()
 {
 	GameCore::GameModule tetris('\0');
-	Renderer::draw_to_console(tetris.info);
+	tetris_ptr = &tetris;
+	std::cout << "tetris.info.rule->max_x, max_y: " << tetris.info->rule->max_x << ", " << tetris.info->rule->max_y << std::endl;
+	Renderer::draw_to_console(*tetris.info);
+}
+
+int main()
+{
+	child_func();
 	do
 	{
 		
 	} while (1);
 }
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

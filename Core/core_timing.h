@@ -1,6 +1,6 @@
 #pragma once
 //TIMEBASED definition forces the AI to make decision more quickly. If we have more time, I might train the AI Program to acknowledge this.
-#define TIMEBASED
+//#define TIMEBASED
 
 #if defined(TIMEBASED) && defined(FRAMEBASED)
 //More difficult variation is chosen
@@ -36,9 +36,10 @@ namespace CoreTiming
 #else
 
 #endif
-
-
-		bool try_update(int nFrames, void(*update_func)());
+		const void(*game_update_func) ();
+		bool try_update(void(*update_func)(), int nFrames = 1);
+		bool try_update(int nFrames = 1);
+		TimeModule(const void(*update_func)());
 #ifdef TIMEBASED
 
 #endif
