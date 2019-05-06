@@ -1,23 +1,21 @@
 #pragma once
 #include "game_core.h"
-#include <stdio.h>
-#include <unordered_set>
-#define _WINDOWS_CONSOLE_
-#ifdef _WINDOWS_CONSOLE_
-#include <Windows.h>
-#endif
-namespace Renderer
+//This one uses std::cout to render, should be able to support many platforms.
+namespace CrossRenderer
 {
-	typedef int R_Int;
-	typedef unsigned int R_Uint;
-
-	const char TETRIMINO_DISPLAY_CHAR[] = "XMNCOZS #";
-	const GameFeatures::TetrisPiece::PositionIndex WIDTH = 50, HEIGHT = 100;
-	const GameFeatures::TetrisPiece::PositionIndex X_OFFSET = 5, Y_OFFSET = 10;
-	//Windows rendering
-	void draw_to_console(GameCore::GameInfo& info);
-	static R_Uint xy2i(R_Uint x, R_Uint y)
+	typedef int RInt;
+	typedef unsigned int RUint;
+	struct RenderUnit
 	{
-		return y * WIDTH + x;
-	}
+		static const RUint DOWNSCALE = 8;
+		static const RUint WIDTH = 1280 / DOWNSCALE;
+		static const RUint HEIGHT = 720 / DOWNSCALE;
+		static const RUint SIZE = WIDTH * HEIGHT;
+		static const RUint X_OFFSET = 3, Y_OFFSET = 3;
+		char screen_text[SIZE];
+		GameFeatures::TetrisPiece::PieceType* abstract_screen;
+		RenderUnit(GameCore::GameRule& rule);
+		void init_screen_text(GameCore::GameInfo& info);
+		void update_screen_text(GameCore::GameInfo& info);
+	};
 }

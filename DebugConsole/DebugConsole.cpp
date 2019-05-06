@@ -4,13 +4,13 @@
 #include <iostream>
 #include "renderer.h"
 
-GameCore::GameModule* tetris_ptr;
+//GameCore::GameModule* tetris_ptr;
 
 void child_func()
 {
 	GameCore::GameModule tetris('\0');
-	tetris_ptr = &tetris;
-	std::cout << "tetris.info.rule->max_x, max_y: " << tetris.info->rule->max_x << ", " << tetris.info->rule->max_y << std::endl;
+	//tetris_ptr = &tetris;
+	//std::cout << "tetris.info.rule->max_x, max_y: " << tetris.info->rule->max_x << ", " << tetris.info->rule->max_y << std::endl;
 	Renderer::draw_to_console(*tetris.info);
 }
 

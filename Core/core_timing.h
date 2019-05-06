@@ -37,9 +37,18 @@ namespace CoreTiming
 
 #endif
 		const void(*game_update_func) ();
-		bool try_update(void(*update_func)(), int nFrames = 1);
-		bool try_update(int nFrames = 1);
+		bool try_update(void(*update_func)()
+#ifdef FRAMEBASED
+			, int nFrames = 1
+#endif
+		);
+		bool try_update(
+#ifdef FRAMEBASED
+			int nFrames = 1
+#endif
+		);
 		TimeModule(const void(*update_func)());
+		TimeModule();
 #ifdef TIMEBASED
 
 #endif

@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "game_rng.h"
+#include "tetris_physics.h"
 namespace GameFeatures
 {
 	
@@ -10,6 +11,7 @@ namespace GameFeatures
 		typedef unsigned char Indexor;
 		enum PieceType:unsigned char
 		{
+			BLANK,
 			I,
 			J,
 			L,
@@ -17,7 +19,6 @@ namespace GameFeatures
 			S,
 			Z,
 			T,
-			BLANK
 		};
 		static const unsigned char N_PIECE_TYPES = 7;
 		static const Indexor TETRIMINO_WIDTH = 4,
@@ -27,7 +28,7 @@ namespace GameFeatures
 		typedef unsigned char Rotation;
 		//typedef const std::unordered_map<PieceType, Tetrimino> PieceMap;
 		typedef const Tetrimino PieceMap[N_PIECE_TYPES];
-		typedef std::uint16_t PositionIndex;
+		typedef uint16_t PositionIndex;
 
 		//0 deg
 		static const Rotation UP = 0;
@@ -174,7 +175,8 @@ namespace GameFeatures
 		const PieceType type;
 		Tetrimino data;
 		Rotation current_rot;
-		PositionIndex positionId;
+		Position2D currentPosition;
+
 		//default_piece is *data at current_rot = UP
 		static Tetrimino* lazy_rotate_piece(const Tetrimino* default_piece, Rotation rot);
 		static Tetrimino* lazy_rotate_piece(PieceType type, Rotation rot);

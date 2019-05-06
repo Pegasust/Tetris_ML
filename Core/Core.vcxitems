@@ -19,7 +19,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)input_interface.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_physics.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)tetris_piece.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)vector2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)core_timing.cpp" />
@@ -27,6 +29,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)input_interface.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_physics.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)tetris_piece.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)vector2d.cpp" />
   </ItemGroup>
 </Project>

@@ -9,8 +9,4 @@ namespace InputInterface
 		int n_frames_update;
 #endif
 	};
-	struct InputInfo
-	{
-
-	};
 }

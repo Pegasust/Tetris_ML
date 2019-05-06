@@ -11,6 +11,12 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)input_interface.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_physics.cpp">
+      <Filter>GameFeatures</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)vector2d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_core.h" />
@@ -23,6 +29,12 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)input_interface.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_physics.h">
+      <Filter>GameFeatures</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)vector2d.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameFeatures">

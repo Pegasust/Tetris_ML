@@ -16,9 +16,19 @@ GameCore::GameModule::GameModule(char args[]) : first_start(true)
 	std::cout << "module: " << this->info->rule->max_x << std::endl;
 }
 
-bool GameCore::GameModule::try_update(Input input)
+bool GameCore::GameModule::try_update(InputInterface::Input & input)
 {
-	//Update physics
+	int n_frames;
+#ifdef TIMEBASED
+	n_frames = tmr.get_frames_updates();
+#else //defined FRAMEBASED
+	n_frames = input.n_frames_update;
+#endif
+	for (; n_frames > 0; n_frames--)
+	{
+		//Physics update per call
+
+	}
 	return false;
 }
 
@@ -36,12 +46,12 @@ GameCore::GameRNG::RNGSeed GameCore::GameModule::start_game(void *)
 	return initial_seed;
 }
 
-const char* GameCore::GameModule::str_expr() const
-{
-	std::string str = "{ info: " + info->string_expr();
-	str += " }";
-	return str.c_str();
-}
+//const char* GameCore::GameModule::str_expr() const
+//{
+//	std::string str = "{ info: " + info->string_expr();
+//	str += " }";
+//	return str.c_str();
+//}
 
 void GameCore::GameModule::start_game_no_check(GameCore::GameRNG::RNGSeed seed)
 {

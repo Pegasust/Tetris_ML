@@ -218,11 +218,13 @@
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="keyboard_input.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="w_renderer.cpp" />
     <ClCompile Include="smart_keyboard_input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard_input.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="w_renderer.h" />
     <ClInclude Include="smart_keyboard_input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

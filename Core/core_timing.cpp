@@ -23,12 +23,12 @@ void CoreTiming::TimeModule::reset_clock()
 #endif
 bool CoreTiming::TimeModule::try_update(void(*update_func) ()
 #ifdef FRAMEBASED
-	, int nFrames=1
+	, int nFrames
 #endif
 )
 {
 #if TIMEBASED
-	nFrames = get_frames_update();
+	int nFrames = get_frames_update();
 #endif
 	if (nFrames > 0)
 	{
@@ -43,7 +43,7 @@ bool CoreTiming::TimeModule::try_update(void(*update_func) ()
 
 bool CoreTiming::TimeModule::try_update(
 #ifdef FRAMEBASED
-	int nFrames = 1
+	int nFrames
 #endif
 )
 {
@@ -62,6 +62,10 @@ bool CoreTiming::TimeModule::try_update(
 }
 
 CoreTiming::TimeModule::TimeModule(const void(*update_func)()):game_update_func(update_func)
+{
+
+}
+CoreTiming::TimeModule::TimeModule() : game_update_func(0)
 {
 
 }
