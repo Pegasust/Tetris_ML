@@ -17,7 +17,7 @@ namespace TMath
 		typedef std::chrono::steady_clock RNGClock;
 		//https://en.wikipedia.org/wiki/Xorshift
 		//One of the fastest non-crypto rng algorithm.
-		static RNGSeed xorshift64(RNGSeed state[1])
+		inline static RNGSeed xorshift64(RNGSeed state[1])
 		{
 			RNGSeed x = state[0];
 			x ^= x << 13;

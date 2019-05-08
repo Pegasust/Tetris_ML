@@ -2,21 +2,30 @@
 //
 
 #include <iostream>
-#include "renderer.h"
+#include "lite_renderer.h"
+#include <thread>
 
 //GameCore::GameModule* tetris_ptr;
-
-void child_func()
+namespace Module = LiteGameModule;
+namespace Engine = LiteGameEngine;
+//using namespace std;
+void child_func(Module::LiteModule& l_module)
 {
-	TMath::GameModule tetris('\0');
-	//tetris_ptr = &tetris;
-	//std::cout << "tetris.info.rule->max_x, max_y: " << tetris.info->rule->max_x << ", " << tetris.info->rule->max_y << std::endl;
-	Renderer::draw_to_console(*tetris.info);
+	std::this_thread::sleep_for(std::chrono::duration<double>(Module::seconds_per_update));
+	//capture input
+	Module::InputInfo info = { Module::NONE, 1 };
+	if (l_module.try_update(info))
+	{
+		//render
+
+	}
 }
 
 int main()
 {
-	child_func();
+	Module::LiteModule l_module = Module::LiteModule(TMath::GameRNG::generate_random_seed());
+
+	child_func(l_module);
 	do
 	{
 		

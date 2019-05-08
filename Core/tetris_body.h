@@ -25,11 +25,8 @@ namespace LiteGameEngine
 		J,
 		BORDER
 	};
-	BodyType rng_seed2bodytype(const TMath::GameRNG::RNGSeed& input)
-	{
-		//TODO: FIX THIS TO A LESS BIASED ALGORITHM
-		return (BodyType) ((input % 7)+1);
-	}
+	BodyType rng_seed2bodytype(const TMath::GameRNG::RNGSeed& input);
+
 	template<unsigned char max_x, unsigned char max_y>
 	struct TetrisBody
 	{
@@ -144,15 +141,8 @@ namespace LiteGameEngine
 		unsigned char update_collider(const TetrisBody<width, height>& body); //Trust me and just update without check.
 		static void assign_empty_field(FieldCollider& col);
 		static void assign_border(FieldCollider& col);
-		static constexpr unsigned char xy2i(const unsigned char & x, const unsigned char & y)
-		{
-			return y * WIDTH + x;
-		}
-		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned& y)
-		{
-			y = i / WIDTH;
-			x = i - (y * WIDTH);
-		}
+		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y);
+		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned& y);
 		//bool try_add_body(const TetrisBody<width, height>& body);
 	};
 	template<unsigned char w= 10, unsigned char h =20>

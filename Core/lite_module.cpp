@@ -17,7 +17,7 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 				{
 					new_position.y = new_position.y + 1.0;
 	#ifdef _DEBUG
-					if (new_position.y == HEIGHT * 3) //(It's okay dad, I know what I'm doing)
+					if (new_position.y == (unsigned int) HEIGHT * (unsigned int) 3) //(It's okay dad, I know what I'm doing)
 					{
 						throw "Infinite loop from DOWN input.";
 						break;
@@ -108,10 +108,10 @@ LiteGameModule::LiteModule::LiteModule(const TMath::GameRNG::RNGSeed& initial_se
 	}
 }
 
-LiteGameEngine::TetrisBody<10, 20> * LiteGameModule::LiteModule::create_new_body(const TMath::GameRNG::RNGSeed & seed)
-{
-	return new LiteGameEngine::TetrisBody<10, 20>(LiteGameEngine::rng_seed2bodytype(seed));
-}
+//LiteGameEngine::TetrisBody<10, 20> * LiteGameModule::LiteModule::create_new_body(const TMath::GameRNG::RNGSeed & seed)
+//{
+//	return new LiteGameEngine::TetrisBody<10, 20>(LiteGameEngine::rng_seed2bodytype(seed));
+//}
 
 
 //LiteGameModule::LiteModule::LiteModule():
@@ -119,3 +119,15 @@ LiteGameEngine::TetrisBody<10, 20> * LiteGameModule::LiteModule::create_new_body
 //{
 //
 //}
+
+constexpr double LiteGameModule::v_gravity_at(Level level)
+{
+	//Lienar scaling
+	auto m = (v_gravity_max - v_gravity0) / (MAX_LEVEL - MIN_LEVEL);
+	return m * level + v_gravity0;
+}
+
+constexpr unsigned long long LiteGameModule::required_rows(const Level& level)
+{
+		return required_rows0 + (level / 3);
+}

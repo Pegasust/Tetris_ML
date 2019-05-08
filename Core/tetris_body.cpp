@@ -49,7 +49,7 @@ void LiteGameEngine::TetrisBody<max_x, max_y>::reassign(const BodyType& type)
 	//assign collider
 	for (unsigned char i = 0; i < TETRIS_COLLIDER_LENGTH; i++)
 	{
-		collier[i] = (colliders[type])[i];
+		collider[i] = (colliders[type])[i];
 	}
 	current_position = { initial_x, initial_y };
 	current_rot = UP;
@@ -88,7 +88,7 @@ void LiteGameEngine::TetrisBody<max_x, max_y>::rotate(TetrisCollider& collider, 
 
 template<unsigned char max_x, unsigned char max_y>
 LiteGameEngine::TetrisBody<max_x, max_y>::TetrisBody(const BodyType& type, const Position2D& initial_pos, const Rotation& initial_rot) :
-	type(type), current_position(initial_position), current_rot(initial_rot)
+	type(type), current_position(initial_pos), current_rot(initial_rot)
 {
 	collider = new TetrisCollider(colliders[type]);
 }
@@ -172,7 +172,7 @@ unsigned char LiteGameEngine::TetrisField<width, height>::update_collider(const 
 		bool delete_row = true;
 		for (unsigned char x = 1; x < width; x++)
 		{
-			if (col[xy2i(x, y)] == BodyType::BLANK)
+			if (collider[xy2i(x, y)] == BodyType::BLANK)
 			{
 				delete_row = false;
 				break;
@@ -189,14 +189,14 @@ unsigned char LiteGameEngine::TetrisField<width, height>::update_collider(const 
 					//TODO: DEBUG: blame this if burn algorithm doesn't yield good data
 					//col[xy2i(_x, _y)] = col[xy2i(_x,_y-1)];
 					unsigned char this_index = xy2i(_x, _y);
-					col[this_index] = col[this_index - WIDTH];
+					collider[this_index] = collider[this_index - WIDTH];
 				}
 			}
 			//highest (y = 0)
 			for (unsigned char _x = 1; _x < width; _x++)
 			{
 				//unsigned char this_index = xy2i(_x, 0);
-				col[_x] = BodyType::BLANK;
+				collider[_x] = BodyType::BLANK;
 			}
 
 		}
@@ -230,6 +230,17 @@ void LiteGameEngine::TetrisField<width, height>::assign_border(FieldCollider& co
 	{
 		col[xy2i(x, height)] = BodyType::BORDER;
 	}
+}
+template<unsigned char width, unsigned char height>
+constexpr unsigned char LiteGameEngine::TetrisField<width, height>::xy2i(const unsigned char& x, const unsigned char& y)
+{
+	return y * WIDTH + x;
+}
+template<unsigned char width, unsigned char height>
+constexpr void LiteGameEngine::TetrisField<width, height>::i2xy(const unsigned char& i, unsigned char& x, unsigned& y)
+{
+	y = i / WIDTH;
+	x = i - (y * WIDTH);
 }
 #pragma region deprecated
 //template<unsigned char width, unsigned char height>
@@ -275,7 +286,7 @@ bool LiteGameEngine::collider_fit(const TetrisCollider& col, const Position2D& n
 template<unsigned char w, unsigned char h>
 bool LiteGameEngine::try_rotate(TetrisBody<w, h>& body, TetrisField<w, h>& field)
 {
-	TetrisBody<w, h>::Rotation new_rot = (body.current_rot + 1) % 4;
+	unsigned char new_rot = (body.current_rot + 1) % 4;
 	TetrisCollider temp;
 	LiteGameEngine::TetrisBody<w, h>::rotate(temp, new_rot, body.type);
 	if (collider_fit(temp, body.current_position, field))
@@ -285,4 +296,10 @@ bool LiteGameEngine::try_rotate(TetrisBody<w, h>& body, TetrisField<w, h>& field
 		return true;
 	}
 	return false;
+}
+
+LiteGameEngine::BodyType LiteGameEngine::rng_seed2bodytype(const TMath::GameRNG::RNGSeed& input)
+{	
+	//TODO: FIX THIS TO A LESS BIASED ALGORITHM
+	return (BodyType)((input % 7) + 1);	
 }
