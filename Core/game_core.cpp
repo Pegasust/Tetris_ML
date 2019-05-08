@@ -1,9 +1,9 @@
 #include "game_core.h"
-GameCore::GameModule::GameModule(char args[]) : first_start(true)
+TMath::GameModule::GameModule(char args[]) : first_start(true)
 {
 	//Normal initialization
 	//Classic tetris
-	GameRule* classic_tetris = new GameRule(GameCore::classic_tetris);
+	GameRule* classic_tetris = new GameRule(TMath::classic_tetris);
 	std::queue<TetrisPiece*> next_pieces;
 	if (!next_pieces.empty())
 	{
@@ -16,7 +16,7 @@ GameCore::GameModule::GameModule(char args[]) : first_start(true)
 	std::cout << "module: " << this->info->rule->max_x << std::endl;
 }
 
-bool GameCore::GameModule::try_update(InputInterface::Input & input)
+bool TMath::GameModule::try_update(InputInterface::Input & input)
 {
 	int n_frames;
 #ifdef TIMEBASED
@@ -32,14 +32,14 @@ bool GameCore::GameModule::try_update(InputInterface::Input & input)
 	return false;
 }
 
-bool GameCore::GameModule::start_game(GameRNG::RNGSeed seed)
+bool TMath::GameModule::start_game(GameRNG::RNGSeed seed)
 {
 	if (seed == 0) return false;
 	start_game_no_check(seed);
 	return true;
 }
 
-GameCore::GameRNG::RNGSeed GameCore::GameModule::start_game(void *)
+TMath::GameRNG::RNGSeed TMath::GameModule::start_game(void *)
 {
 	GameRNG::RNGSeed initial_seed = GameRNG::generate_random_seed();
 	start_game(initial_seed);
@@ -53,7 +53,7 @@ GameCore::GameRNG::RNGSeed GameCore::GameModule::start_game(void *)
 //	return str.c_str();
 //}
 
-void GameCore::GameModule::start_game_no_check(GameCore::GameRNG::RNGSeed seed)
+void TMath::GameModule::start_game_no_check(TMath::GameRNG::RNGSeed seed)
 {
 	if (!first_start)
 	{

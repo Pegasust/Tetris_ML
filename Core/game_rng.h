@@ -1,7 +1,8 @@
 #pragma once
 #include <chrono>
 #include <stdint.h>
-namespace GameCore
+#include <limits>
+namespace TMath
 {
 
 	//I am using the xorshift algorithm because it can be manipulated, which might be useful
@@ -10,8 +11,9 @@ namespace GameCore
 	{
 	public:
 		//I use 64-bit because its max value (18,446,744,073,709,551,615) is enough randomness
-		typedef uint64_t RNGSeed;
-#define RNGSEED_MAX 0xffffffffUL
+		typedef uint64_t
+			RNGSeed;
+		static constexpr RNGSeed RNGSEED_MAX = std::numeric_limits<RNGSeed>::max();
 		typedef std::chrono::steady_clock RNGClock;
 		//https://en.wikipedia.org/wiki/Xorshift
 		//One of the fastest non-crypto rng algorithm.

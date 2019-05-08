@@ -1,5 +1,5 @@
 #include "game_rng.h"
-GameCore::GameRNG::RNGSeed GameCore::GameRNG::generate_random_seed()
+TMath::GameRNG::RNGSeed TMath::GameRNG::generate_random_seed()
 {
 	//Get time now
 	auto invoke_time = RNGClock::now();
@@ -19,7 +19,7 @@ GameCore::GameRNG::RNGSeed GameCore::GameRNG::generate_random_seed()
 	return (x[0] / 2) + (y / 2);
 }
 
-bool GameCore::GameRNG::get_bool(RNGSeed state[1], double percentage)
+bool TMath::GameRNG::get_bool(RNGSeed state[1], double percentage)
 {
 	bool val;
 	if (percentage >= 1.0) val = true;

@@ -175,14 +175,14 @@ namespace GameFeatures
 		const PieceType type;
 		Tetrimino data;
 		Rotation current_rot;
-		Position2D currentPosition;
+		Position2D current_position;
 
 		//default_piece is *data at current_rot = UP
 		static Tetrimino* lazy_rotate_piece(const Tetrimino* default_piece, Rotation rot);
 		static Tetrimino* lazy_rotate_piece(PieceType type, Rotation rot);
-		static TetrisPiece* generate_random_piece(GameCore::GameRNG::RNGSeed* seed);
+		static TetrisPiece* generate_random_piece(TMath::GameRNG::RNGSeed* seed);
 		void rotate(Rotation rot);
-		TetrisPiece(PieceType type);
+		TetrisPiece(PieceType type, const Position2D& initial_position);
 		static void posId2xy(PositionIndex i, int& x, int& y, int max_x, int max_y);
 		static void posId2xy(PositionIndex i, unsigned int& x, unsigned int& y, int max_x, int max_y);
 	public:

@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 namespace TMath
 {
 	//struct vector2d
@@ -23,6 +24,10 @@ namespace TMath
 	//		return re;
 	//	}
 	//};
+	double get_magnitude(double& x, double& y)
+	{
+		return sqrt(x * x + y * y);
+	}
 	template<typename T>
 	struct vector2
 	{
@@ -33,6 +38,45 @@ namespace TMath
 			re.x = this->x + rhs.x;
 			re.y = this->y + rhs.y;
 			return re;
+		}
+		vector2 operator-(const vector2& rhs)
+		{
+			vector2 re;
+			re.x = this->x - rhs.x;
+			re.y = this->y - rhs.y;
+			return re;
+		}
+		void operator+=(const vector2& rhs)
+		{
+			this->x += rhs.x;
+			this->y += rhs.y;
+		}
+		void operator-=(const vector2& rhs)
+		{
+			this->x -= rhs.x;
+			this->y -= rhs.y;
+		}
+		vector2 operator+()
+		{
+			return { this->x, this->y };
+		}
+		vector2 operator-()
+		{
+			return { -this->x, -this->y };
+		}
+		vector2 operator*(const int& i)
+		{
+			return { this->x * i, this->y * i };
+		}
+		vector2 operator*(const double& d)
+		{
+			return { this->x * d, this->y * d };
+		}
+		double magnitude() const
+		{
+			double d_x = (double)x;
+			double d_y = (double)y;
+			return get_magnitude(d_x, d_y);
 		}
 	};
 }

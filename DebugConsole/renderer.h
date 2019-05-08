@@ -14,8 +14,9 @@ namespace CrossRenderer
 		static const RUint X_OFFSET = 3, Y_OFFSET = 3;
 		char screen_text[SIZE];
 		GameFeatures::TetrisPiece::PieceType* abstract_screen;
-		RenderUnit(GameCore::GameRule& rule);
-		void init_screen_text(GameCore::GameInfo& info);
-		void update_screen_text(GameCore::GameInfo& info);
+		RenderUnit(TMath::GameRule& rule);
+		//frames the screen to tetris screen
+		void init_screen_text(TMath::GameInfo& info);
+		void update_screen_text(TMath::GameInfo& info);
 	};
 }

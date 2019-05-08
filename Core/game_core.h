@@ -8,7 +8,7 @@
 #include "game_rng.h"
 #include "input_interface.h"
 using namespace GameFeatures;
-namespace GameCore
+namespace TMath
 {
 	struct GameRule
 	{

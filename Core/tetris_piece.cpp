@@ -77,16 +77,16 @@ void GameFeatures::TetrisPiece::rotate(Rotation rot)
 	*data = lazy_rotate_piece(type, current_rot);
 }
 
-TetrisPiece* TetrisPiece::generate_random_piece(GameCore::GameRNG::RNGSeed* seed)
+TetrisPiece* TetrisPiece::generate_random_piece(TMath::GameRNG::RNGSeed* seed)
 {
 	unsigned char piece_id = *seed % N_PIECE_TYPES;
 	PieceType key = static_cast<PieceType>(piece_id);
 	TetrisPiece return_piece = TetrisPiece(key);
-	*seed = GameCore::GameRNG::xorshift64(seed);
+	*seed = TMath::GameRNG::xorshift64(seed);
 	return &return_piece;
 }
 
-GameFeatures::TetrisPiece::TetrisPiece(PieceType assigning_type):type(assigning_type)
+GameFeatures::TetrisPiece::TetrisPiece(PieceType assigning_type, const Position2D& initial_position):type(assigning_type), current_position(initial_position)
 {
 	*data = pieces_map[type];
 	current_rot = UP;

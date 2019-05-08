@@ -24,8 +24,6 @@ namespace CoreTiming
 	public:
 #ifdef TIMEBASED
 		typedef std::chrono::steady_clock frame_clock;
-		//FPS: 60
-		const double millis_per_frame = 1 / 60;
 		frame_clock::time_point last_update;
 		TimeModule()
 		{
@@ -34,7 +32,8 @@ namespace CoreTiming
 		int get_frames_updates();
 		void reset_clock();
 #else
-
+		//FPS: 60
+		static constexpr double millis_per_frame = 1.0 / 60.0;
 #endif
 		const void(*game_update_func) ();
 		bool try_update(void(*update_func)()

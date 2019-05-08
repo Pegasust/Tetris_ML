@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-CrossRenderer::RenderUnit::RenderUnit(GameCore::GameRule& rule)
+CrossRenderer::RenderUnit::RenderUnit(TMath::GameRule& rule)
 {
 	memset(screen_text, ' ', SIZE);
 	//The code below should set all to 0u, which is TetrisPiece::PieceType::BLANK
@@ -9,7 +9,12 @@ CrossRenderer::RenderUnit::RenderUnit(GameCore::GameRule& rule)
 
 }
 
-void CrossRenderer::RenderUnit::update_screen_text(GameCore::GameInfo& info)
+void CrossRenderer::RenderUnit::init_screen_text(TMath::GameInfo& info)
+{
+
+}
+
+void CrossRenderer::RenderUnit::update_screen_text(TMath::GameInfo& info)
 {
 
 }
