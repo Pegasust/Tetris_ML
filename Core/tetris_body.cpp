@@ -43,6 +43,19 @@ void LiteGameEngine::TetrisBody<max_x, max_y>::rotate()
 }
 
 template<unsigned char max_x, unsigned char max_y>
+void LiteGameEngine::TetrisBody<max_x, max_y>::reassign(const BodyType& type)
+{
+	this->type = type;
+	//assign collider
+	for (unsigned char i = 0; i < TETRIS_COLLIDER_LENGTH; i++)
+	{
+		collier[i] = (colliders[type])[i];
+	}
+	current_position = { initial_x, initial_y };
+	current_rot = UP;
+}
+
+template<unsigned char max_x, unsigned char max_y>
 void LiteGameEngine::TetrisBody<max_x, max_y>::rotate(TetrisCollider& collider, const Rotation& rot, const BodyType& type)
 {
 	for (unsigned char i = 0; i < TETRIS_COLLIDER_LENGTH; i++)
@@ -81,45 +94,118 @@ LiteGameEngine::TetrisBody<max_x, max_y>::TetrisBody(const BodyType& type, const
 }
 
 template<unsigned char max_x, unsigned char max_y>
-LiteGameEngine::TetrisBody<max_x, max_y>::TetrisBody(const BodyType& type):
+LiteGameEngine::TetrisBody<max_x, max_y>::TetrisBody(const BodyType& type) :
 	type(type), current_position({ initial_x, initial_y }), current_rot(UP)
 {
 	collider = new TetrisCollider(colliders[type]);
 }
 
 template<unsigned char width, unsigned char height>
-LiteGameEngine::TetrisField<width, height>::TetrisField():
-	all_colliders()
+LiteGameEngine::TetrisField<width, height>::TetrisField()//:
+	//all_colliders()
 {
 	assign_empty_field(collider);
 }
 
-template<unsigned char width, unsigned char height>
-void LiteGameEngine::TetrisField<width, height>::update_collider()
-{
-	for (unsigned i = 0; i < LENGTH; i++)
-	{
-		this->collider[i] = false;
-	}
-	//collider is now all false
+//template<unsigned char width, unsigned char height>
+//void LiteGameEngine::TetrisField<width, height>::update_collider(const TetrisCollider& tetris_col, 
+//	const BodyType& t, const Position2D& pos)
+//{
+//#pragma region deprecated
+//	//for (unsigned i = 0; i < LENGTH; i++)
+//	//{
+//	//	this->collider[i] = false;
+//	//}
+//	////collider is now all false
+//
+//	//for (unsigned int i = 0; i < all_colliders.size(); i++)
+//	//{
+//	//	TetrisBody* & col = all_colliders[i];
+//	//	char rounded_y = TMath::round_nearest(col->current_position.y);
+//	//	char rounded_x = TMath::round_nearest(col->current_position.x);
+//	//	for (unsigned char j = 0; j < TETRIS_COLLIDER_LENGTH; j++)
+//	//	{
+//	//		char global_y;
+//	//		char global_x;
+//	//		col->i2xy(j, global_x, global_y);
+//	//		global_y += rounded_y;
+//	//		global_x += rounded_x;
+//	//		this->collider[this->xy2i(global_x, global_y)] |= (*col)[j]; //Assign true only
+//	//	}
+//	//}
+//	////Collider consists of only tetris bricks
+//	//assign_border(this->collider);
+//
+//#pragma endregion
+//
+//	//tetris_col is being added to the grid, no need to check.
+//	unsigned char global_x = TMath::round_nearest(pos.x);
+//	unsigned char global_y = TMath::round_nearest(pos.y);
+//	for (unsigned char i = 0; i < TETRIS_COLLIDER_LENGTH; i++)
+//	{
+//		TetrisBody
+//	}
+//}
 
-	for (unsigned int i = 0; i < all_colliders.size(); i++)
+template<unsigned char width, unsigned char height>
+unsigned char LiteGameEngine::TetrisField<width, height>::update_collider(const TetrisBody<width, height>& body)
+{
+	//update the collider
+	unsigned char rounded_x = TMath::round_nearest(body.current_position.x),
+		rounded_y = TMath::round_nearest(body.current_position.y);
+	for (unsigned char i = 0; i < TETRIS_COLLIDER_LENGTH; i++)
 	{
-		TetrisBody* & col = all_colliders[i];
-		char rounded_y = TMath::round_nearest(col->current_position.y);
-		char rounded_x = TMath::round_nearest(col->current_position.x);
-		for (unsigned char j = 0; j < TETRIS_COLLIDER_LENGTH; j++)
+		if (body.collider[i]) //If there is collider
 		{
-			char global_y;
-			char global_x;
-			col->i2xy(j, global_x, global_y);
-			global_y += rounded_y;
+			unsigned char global_x, global_y;
+			body.i2xy(i, global_x, global_y);
 			global_x += rounded_x;
-			this->collider[this->xy2i(global_x, global_y)] |= (*col)[j]; //Assign true only
+			global_y += rounded_y;
+			this->collider[xy2i(global_x, global_y)] = body.type;
 		}
 	}
-	//Collider consists of only tetris bricks
-	assign_border(this->collider);
+	//look for burn signals
+	unsigned char burned_rows = 0;
+	for (unsigned char y = height - 1; y >= 0;//y--
+		) //From bot to top
+	{
+		bool delete_row = true;
+		for (unsigned char x = 1; x < width; x++)
+		{
+			if (col[xy2i(x, y)] == BodyType::BLANK)
+			{
+				delete_row = false;
+				break;
+			}
+		}
+		if (delete_row)
+		{
+			burned_rows++;
+			//Everything except highest
+			for (unsigned char _y = y; _y > 0; _y--)
+			{
+				for (unsigned char _x = 1; _x < width; _x++)
+				{
+					//TODO: DEBUG: blame this if burn algorithm doesn't yield good data
+					//col[xy2i(_x, _y)] = col[xy2i(_x,_y-1)];
+					unsigned char this_index = xy2i(_x, _y);
+					col[this_index] = col[this_index - WIDTH];
+				}
+			}
+			//highest (y = 0)
+			for (unsigned char _x = 1; _x < width; _x++)
+			{
+				//unsigned char this_index = xy2i(_x, 0);
+				col[_x] = BodyType::BLANK;
+			}
+
+		}
+		else
+		{
+			y--; //Since row is not deleting, it should go up
+		}
+	}
+	return burned_rows;
 }
 
 template<unsigned char width, unsigned char height>
@@ -127,7 +213,7 @@ void LiteGameEngine::TetrisField<width, height>::assign_empty_field(FieldCollide
 {
 	for (unsigned i = 0; i < LENGTH; i++)
 	{
-		col[i] = false;
+		col[i] = BodyType::BLANK;
 	}
 	assign_border(col);
 }
@@ -137,25 +223,28 @@ void LiteGameEngine::TetrisField<width, height>::assign_border(FieldCollider& co
 	//Border instantializing
 	for (unsigned char y = 0; y < HEIGHT; y++)
 	{
-		col[xy2i(0, y)] = true;
-		col[xy2i(WIDTH - 1)] = true;
+		col[xy2i(0, y)] = BodyType::BORDER;
+		col[xy2i(WIDTH - 1)] = BodyType::BORDER;
 	}
 	for (unsigned char x = 1; x < width; x++)
 	{
-		col[xy2i(x, height)] = true;
+		col[xy2i(x, height)] = BodyType::BORDER;
 	}
 }
+#pragma region deprecated
+//template<unsigned char width, unsigned char height>
+//bool LiteGameEngine::TetrisField<width, height>::try_add_body(const TetrisBody<width, height>& body)
+//{
+//	if (collider_fit(body.collider, body.current_position, this))
+//	{
+//		this->all_colliders.push_back(body);
+//		return true;
+//	}
+//	return false;
+//}
+#pragma endregion
 
-template<unsigned char width, unsigned char height>
-bool LiteGameEngine::TetrisField<width, height>::try_add_body(const TetrisBody<width, height>& body)
-{
-	if (collider_fit(body.collider, body.current_position, this))
-	{
-		this->all_colliders.push_back(body);
-		return true;
-	}
-	return false;
-}
+
 
 template<unsigned char w, unsigned char h>
 bool LiteGameEngine::collider_fit(const TetrisCollider& col, const Position2D& new_position, TetrisField<w, h>& field)
@@ -173,7 +262,7 @@ bool LiteGameEngine::collider_fit(const TetrisCollider& col, const Position2D& n
 			global_x += rounded_x;
 			if (
 				global_x <= 0 || global_x >= field.WIDTH - 1 || global_y <= 0 || global_y >= h-1 //There is a collision out of bound
-				|| field[field.xy2i(global_x, global_y)] //the field already have a collider there
+				|| field.collider[field.xy2i(global_x, global_y)] != BodyType::BLANK //the field already have a collider there
 				)
 			{
 				return false;

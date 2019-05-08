@@ -50,22 +50,61 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		new_position.y += gravity_displacement;
 		if (!LiteGameEngine::collider_fit(controlling_piece.collider, new_position, field))
 		{
-			new_position.y = floor(new_position.y - gravity_displacement);
+			//attempt to return to the nearest position
+			controlling_piece.current_position.y = floor(new_position.y - gravity_displacement);
+			unsigned char burned = field.update_collider(controlling_piece);
+			unsigned char scaled_burned = 0;
+			if (burned > 0)
+			{
+				//scoring and levelling up
+				scaled_burned = TMath::round_nearest((double)burned * 1.499+((double)current_level/15.0));
+				if (scaled_burned < n_level_up_rows)
+				{
+					n_level_up_rows -= scaled_burned;
+				}
+				else
+				{
+					//level up
+					n_level_up_rows += required_rows(++current_level) - scaled_burned;
+					score += (double)current_level / 100.0;
+				}
+			}
+			score += (double)current_level / 700.0 + (((double)scaled_burned * current_level) / 125.0) ;
+
+			//reassign controlling piece
+			controlling_piece.reassign(coming_pieces.front());
+			if (burned < 4 && !LiteGameEngine::collider_fit(controlling_piece.collider, controlling_piece.current_position, field))
+			{
+				//game over
+				score = std::numeric_limits<double>::lowest();
+				return false;
+			}
+			coming_pieces.pop();
+			//generate the next one
+			current_seed = TMath::GameRNG::xorshift64(&current_seed);
+			coming_pieces.push(LiteGameEngine::rng_seed2bodytype(current_seed));
 		}
-		controlling_piece.current_position = new_position;
+		else
+		{
+			//no reassignment needed
+			controlling_piece.current_position = new_position;
+			//This will encourage ML to press DOWN
+			score -= (double)current_level / 8000.0;
+		}
+		if (highest_score < score) highest_score = score;
 	}
-	
+	return true;
 }
 
 LiteGameModule::LiteModule::LiteModule(const TMath::GameRNG::RNGSeed& initial_seed) :
 	field(), current_seed(initial_seed),
-	controlling_piece(*create_new_body(current_seed)),
+	controlling_piece(LiteGameEngine::rng_seed2bodytype(initial_seed)),
 	coming_pieces()
 {
 	for (unsigned char i = 0; i < 3; i++)
 	{
 		current_seed = TMath::GameRNG::xorshift64(&current_seed);
-		coming_pieces.push_back(create_new_body(current_seed));
+		coming_pieces.push(LiteGameEngine::rng_seed2bodytype(current_seed));
 	}
 }
 

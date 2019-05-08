@@ -22,11 +22,13 @@ namespace LiteGameEngine
 		O,
 		T,
 		L,
-		J
+		J,
+		BORDER
 	};
 	BodyType rng_seed2bodytype(const TMath::GameRNG::RNGSeed& input)
 	{
-		return (BodyType) (input % 8);
+		//TODO: FIX THIS TO A LESS BIASED ALGORITHM
+		return (BodyType) ((input % 7)+1);
 	}
 	template<unsigned char max_x, unsigned char max_y>
 	struct TetrisBody
@@ -45,18 +47,19 @@ namespace LiteGameEngine
 #pragma endregion
 
 #pragma region Helpers
-		static constexpr double initial_x = (max_x/2) - 4.0;
-		static constexpr double initial_y = 1.0;
+		static constexpr double initial_x = (max_x/2) - 2.0;
+		static constexpr double initial_y = -1.0;
 		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y);
 		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char& y);
 #pragma endregion
 
 	public:
-		const BodyType type; //can access default collider
+		BodyType type; //can access default collider
 		TetrisCollider collider;
 		Rotation current_rot;
 		Position2D current_position;
 		void rotate();
+		void reassign(const BodyType& type);
 		static void rotate(TetrisCollider& collider, const Rotation& rot, const BodyType& type);
 		TetrisBody(const BodyType  & type, const Position2D & initial_pos, const Rotation & initial_rot);
 		TetrisBody(const BodyType& type);
@@ -131,12 +134,14 @@ namespace LiteGameEngine
 		static const unsigned char WIDTH = width + 2;
 		static const unsigned char HEIGHT = height + 1;
 		static const unsigned char LENGTH = WIDTH * HEIGHT;
-		typedef bool FieldCollider[LENGTH];
+		typedef BodyType FieldCollider[LENGTH];
 		FieldCollider collider;
-		std::vector<TetrisBody<width, height>*> all_colliders; //All of the BUILT tetris pieces
+		//std::vector<TetrisBody<width, height>*> all_colliders; //All of the BUILT tetris pieces
 		TetrisField();
 	public:
-		void update_collider(); //update collider from all_colliders
+		//void update_collider(const TetrisCollider& tetris_col, const BodyType& t, const Position2D& pos); //update collider from all_colliders
+		//return the # of rows burned
+		unsigned char update_collider(const TetrisBody<width, height>& body); //Trust me and just update without check.
 		static void assign_empty_field(FieldCollider& col);
 		static void assign_border(FieldCollider& col);
 		static constexpr unsigned char xy2i(const unsigned char & x, const unsigned char & y)
@@ -148,7 +153,7 @@ namespace LiteGameEngine
 			y = i / WIDTH;
 			x = i - (y * WIDTH);
 		}
-		bool try_add_body(const TetrisBody<width, height>& body);
+		//bool try_add_body(const TetrisBody<width, height>& body);
 	};
 	template<unsigned char w= 10, unsigned char h =20>
 	bool collider_fit(const TetrisCollider& col, const Position2D& new_position, TetrisField<w, h>& field);
