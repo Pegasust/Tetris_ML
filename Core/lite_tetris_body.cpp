@@ -89,15 +89,10 @@ LGEngine::TetrisBody::TetrisBody(const BodyType& type) :
 	memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
 }
 
-constexpr unsigned char LGEngine::TetrisBody::xy2i(const unsigned char& x, const unsigned char& y)
-{
-	return y * 4 + x;
-}
-constexpr void LGEngine::TetrisBody::i2xy(const unsigned char & i, unsigned char& x, unsigned char& y)
-{
-	y = i / 4;
-	x = i - (y * 4);
-}
+//constexpr unsigned char LGEngine::TetrisBody::xy2i(const unsigned char& x, const unsigned char& y)
+//
+//constexpr void LGEngine::TetrisBody::i2xy(const unsigned char & i, unsigned char& x, unsigned char& y)
+//
 
 void LGEngine::TetrisBody::rotate()
 {

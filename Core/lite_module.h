@@ -3,6 +3,7 @@
 #include <queue>
 #ifdef _DEBUG
 #include <iostream>
+#include <iomanip>
 #endif
 using namespace std;
 namespace LiteGameModule

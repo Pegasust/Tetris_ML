@@ -24,8 +24,15 @@ namespace LGEngine
 		bool check_collider(const TetrisBody& body) const;
 		static void assign_empty_field(FieldCollider& col);
 		static void assign_border(FieldCollider& col);
-		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y);
-		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char & y);
+		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y)
+		{
+			return y * LGEngine::TetrisField::WIDTH + x;
+		}
+		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char & y) 
+		{
+			y = i / WIDTH;
+			x = i - (WIDTH * i);
+		}
 	};
 	bool try_rotate(TetrisBody& collider, const LGEngine::Rotation& new_rot, const TetrisField& field);
 }

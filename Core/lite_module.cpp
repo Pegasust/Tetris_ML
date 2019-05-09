@@ -3,7 +3,7 @@
 bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 {
 #ifdef _DEBUG
-	std : cout << "Trying to update " << info.n_frames_update << " frames with " << info.input << '\0' << std::endl;
+	//std :: cout << "Trying to update " << info.n_frames_update << " frames with " << info.input << '\0' << std::endl;
 #endif
 	LGEngine::Position2D new_position = controlling_piece.current_position;
 	for (; info.n_frames_update > 0; info.n_frames_update--)
@@ -27,6 +27,7 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 						throw "Infinite loop from DOWN input.";
 						break;
 					}
+					//std::cout << "DOWN \0" << std::endl;
 	#endif
 				}
 				break;
@@ -98,6 +99,9 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		}
 		else
 		{
+//#ifdef _DEBUG
+//			std::cout << "No reassignment.\0" << std::endl;
+//#endif
 			//no reassignment needed
 			controlling_piece.current_position = new_position;
 			//This will encourage ML to press DOWN
@@ -105,6 +109,9 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		}
 		if (highest_score < score) highest_score = score;
 	}
+//#ifdef _DEBUG
+//	std::cout << "current score: " << std::setprecision(15) <<score << std::endl << "highest score: " << highest_score << '\0' << std::endl;
+//#endif
 	return true;
 }
 

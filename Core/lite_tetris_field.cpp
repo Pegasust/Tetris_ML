@@ -151,13 +151,7 @@ void LGEngine::TetrisField::assign_border(FieldCollider& col)
 	}
 }
 
-constexpr unsigned char LGEngine::TetrisField::xy2i(const unsigned char& x, const unsigned char& y)
-{
-	return y * LGEngine::TetrisField::WIDTH + x;
-}
-
-constexpr void LGEngine::TetrisField::i2xy(const unsigned char & i, unsigned char& x, unsigned char& y)
-{
-	y = i / WIDTH;
-	x = i - (WIDTH * i);
-}
+//constexpr unsigned char LGEngine::TetrisField::xy2i(const unsigned char& x, const unsigned char& y)
+//
+//
+//constexpr void LGEngine::TetrisField::i2xy(const unsigned char & i, unsigned char& x, unsigned char& y)

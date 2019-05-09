@@ -2,6 +2,9 @@
 #include <chrono>
 #include <stdint.h>
 #include <limits>
+#ifdef _DEBUG
+#include <iostream>
+#endif
 namespace TMath
 {
 
@@ -26,7 +29,7 @@ namespace TMath
 			return state[0] = x;
 		}
 		//Based on time
-		static RNGSeed* generate_random_seed();
+		static RNGSeed generate_random_seed();
 
 		static bool get_bool(RNGSeed state[1], double percentage);
 	};

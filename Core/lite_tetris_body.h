@@ -51,8 +51,15 @@ namespace LGEngine
 #pragma region Helpers
 		static constexpr double initial_x = ((double) FIELD_WIDTH / 2) - 2.0;
 		static constexpr double initial_y = -1.0;
-		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y);
-		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char& y);
+		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y)
+		{
+			return y * 4 + x;
+		}
+		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char& y)
+		{
+			y = i / 4;
+			x = i - (y * 4);
+		}
 		static const TetrisCollider colliders[8];
 #pragma endregion
 
