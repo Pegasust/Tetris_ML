@@ -1,7 +1,9 @@
 #pragma once
-#include "tetris_body.h"
+#include "lite_tetris_field.h"
 #include <queue>
-
+#ifdef _DEBUG
+#include <iostream>
+#endif
 using namespace std;
 namespace LiteGameModule
 {
@@ -30,24 +32,25 @@ namespace LiteGameModule
 	};
 
 
-	struct LiteModule
+	class LiteModule
 	{
-		typedef LiteGameEngine::TetrisBody<10, 20> LTetrisBody;
-		Level current_level = MIN_LEVEL;
-		unsigned long long n_level_up_rows = required_rows(current_level); //The amount of rows (scaled) needs to be burned until level up
+	public:
+		typedef LGEngine::TetrisBody LTetrisBody;
+		Level current_level;
+		unsigned long long n_level_up_rows; //The amount of rows (scaled) needs to be burned until level up
 		const unsigned char WIDTH = 10, HEIGHT = 20; //Field specifications
 		const unsigned char N_PIECE_AHEAD = 3;
-		LiteGameEngine::TetrisField<10, 20> field;
+		LGEngine::TetrisField field;
 		TMath::GameRNG::RNGSeed current_seed;
-		LiteGameEngine::TetrisBody<10, 20> controlling_piece;
-		std::queue<LiteGameEngine::BodyType> coming_pieces;
-		double score = 0.0;
-		double highest_score = 0.0;
+		LGEngine::TetrisBody controlling_piece;
+		std::queue<LGEngine::BodyType> coming_pieces;
+		double score;
+		double highest_score;
 	public:
 		bool try_update(InputInfo& info); //return false when game over
-		LiteModule(const TMath::GameRNG::RNGSeed& initial_seed);
+		LiteModule(TMath::GameRNG::RNGSeed initial_seed[1]);
 		//LiteModule();
 	private:
-		//LiteGameEngine::TetrisBody<10, 20>* create_new_body(const TMath::GameRNG::RNGSeed & seed);
+		//LGEngine::TetrisBody<10, 20>* create_new_body(const TMath::GameRNG::RNGSeed & seed);
 	};
 }

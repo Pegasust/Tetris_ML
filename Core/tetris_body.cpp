@@ -1,4 +1,5 @@
 #include "tetris_body.h"
+#include "lite_tetris_field.h"
 template<unsigned char w, unsigned char h>
 constexpr unsigned char LiteGameEngine::TetrisBody<w, h>::xy2i(const unsigned char& x, const unsigned char& y)
 {
@@ -101,10 +102,11 @@ LiteGameEngine::TetrisBody<max_x, max_y>::TetrisBody(const BodyType& type) :
 }
 
 template<unsigned char width, unsigned char height>
-LiteGameEngine::TetrisField<width, height>::TetrisField()//:
+LiteGameEngine::TetrisField<width, height>::TetrisField(void)
+	:collider()
 	//all_colliders()
 {
-	assign_empty_field(collider);
+	LiteGameEngine::TetrisField<width, height>::assign_empty_field(collider);
 }
 
 //template<unsigned char width, unsigned char height>
@@ -208,6 +210,7 @@ unsigned char LiteGameEngine::TetrisField<width, height>::update_collider(const 
 	return burned_rows;
 }
 
+
 template<unsigned char width, unsigned char height>
 void LiteGameEngine::TetrisField<width, height>::assign_empty_field(FieldCollider& col)
 {
@@ -303,3 +306,15 @@ LiteGameEngine::BodyType LiteGameEngine::rng_seed2bodytype(const TMath::GameRNG:
 	//TODO: FIX THIS TO A LESS BIASED ALGORITHM
 	return (BodyType)((input % 7) + 1);	
 }
+//
+//#define TEMP(w, h) template<unsigned char w, unsigned char h>
+//
+//TEMP(w, h)
+//constexpr unsigned char LiteGameEngine::TetrisField<w, h>::WIDTH = w + 2;
+//TEMP(w, h)
+//constexpr unsigned char LiteGameEngine::TetrisField<w, h>::HEIGHT = h + 1;
+//TEMP(w, h)
+//constexpr unsigned char LiteGameEngine::TetrisField<w, h>::LENGTH = WIDTH * HEIGHT;
+//
+//
+//#undef TEMP

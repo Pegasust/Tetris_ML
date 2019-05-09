@@ -1,5 +1,5 @@
 #include "game_rng.h"
-TMath::GameRNG::RNGSeed TMath::GameRNG::generate_random_seed()
+TMath::GameRNG::RNGSeed* TMath::GameRNG::generate_random_seed()
 {
 	//Get time now
 	auto invoke_time = RNGClock::now();
@@ -16,7 +16,8 @@ TMath::GameRNG::RNGSeed TMath::GameRNG::generate_random_seed()
 	//Moreover, since there is a very small chance, but is likely to happen, that y = 0.
 	//We don't want that to happen since the xorshift will produce only 0s if
 	//we throw a 0 as the seed.
-	return (x[0] / 2) + (y / 2);
+	x[0] = (x[0] / 2) + (y / 2);
+	return x;
 }
 
 bool TMath::GameRNG::get_bool(RNGSeed state[1], double percentage)

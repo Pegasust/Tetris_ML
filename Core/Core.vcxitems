@@ -16,15 +16,17 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_module.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_body.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_field.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_body.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)vector2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_module.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_body.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_field.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_body.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)vector2d.cpp" />
   </ItemGroup>
 </Project>

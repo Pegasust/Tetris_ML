@@ -59,7 +59,7 @@ namespace LiteGameEngine
 		void reassign(const BodyType& type);
 		static void rotate(TetrisCollider& collider, const Rotation& rot, const BodyType& type);
 		TetrisBody(const BodyType  & type, const Position2D & initial_pos, const Rotation & initial_rot);
-		TetrisBody(const BodyType& type);
+		TetrisBody(const BodyType & type);
 	};
 	const TetrisCollider colliders[] =
 	{
@@ -126,15 +126,16 @@ namespace LiteGameEngine
 #undef N
 	};
 	template<unsigned char width = 10, unsigned char height = 20>
-	struct TetrisField
+	class TetrisField
 	{
-		static const unsigned char WIDTH = width + 2;
-		static const unsigned char HEIGHT = height + 1;
-		static const unsigned char LENGTH = WIDTH * HEIGHT;
+	public:
+		static constexpr unsigned char WIDTH = width + 2;
+		static constexpr unsigned char HEIGHT = height + 1;
+		static constexpr unsigned char LENGTH = WIDTH * HEIGHT;
 		typedef BodyType FieldCollider[LENGTH];
 		FieldCollider collider;
 		//std::vector<TetrisBody<width, height>*> all_colliders; //All of the BUILT tetris pieces
-		TetrisField();
+		TetrisField(void);
 	public:
 		//void update_collider(const TetrisCollider& tetris_col, const BodyType& t, const Position2D& pos); //update collider from all_colliders
 		//return the # of rows burned

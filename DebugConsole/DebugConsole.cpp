@@ -7,7 +7,7 @@
 
 //GameCore::GameModule* tetris_ptr;
 namespace Module = LiteGameModule;
-namespace Engine = LiteGameEngine;
+namespace Engine = LGEngine;
 //using namespace std;
 void child_func(Module::LiteModule& l_module)
 {

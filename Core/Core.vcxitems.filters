@@ -10,11 +10,14 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)tetris_body.cpp">
-      <Filter>LiteGameEngine</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_module.cpp">
-      <Filter>LiteGameEngine\LiteGameModule</Filter>
+      <Filter>LiteGameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_body.cpp">
+      <Filter>HardLiteGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_field.cpp">
+      <Filter>HardLiteGameEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -27,11 +30,14 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)tetris_body.h">
-      <Filter>LiteGameEngine</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_module.h">
-      <Filter>LiteGameEngine\LiteGameModule</Filter>
+      <Filter>LiteGameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_body.h">
+      <Filter>HardLiteGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_field.h">
+      <Filter>HardLiteGameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +47,11 @@
     <Filter Include="LiteGameEngine">
       <UniqueIdentifier>{13965bd6-87d7-49f4-8153-d2b067d161a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LiteGameEngine\LiteGameModule">
+    <Filter Include="LiteGameModule">
       <UniqueIdentifier>{ee2b2164-fc25-4a99-85ba-8cd42135306a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HardLiteGameEngine">
+      <UniqueIdentifier>{ae760bdb-6c14-4348-94fc-a30c524aab38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

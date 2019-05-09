@@ -2,7 +2,10 @@
 
 bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 {
-	LiteGameEngine::Position2D new_position = controlling_piece.current_position;
+#ifdef _DEBUG
+	std : cout << "Trying to update " << info.n_frames_update << " frames with " << info.input << '\0' << std::endl;
+#endif
+	LGEngine::Position2D new_position = controlling_piece.current_position;
 	for (; info.n_frames_update > 0; info.n_frames_update--)
 	{
 		//Handle input
@@ -11,13 +14,15 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		{
 			case DOWN:
 				//potential_new_body->current_position.y = potential_new_body->current_position.y + 1;
-				while (LiteGameEngine::collider_fit(controlling_piece.collider, 
-					{ new_position.x, new_position.y + 1.0 }, this->field))
+				while (/*LGEngine::collider_fit(controlling_piece.collider, 
+					{ new_position.x, new_position.y + 1.0 }, this->field))*/
+					field.check_collider(controlling_piece.collider, { new_position.x, new_position.y + 1.0 })
 					//While it can still go down
+					)
 				{
 					new_position.y = new_position.y + 1.0;
 	#ifdef _DEBUG
-					if (new_position.y == (unsigned int) HEIGHT * (unsigned int) 3) //(It's okay dad, I know what I'm doing)
+					if ((unsigned int)new_position.y ==((unsigned int) HEIGHT * (unsigned int) 3)) //(It's okay dad, I know what I'm doing)
 					{
 						throw "Infinite loop from DOWN input.";
 						break;
@@ -26,21 +31,25 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 				}
 				break;
 			case LEFT:
-				if (LiteGameEngine::collider_fit(controlling_piece.collider, 
-					{new_position.x-1.0, new_position.y}, field))
+				if (/*LGEngine::collider_fit(controlling_piece.collider, 
+					{new_position.x-1.0, new_position.y}, field)*/
+					field.check_collider(controlling_piece.collider, { new_position.x - 1.0, new_position.y })
+					)
 				{
 					new_position.x = new_position.x - 1.0;
 				}
 				break;
 			case RIGHT:	
-				if (LiteGameEngine::collider_fit(controlling_piece.collider, 
-					{ new_position.x + 1.0, new_position.y }, field))
+				if (/*LGEngine::collider_fit(controlling_piece.collider, 
+					{ new_position.x + 1.0, new_position.y }, field)*/
+					field.check_collider(controlling_piece.collider, { new_position.x + 1.0, new_position.y })
+					)
 				{
 					new_position.x = new_position.x + 1.0;
 				}
 				break;
 			case ROTATE:
-				LiteGameEngine::try_rotate(controlling_piece, field);
+				LGEngine::try_rotate(controlling_piece, (controlling_piece.current_rot+1) % 4, field);
 				break;
 		}
 		
@@ -48,7 +57,8 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		//This is always less than 1.0
 		double gravity_displacement = LiteGameModule::v_gravity_at(current_level) * seconds_per_update;
 		new_position.y += gravity_displacement;
-		if (!LiteGameEngine::collider_fit(controlling_piece.collider, new_position, field))
+		if /*(!LGEngine::collider_fit(controlling_piece.collider, new_position, field))*/
+			(!field.check_collider(controlling_piece.collider, new_position))
 		{
 			//attempt to return to the nearest position
 			controlling_piece.current_position.y = floor(new_position.y - gravity_displacement);
@@ -73,7 +83,9 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 
 			//reassign controlling piece
 			controlling_piece.reassign(coming_pieces.front());
-			if (burned < 4 && !LiteGameEngine::collider_fit(controlling_piece.collider, controlling_piece.current_position, field))
+			if (burned < 4 &&/* !LGEngine::collider_fit(controlling_piece.collider, controlling_piece.current_position, field)*/
+				field.check_collider(controlling_piece)
+				)
 			{
 				//game over
 				score = std::numeric_limits<double>::lowest();
@@ -82,7 +94,7 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 			coming_pieces.pop();
 			//generate the next one
 			current_seed = TMath::GameRNG::xorshift64(&current_seed);
-			coming_pieces.push(LiteGameEngine::rng_seed2bodytype(current_seed));
+			coming_pieces.push(LGEngine::body_type_val(current_seed));
 		}
 		else
 		{
@@ -96,21 +108,27 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 	return true;
 }
 
-LiteGameModule::LiteModule::LiteModule(const TMath::GameRNG::RNGSeed& initial_seed) :
-	field(), current_seed(initial_seed),
-	controlling_piece(LiteGameEngine::rng_seed2bodytype(initial_seed)),
-	coming_pieces()
+LiteGameModule::LiteModule::LiteModule(TMath::GameRNG::RNGSeed initial_seed[1]) :
+	current_level(MIN_LEVEL),
+	n_level_up_rows(required_rows(current_level)),
+	field(),
+	current_seed(initial_seed[0]),
+	controlling_piece(LGEngine::body_type_val(initial_seed[0])),
+	coming_pieces(),
+	score(0.0),
+	highest_score(0.0)
 {
+	//controlling_piece = LTetrisBody(LGEngine::rng_seed2bodytype(initial_seed[0]));
 	for (unsigned char i = 0; i < 3; i++)
 	{
 		current_seed = TMath::GameRNG::xorshift64(&current_seed);
-		coming_pieces.push(LiteGameEngine::rng_seed2bodytype(current_seed));
+		coming_pieces.push(LGEngine::body_type_val(current_seed));
 	}
 }
 
-//LiteGameEngine::TetrisBody<10, 20> * LiteGameModule::LiteModule::create_new_body(const TMath::GameRNG::RNGSeed & seed)
+//LGEngine::TetrisBody<10, 20> * LiteGameModule::LiteModule::create_new_body(const TMath::GameRNG::RNGSeed & seed)
 //{
-//	return new LiteGameEngine::TetrisBody<10, 20>(LiteGameEngine::rng_seed2bodytype(seed));
+//	return new LGEngine::TetrisBody<10, 20>(LGEngine::rng_seed2bodytype(seed));
 //}
 
 
