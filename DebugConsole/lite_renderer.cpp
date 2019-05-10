@@ -13,6 +13,10 @@ std::string Renderer::get_score_info(const LiteGameModule::LiteModule& mod)
 	score_str += std::to_string(mod.n_level_up_rows);
 	score_str += "\n_current_seed: ";
 	score_str += std::to_string(mod.current_seed);
+	score_str += "\n_current_x: ";
+	score_str += std::to_string(mod.controlling_piece.current_position.x);
+	score_str += ", ";
+	score_str += std::to_string(mod.controlling_piece.current_position.y);
 	return score_str;
 }
 
@@ -26,6 +30,8 @@ std::string Renderer::get_upcoming_str(const LiteGameModule::LiteModule& mod)
 		upcoming_str += '\t';
 		upcoming_copy.pop();
 	}
+	upcoming_str += "\ncurrent piece: ";
+	upcoming_str += TETRIS_CHARS[mod.controlling_piece.type];
 	return upcoming_str;
 }
 
@@ -48,9 +54,6 @@ std::string Renderer::get_renderer_string(const LiteGameModule::LiteModule& mod)
 
 std::string Renderer::get_field_str(const LiteGameModule::LiteModule& mod)
 {
-#ifdef _DEBUG
-	std::cout << "creating tetris game field str" << std::endl;
-#endif
 	std::string tetris_game_field;
 	//Draw the static objects
 	for (unsigned char y = LGEngine::TetrisField::FIELD_TOP; y <= LGEngine::TetrisField::FIELD_BOTTOM + 1; y++)
@@ -70,23 +73,23 @@ std::string Renderer::get_field_str(const LiteGameModule::LiteModule& mod)
 	//tetris_game_field[CHAR_FIELD_LEN - 1] = '\0';
 	tetris_game_field += '\0';
 	//Finished with the field collider
-	//int current_piece_y0 = (int)mod.controlling_piece.current_position.y;
-	//int current_piece_x0 = (int)mod.controlling_piece.current_position.x;
+	int current_piece_y0 = (int)mod.controlling_piece.current_position.y;
+	int current_piece_x0 = (int)mod.controlling_piece.current_position.x;
 
 	//Draw the current piece
 	for (unsigned char i = 0; i < LGEngine::T_COLLIDER_LEN; i++)
 	{
 		if (mod.controlling_piece.collider[i]) //If there is collider
 		{
-			//unsigned char localx, localy;
-			//mod.controlling_piece.i2xy(i, localx, localy);
-			//int renderer_y = current_piece_y0 + localy;
-			//int renderer_x = current_piece_x0 + localx;
-			//unsigned int index = renderer_y * (LGEngine::TetrisField::WIDTH + 1) + renderer_x;
+			unsigned char localx, localy;
+			mod.controlling_piece.i2xy(i, localx, localy);
+			int renderer_y = current_piece_y0 + localy;
+			int renderer_x = current_piece_x0 + localx;
+			unsigned int index = renderer_y * (LGEngine::TetrisField::WIDTH + 1) + renderer_x;
 
 			//Overdraw it at the correct position
-			//tetris_game_field[index] = TETRIS_CHARS[mod.controlling_piece.type];
-			tetris_game_field += TETRIS_CHARS[mod.controlling_piece.type];
+			tetris_game_field[index] = TETRIS_CHARS[mod.controlling_piece.type];
+			//tetris_game_field += TETRIS_CHARS[mod.controlling_piece.type];
 		}
 	}
 	return tetris_game_field;
@@ -107,14 +110,15 @@ void Renderer::clear_console()
 void Renderer::RenderUnit::update_string(const LiteGameModule::LiteModule& mod)
 {
 	//Reassign 
-	for (unsigned char y = LGEngine::TetrisField::FIELD_TOP; y <= LGEngine::TetrisField::FIELD_BOTTOM; y++)
-	{
-		unsigned int str_y_index0 = y * (LGEngine::TetrisField::WIDTH + 1);
-		for (unsigned char x = LGEngine::TetrisField::FIELD_LEFT; x <= LGEngine::TetrisField::FIELD_RIGHT; x++)
-		{
-			field[str_y_index0 + x] = mod.field.collider[mod.field.xy2i(x, y)];
-		}
-	}
+	//for (unsigned char y = LGEngine::TetrisField::FIELD_TOP; y <= LGEngine::TetrisField::FIELD_BOTTOM; y++)
+	//{
+	//	unsigned int str_y_index0 = y * (LGEngine::TetrisField::WIDTH + 1);
+	//	for (unsigned char x = LGEngine::TetrisField::FIELD_LEFT; x <= LGEngine::TetrisField::FIELD_RIGHT; x++)
+	//	{
+	//		field[str_y_index0 + x] = mod.field.collider[mod.field.xy2i(x, y)];
+	//	}
+	//}
+	field = get_field_str(mod);
 	//Should now be done with reassigning renderer
 	info = get_score_info(mod);
 	upcoming = get_upcoming_str(mod);
@@ -127,6 +131,7 @@ void Renderer::RenderUnit::render()
 	render += '\n';
 	render += upcoming;
 	std::cout << render << std::endl;
+	std::cout << "frames: " << std::to_string(++frames) << std::endl;
 }
 
 Renderer::RenderUnit::RenderUnit(const LiteGameModule::LiteModule& mod) :

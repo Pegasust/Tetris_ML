@@ -24,18 +24,12 @@
     <ClCompile Include="smart_keyboard_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lite_renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard_input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="smart_keyboard_input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lite_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

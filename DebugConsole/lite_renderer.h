@@ -16,6 +16,7 @@ namespace Renderer
 {
 	const unsigned int CHAR_FIELD_LEN = ((LGEngine::TetrisField::WIDTH + 1) * LGEngine::TetrisField::HEIGHT) + 1;
 	const std::string TETRIS_CHARS = " 1ZSOTLJ#";
+	//TODO: CHANGE THESE TO DIRECTLY MODIFY A VALUE (add to parameter an & instead of returning a string)
 	std::string get_score_info(const LiteGameModule::LiteModule& mod);
 	std::string get_upcoming_str(const LiteGameModule::LiteModule& mod);
 	std::string get_renderer_string(const LiteGameModule::LiteModule& mod);
@@ -24,6 +25,9 @@ namespace Renderer
 	class RenderUnit
 	{
 	public:
+#if _DEBUG
+		unsigned long long frames = 0;
+#endif
 		std::string field;
 		std::string info;
 		std::string upcoming;

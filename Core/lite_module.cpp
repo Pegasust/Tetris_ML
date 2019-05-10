@@ -2,34 +2,34 @@
 
 bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 {
-#ifdef _DEBUG
-	//std :: cout << "Trying to update " << info.n_frames_update << " frames with " << info.input << '\0' << std::endl;
-#endif
-	LGEngine::Position2D new_position = controlling_piece.current_position;
+	LGEngine::Position2D new_position;
 	for (; info.n_frames_update > 0; info.n_frames_update--)
 	{
+		new_position = controlling_piece.current_position;
 		//Handle input
 		//LTetrisBody* potential_new_body = new LTetrisBody(*controlling_piece);
 		switch(info.input)
 		{
 			case DOWN:
 				//potential_new_body->current_position.y = potential_new_body->current_position.y + 1;
+				new_position.y = floor(new_position.y);
 				while (/*LGEngine::collider_fit(controlling_piece.collider, 
 					{ new_position.x, new_position.y + 1.0 }, this->field))*/
-					field.check_collider(controlling_piece.collider, { new_position.x, new_position.y + 1.0 })
+					field.check_collider(controlling_piece.collider, { new_position.x, new_position.y })
 					//While it can still go down
 					)
 				{
 					new_position.y = new_position.y + 1.0;
-	#ifdef _DEBUG
-					if ((unsigned int)new_position.y ==((unsigned int) HEIGHT * (unsigned int) 3)) //(It's okay dad, I know what I'm doing)
-					{
-						throw "Infinite loop from DOWN input.";
-						break;
-					}
-					//std::cout << "DOWN \0" << std::endl;
-	#endif
+	//#ifdef _DEBUG
+	//				if ((unsigned int)new_position.y ==((unsigned int) HEIGHT * (unsigned int) 3)) //(It's okay dad, I know what I'm doing)
+	//				{
+	//					throw "Infinite loop from DOWN input.";
+	//					break;
+	//				}
+	//				//std::cout << "DOWN \0" << std::endl;
+	//#endif
 				}
+				//new_position.y += 0.003;
 				break;
 			case LEFT:
 				if (/*LGEngine::collider_fit(controlling_piece.collider, 
@@ -57,9 +57,12 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 		//do gravity
 		//This is always less than 1.0
 		double gravity_displacement = LiteGameModule::v_gravity_at(current_level) * seconds_per_update;
-		new_position.y += gravity_displacement;
+		if (info.input != Input::DOWN)
+		{
+			new_position.y += gravity_displacement;
+		}
 		if /*(!LGEngine::collider_fit(controlling_piece.collider, new_position, field))*/
-			(!field.check_collider(controlling_piece.collider, new_position))
+			(!field.check_collider(controlling_piece.collider, new_position)) //If the thing collides in this update
 		{
 			//attempt to return to the nearest position
 			controlling_piece.current_position.y = floor(new_position.y - gravity_displacement);
@@ -77,15 +80,15 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 				{
 					//level up
 					n_level_up_rows += required_rows(++current_level) - scaled_burned;
-					score += (double)current_level / 100.0;
+					score += (double)(current_level +1.0)/ 100.0;
 				}
 			}
-			score += (double)current_level / 700.0 + (((double)scaled_burned * current_level) / 125.0) ;
+			score += ((double)current_level + 1.0) / 700.0 + ((double)(scaled_burned * (current_level+1)) / 125.0) ;
 
 			//reassign controlling piece
 			controlling_piece.reassign(coming_pieces.front());
 			if (burned < 4 &&/* !LGEngine::collider_fit(controlling_piece.collider, controlling_piece.current_position, field)*/
-				field.check_collider(controlling_piece)
+				!field.check_collider(controlling_piece)
 				)
 			{
 				//game over
@@ -105,7 +108,7 @@ bool LiteGameModule::LiteModule::try_update(InputInfo& info)
 			//no reassignment needed
 			controlling_piece.current_position = new_position;
 			//This will encourage ML to press DOWN
-			score -= (double)current_level / 8000.0;
+			score -= ((double)current_level + 1.0) / 8000.0;
 		}
 		if (highest_score < score) highest_score = score;
 	}

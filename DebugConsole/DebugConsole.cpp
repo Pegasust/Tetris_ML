@@ -1,5 +1,12 @@
 // DebugConsole.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#define USER_TEST
+//#define TIME_BASED
+#ifndef USER_TEST
+#define COMMAND_TEST
+#endif // !USER_TEST
+
+
 
 #include <iostream>
 #include "lite_renderer.h"
@@ -21,7 +28,20 @@ bool child_func(Module::LiteModule& l_module)
 	//std::cout << "updating..." << std::endl;
 	//std::this_thread::sleep_for(std::chrono::duration<double>(Module::seconds_per_update));
 	//capture input
-	auto input = _getch();
+	int input;
+#ifndef TIME_BASED
+	input = _getch();
+#else
+	auto now = std::chrono::high_resolution_clock::now();
+	while (!_kbhit())
+	{
+		if (((std::chrono::high_resolution_clock::now() - now).count() ) > (long)(Module::seconds_per_update))
+		{
+			break;
+		}
+	}
+	input = _getch();
+#endif
 	Module::Input i;
 	switch (input)
 	{
@@ -74,8 +94,22 @@ int main()
 	r_unit->render();
 	//_getch();
 
+#ifdef USER_TEST
 	while (child_func(l_module)) {};
+#elif defined COMMAND_TEST
+	Module::InputInfo info = { Module::DOWN, 7 };
+	if(!l_module.try_update(info))
+	{
+		//If lost
+		Renderer::clear_console();
+		std::cout << "Lost." << std::endl;
+		_getch();
+	}
+	Renderer::clear_console();
+	r_unit->update_string(l_module);
+	r_unit->render();
 
+#endif
 	delete r_unit;
 	do
 	{

@@ -15,7 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)game_rng.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_api.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_module.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_renderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_body.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_field.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h" />
@@ -23,7 +25,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)game_rng.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_api.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_module.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_renderer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_body.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_field.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)rounding.cpp" />

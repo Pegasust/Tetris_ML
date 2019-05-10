@@ -11,9 +11,9 @@ namespace LiteGameModule
 	typedef unsigned long long Level;
 	constexpr Level MAX_LEVEL = std::numeric_limits<Level>::max();
 	constexpr Level MIN_LEVEL = std::numeric_limits<Level>::min();;
-	constexpr double v_gravity0 = 0.3333; // blocks per second
+	constexpr double v_gravity0 = 98.0; // blocks per second
 	constexpr double v_gravity_max = 98.0; //blocks per second
-	constexpr double seconds_per_update = 1.0 / (v_gravity_max+ 10.0);
+	constexpr double seconds_per_update = 1.0 / (v_gravity_max+ 21.0);
 	//constexpr double expr_s_per_up = seconds_per_update;
 	constexpr double v_gravity_at(Level level);
 	const unsigned long long required_rows0 = 7;

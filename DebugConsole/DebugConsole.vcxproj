@@ -217,12 +217,10 @@
   <ItemGroup>
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="keyboard_input.cpp" />
-    <ClCompile Include="lite_renderer.cpp" />
     <ClCompile Include="smart_keyboard_input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard_input.h" />
-    <ClInclude Include="lite_renderer.h" />
     <ClInclude Include="smart_keyboard_input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

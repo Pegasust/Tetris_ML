@@ -19,6 +19,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_tetris_field.cpp">
       <Filter>HardLiteGameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_renderer.cpp">
+      <Filter>ConsoleRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)lite_api.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h">
@@ -39,6 +43,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_tetris_field.h">
       <Filter>HardLiteGameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_renderer.h">
+      <Filter>ConsoleRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)lite_api.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -52,6 +60,9 @@
     </Filter>
     <Filter Include="HardLiteGameEngine">
       <UniqueIdentifier>{ae760bdb-6c14-4348-94fc-a30c524aab38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConsoleRenderer">
+      <UniqueIdentifier>{9ddabfa5-6b0b-471c-ba66-a26acd4404fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

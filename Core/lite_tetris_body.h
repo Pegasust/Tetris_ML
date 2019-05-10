@@ -49,8 +49,8 @@ namespace LGEngine
 #pragma endregion
 
 #pragma region Helpers
-		static constexpr double initial_x = ((double) FIELD_WIDTH / 2) - 2.0;
-		static constexpr double initial_y = -1.0;
+		static constexpr double initial_x = ((double) FIELD_WIDTH / 2)-1.0;
+		static constexpr double initial_y = 0.0;
 		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y)
 		{
 			return y * 4 + x;

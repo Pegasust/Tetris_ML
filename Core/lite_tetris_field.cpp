@@ -25,7 +25,7 @@ unsigned char LGEngine::TetrisField::update_collider(const TetrisBody body)
 	//look for burn signals
 	unsigned char burned_rows = 0;
 	//TODO: NOT NECESSARY TO CHECK FROM BOT, JUST CHECK FROM WHERE WE PLACED IT TO PIECE's TOP
-	for (unsigned char y = FIELD_BOTTOM; 
+	for (char y = FIELD_BOTTOM; 
 		y >= FIELD_TOP;//y--
 #ifdef _DEBUG
 		y--
