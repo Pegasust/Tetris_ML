@@ -155,10 +155,13 @@
     <ClCompile Include="game_helper.cpp" />
     <ClCompile Include="Zenix_ML.cpp" />
     <ClCompile Include="Zenx.cpp" />
+    <ClCompile Include="Zenxis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_helper.h" />
     <ClInclude Include="Zenx.h" />
+    <ClInclude Include="Zenxis.h" />
+    <ClInclude Include="Zenx_Consts.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DebugConsole\DebugConsole.vcxproj">

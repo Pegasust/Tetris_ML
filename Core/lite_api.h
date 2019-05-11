@@ -1,4 +1,11 @@
 #pragma once
+#ifdef _DEBUG
+#define RENDER
+#endif
+#ifdef RENDER
+#include <conio.h>
+#include <iostream>
+#endif
 #include "lite_renderer.h"
 namespace LiteAPI
 {

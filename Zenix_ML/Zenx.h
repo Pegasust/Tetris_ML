@@ -1,5 +1,6 @@
 #pragma once
 #include "game_helper.h"
+#include "Zenx_Consts.h"
 //H: Zenx are to address the race of people who play Tetris their whole life.
 //H: Zenxis pass their knowledge by reproducing
 //H: Zenxis do not define gender; their reproduction require another Zenx.
@@ -10,15 +11,6 @@
 */
 namespace TetrisML
 {
-	const unsigned long long N_INDIVIDUALS_PER_GEN = 100;
-	constexpr double SURVIVING_RATIO = 0.1;
-	constexpr double MUTATION_RATIO = 0.05;
-	constexpr double MUTATE_RANGE = 0.2; //range is +- (MUTATE_RANGE / 2), inclusive
-
-
-
-
-	const unsigned long long SURVIVORS_PER_GEN = N_INDIVIDUALS_PER_GEN * SURVIVING_RATIO;
 	struct DNAConfig //contains all cooefficients
 	{
 		double
@@ -35,17 +27,23 @@ namespace TetrisML
 		DNAConfig& operator /=(const double& rhs);
 		DNAConfig& operator *=(const double& rhs);
 	};
+	union DNAArray
+	{
+		DNAConfig dna;
+#define NOT_0 3
+		double arr[NOT_0];
+#undef NOT_0
+	};
 	struct MetaInfo
 	{
 		unsigned long long generation;
-		double dna_config[N_INDIVIDUALS_PER_GEN];
+		DNAArray dna_config;
 	};
 	struct RecordInfo
 	{
 		unsigned long long level;
 		double highest_score;
-		TMath::GameRNG::RNGSeed last_seed;
-		RecordInfo(ZenixAgent::TModule::LiteModule const& mod);
+		void assign(ZenixAgent::TModule::LiteModule const& mod);
 	};
 	class Zenx
 	{
@@ -54,23 +52,27 @@ namespace TetrisML
 		typedef double Bias;
 		DNAConfig dna;
 		Fitness best_fitness = std::numeric_limits<Fitness>::lowest();
-		//ZenixAgent::TModule::LiteModule latest_mod;
-
 		//H: Zenxis remember their past life.
 		RecordInfo lifetime_record;
+
+
 		Fitness get_fitness(const ZenixAgent::RawObservation& obsv);
 
 		//std::vector<TMath::GameRNG::RNGSeed> played_seeds;
 
 		//Also assign best_fitness, lifetime_record
-		ZenixAgent::RawObservation play_once();
-		
+		ZenixAgent::RawObservation& play_once();
+		//Also assign best_fitness, lifetime_record
+		ZenixAgent::RawObservation& play_once(TMath::GameRNG::RNGUnion seed[1]);
 		//RETURNS UNNORMALIZED DNA
-		static DNAConfig reproduce(const Zenx& parent1, const Zenx& parent2);
+		static DNAConfig& reproduce(const Zenx& parent1, const Zenx& parent2);
 		//RETURNS UNNORMALIZED DNA
 		//If bi is negative, value is more biased towards one and vice versa
-		static DNAConfig reproduce(const Zenx& p1, const Zenx& p2, const Bias& bi);
-		static constexpr bool try_mutate(DNAConfig& child_dna);
+		static DNAConfig& reproduce(const Zenx& p1, const Zenx& p2, const Bias& bi);
+		static bool try_mutate(DNAConfig& child_dna, TMath::GameRNG::RNGUnion x[1]);
+		Zenx(const DNAArray& dna);
 
+		bool operator >(Zenx const& rhs);
+		Zenx();
 	};
 }

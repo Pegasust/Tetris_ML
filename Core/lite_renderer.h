@@ -10,6 +10,7 @@
 #else
 #include <stdlib.h>
 #endif
+#include <iostream>
 #include <string>
 #include "lite_module.h"
 namespace Renderer
@@ -25,9 +26,7 @@ namespace Renderer
 	class RenderUnit
 	{
 	public:
-#if _DEBUG
 		unsigned long long frames = 0;
-#endif
 		std::string field;
 		std::string info;
 		std::string upcoming;

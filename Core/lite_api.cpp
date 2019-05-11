@@ -13,6 +13,10 @@ double LiteAPI::down_cast(LGEngine::TetrisBody const& body, LGEngine::TetrisFiel
 
 char LiteAPI::simulate(LiteGameModule::LiteModule& mod, bool& game_not_over, LiteGameModule::InputInfo& info)
 {
+#ifdef RENDER
+	std::cout << "[Simulation]: Input: " << info.input << std::endl;
+	_getch();
+#endif
 	LGEngine::Position2D new_position;
 	char total_burns = 0;
 	for (; info.n_frames_update > 0; info.n_frames_update--)

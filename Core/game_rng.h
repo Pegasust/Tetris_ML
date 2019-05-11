@@ -48,7 +48,7 @@ namespace TMath
 
 		static bool get_bool(RNGUnion state[1], double percentage);
 
-		//Inclusive
+		//Exclusive
 		static double get_value(RNGUnion state[1], double const& min, double const& max);
 	};
 }

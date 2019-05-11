@@ -2,10 +2,17 @@
 //
 
 #include <iostream>
-
+#include "Zenxis.h"
 int main()
 {
-    std::cout << "Hello World!\n";
+	auto x = TetrisML::SeedHelper::generate_random_seed();
+	TetrisML::Seed s(*(TetrisML::Seed*) &x);
+	TetrisML::Zenxis zenxis(s);
+	std::cout.precision(std::numeric_limits<double>::max_digits10);
+	do
+	{
+		zenxis.big_bang();
+	} while (1);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

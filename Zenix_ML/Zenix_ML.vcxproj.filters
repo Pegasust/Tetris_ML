@@ -27,12 +27,21 @@
     <ClCompile Include="Zenx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Zenxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Zenx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Zenxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Zenx_Consts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

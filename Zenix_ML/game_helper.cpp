@@ -14,7 +14,8 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, con
 		rotate_inf.n_frames_update = rotation - mod.controlling_piece.current_rot;
 	}
 
-	if (!mod.try_update(rotate_inf)) return false;
+	if (!mod.try_update(rotate_inf)) 
+		return false;
 
 	//x upd
 	UpdateInfo temp_inf;
@@ -27,7 +28,8 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, con
 	{
 		temp_inf.input = TModule::Input::RIGHT;
 	}
-	if (!mod.try_update(temp_inf)) return false;
+	if (!mod.try_update(temp_inf)) 
+		return false;
 	
 	//y upd
 	temp_inf.n_frames_update = 1;
@@ -35,7 +37,8 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, con
 	//if (!mod.try_update(temp_inf)) return false;
 	bool game_not_over;
 	burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
-	if (!game_not_over) return false;
+	if (!game_not_over) 
+		return false;
 	return true;
 }
 
@@ -53,9 +56,27 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 	{
 		rotate_inf.n_frames_update = rotation - mod.controlling_piece.current_rot;
 	}
+#ifdef RENDER
+#define MOD_NAME mod
+#define RENDERER_INIT	Renderer::RenderUnit rdr(MOD_NAME);
+#define DISPLAY_INPUT_INFO(input_inf) (std::cout<<"Input info: { "<< input_inf.input<<", "<<input_inf.n_frames_update<<" }"<<std::endl)
+#define PRINT_LOSE std::cout<<"RENDERER: Lose."<<std::endl; _getch()
+#define SHOW_SCREEN rdr.update_string(MOD_NAME); rdr.render(); _getch();
 
-	if (!mod.try_update(rotate_inf)) return false;
-
+	RENDERER_INIT;
+	Renderer::clear_console();
+	DISPLAY_INPUT_INFO(rotate_inf);
+#endif
+	if (!mod.try_update(rotate_inf))
+	{
+		return false;
+#ifdef RENDER
+		PRINT_LOSE;
+#endif
+	}
+#ifdef RENDER
+	SHOW_SCREEN;
+#endif
 	//x upd
 	UpdateInfo temp_inf;
 	temp_inf.n_frames_update = abs(mod.controlling_piece.current_position.x - x);
@@ -67,7 +88,20 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 	{
 		temp_inf.input = TModule::Input::RIGHT;
 	}
-	if (!mod.try_update(temp_inf)) return false;
+#ifdef RENDER
+	Renderer::clear_console();
+	DISPLAY_INPUT_INFO(rotate_inf);
+#endif
+	if (!mod.try_update(temp_inf)) 
+	{
+#ifdef RENDER
+		PRINT_LOSE; 
+#endif
+		return false;
+	}
+#ifdef RENDER
+	SHOW_SCREEN;
+#endif
 
 	//y upd
 	temp_inf.n_frames_update = 1;
@@ -77,6 +111,9 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 	//burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
 	//if (!game_not_over) return false;
 	return mod.try_update(temp_inf);
+#ifdef RENDER
+#undef MOD_NAME
+#endif
 }
 
 bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const char& x, const unsigned char& y, TEngine::Rotation const& rotation)
