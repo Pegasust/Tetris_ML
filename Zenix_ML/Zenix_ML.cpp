@@ -8,7 +8,8 @@ int main()
 	auto x = TetrisML::SeedHelper::generate_random_seed();
 	TetrisML::Seed s(*(TetrisML::Seed*) &x);
 	TetrisML::Zenxis zenxis(s);
-	std::cout.precision(std::numeric_limits<double>::max_digits10);
+	//std::cout.precision(std::numeric_limits<double>::max_digits10);
+	std::cout.precision(5);
 	do
 	{
 		zenxis.big_bang();

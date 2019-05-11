@@ -236,11 +236,17 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 	ZenixAgent::TEngine::Rotation fittest_rot;
 	do
 	{
+		fittest_x = std::numeric_limits<char>::lowest();
 #ifdef RENDER
 		Renderer::clear_console();
 		rdr.update_string(main_mod);
 		rdr.render();
+		std::cout << "MOVE_SET_APPLIED." << std::endl;
+#ifdef _TRACE
 		_getch();
+		std::cout << "Press smt..." << std::endl;
+
+#endif
 #endif
 		//Within scope: In every situation
 		Fitness local_best_fitness = std::numeric_limits<Fitness>::lowest();
@@ -251,9 +257,18 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 			{
 				//TODO: Optimize this: remove downcast from game_helper::can_move_piece
 				//Do downcast here instead?
-				for (unsigned char y = LGEngine::TetrisBody::MAX_POS_Y; y >= LGEngine::TetrisBody::MIN_POS_Y; y--) //Try y
+				for (unsigned char y = LGEngine::TetrisBody::MAX_POS_Y; y < 255 && y >= LGEngine::TetrisBody::MIN_POS_Y; y--) //Try y
 					//From bot to top.
 				{
+					//Check if collider can even be there to prevent going through a hassle.
+					ZenixAgent::TEngine::TetrisCollider temp;
+					ZenixAgent::TEngine::TetrisBody::rotate(temp, rot, main_mod.controlling_piece.type);
+					ZenixAgent::TEngine::Position2D position_check = { (double)x, (double)y };
+
+					if (!main_mod.field.check_collider(temp, position_check))
+					{
+						continue;
+					}
 					// TODO: Optimize an output for can_move_piece can improve performance
 					//Try to make the move to find out if it's the best choice
 					if (ZenixAgent::can_move_piece(main_mod, x, y, rot))
@@ -263,6 +278,12 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 						//Make the actual move on the cloned mod
 						if (ZenixAgent::attempt_move_piece(cloned_mod, x, y, rot, burned))
 						{
+#ifdef RENDER
+							Renderer::RenderUnit rdr(cloned_mod);
+							Renderer::clear_console();
+							rdr.render();
+							std::cout << "Attempt: <" << (int)x << ", " << (int)y << ", " << (int) rot << ">.";
+#endif
 							//gather info
 							auto obsv = ZenixAgent::get_raw_observation(cloned_mod.field);
 							//Since this is not game over, data are surely not altered.
@@ -294,24 +315,34 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 						break;
 					}
 				}
+				
 			}
 		}
 
 
 		//No possible move
+		if (fittest_x == std::numeric_limits<char>::lowest())
+		{
 #ifdef RENDER
-		std::cout << "No possible move." << std::endl;
-		_getch();
-		throw "WTF?";
-
+			std::cout << "No possible move." << std::endl; 
+#ifdef _TRACE
+				_getch();
+				std::cout << "Press smt..." << std::endl;
 #endif
-		//Well, it's equal to loss anyways
-		break;
+			//throw "WTF?";
+			break;
+#endif
+			//Well, it's equal to loss anyways
+		}
 	} while (ZenixAgent::apply_moveset(main_mod, fittest_x, fittest_x, fittest_rot));
 #ifdef RENDER
 	Renderer::clear_console();
 	std::cout << "Game over." << std::endl;
+#ifdef _TRACE
 	_getch();
+	std::cout << "Press smt..." << std::endl;
+
+#endif
 #endif
 	lifetime_record.assign(main_mod);
 

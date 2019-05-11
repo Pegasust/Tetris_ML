@@ -22,11 +22,11 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, con
 	temp_inf.n_frames_update = abs(mod.controlling_piece.current_position.x - x);
 	if (x > mod.controlling_piece.current_position.x) //Desired position is to the right
 	{
-		temp_inf.input = TModule::Input::LEFT;
+		temp_inf.input = TModule::Input::RIGHT;
 	}
 	else
 	{
-		temp_inf.input = TModule::Input::RIGHT;
+		temp_inf.input = TModule::Input::LEFT;
 	}
 	if (!mod.try_update(temp_inf)) 
 		return false;
@@ -35,10 +35,11 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, con
 	temp_inf.n_frames_update = 1;
 	temp_inf.input = TModule::Input::DOWN;
 	//if (!mod.try_update(temp_inf)) return false;
-	bool game_not_over;
-	burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
-	if (!game_not_over) 
-		return false;
+	//bool game_not_over;
+	//burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
+	//if (!game_not_over) 
+	//	return false;
+	burned = LiteAPI::update_yield_burn(temp_inf, mod);
 	return true;
 }
 
@@ -60,8 +61,16 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 #define MOD_NAME mod
 #define RENDERER_INIT	Renderer::RenderUnit rdr(MOD_NAME);
 #define DISPLAY_INPUT_INFO(input_inf) (std::cout<<"Input info: { "<< input_inf.input<<", "<<input_inf.n_frames_update<<" }"<<std::endl)
-#define PRINT_LOSE std::cout<<"RENDERER: Lose."<<std::endl; _getch()
-#define SHOW_SCREEN rdr.update_string(MOD_NAME); rdr.render(); _getch();
+
+#ifdef _TRACE
+#define PROMPT_USER   std::cout << "Press smt..." << std::endl; _getch();
+#else
+#define PROMPT_USER
+#endif
+#define PRINT_LOSE std::cout<<"RENDERER: Lose."<<std::endl; PROMPT_USER
+
+#define SHOW_SCREEN rdr.update_string(MOD_NAME); rdr.render();PROMPT_USER
+
 
 	RENDERER_INIT;
 	Renderer::clear_console();
@@ -82,11 +91,11 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 	temp_inf.n_frames_update = abs(mod.controlling_piece.current_position.x - x);
 	if (x > mod.controlling_piece.current_position.x) //Desired position is to the right
 	{
-		temp_inf.input = TModule::Input::LEFT;
+		temp_inf.input = TModule::Input::RIGHT;
 	}
 	else
 	{
-		temp_inf.input = TModule::Input::RIGHT;
+		temp_inf.input = TModule::Input::LEFT;
 	}
 #ifdef RENDER
 	Renderer::clear_console();
@@ -116,8 +125,11 @@ bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const un
 #endif
 }
 
-bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const char& x, const unsigned char& y, TEngine::Rotation const& rotation)
+//Reasigns x and y 
+bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, char& x, unsigned char& y, TEngine::Rotation const& rotation)
 {
+#define END_X_CHECK_OF_CURRENT_ROT x += 10;
+#define CORRECT_Y_NEXT_CHECK(desired_y) y = desired_y-1;
 	//Unoptimized way. Probably can use math.
 	auto temp_mod = mod;
 
@@ -154,11 +166,11 @@ bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const char& x, c
 		temp_inf.n_frames_update = abs(temp_mod.controlling_piece.current_position.x - x);
 		if (x > temp_mod.controlling_piece.current_position.x) //Desired position is to the right
 		{
-			temp_inf.input = TModule::Input::LEFT;
+			temp_inf.input = TModule::Input::RIGHT;
 		}
 		else
 		{
-			temp_inf.input = TModule::Input::RIGHT;
+			temp_inf.input = TModule::Input::LEFT;
 		}
 		//TODO: Can have a side-cast here to prevent multiple instances of a same state.
 		bool game_not_over = true;
@@ -175,12 +187,14 @@ bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const char& x, c
 	//check for same y
 	if ((unsigned char)temp_mod.controlling_piece.current_position.y != y) //only check when y value is different
 	{
-		if ((unsigned char)LiteAPI::down_cast(temp_mod.controlling_piece, temp_mod.field) != y)
+		if ((unsigned char)LiteAPI::down_cast(temp_mod.controlling_piece, temp_mod.field) != y) //There might be a piece above it
 		{
 			return false;
 		}
 	}
 	return true;
+#undef END_X_CHECK_OF_CURRENT_ROT
+#undef CORRECT_Y_NEXT_CHECK
 }
 
 ZenixAgent::RawObservation ZenixAgent::get_raw_observation(const TEngine::TetrisField& field)

@@ -21,6 +21,7 @@ namespace LGEngine
 		//Returns the number of rows burned
 		unsigned char update_collider(const TetrisBody body); //Trust me and just update without check.
 		bool check_collider(const TetrisCollider& col, const Position2D& new_position) const;
+		//bool check_collider(const TetrisCollider& col, const Position2D& new_position, const Rotation & new_rot) const;
 		bool check_collider(const TetrisBody& body) const;
 		static void assign_empty_field(FieldCollider& col);
 		static void assign_border(FieldCollider& col);

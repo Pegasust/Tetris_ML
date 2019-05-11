@@ -151,7 +151,7 @@ void TetrisML::Zenxis::big_bang()
 	//avg high score
 	std::cout << "avg_hscore: " << (avg_hscore / (double)N_INDIVIDUALS_PER_GEN) << '\t';
 	std::cout << "avg_burns: " << (avg_burns / (double)N_INDIVIDUALS_PER_GEN) << '\t';
-	std::cout << "avg_level: " << (avg_level / (double)N_INDIVIDUALS_PER_GEN);
+	std::cout << "avg_level: " << (avg_level / (double)N_INDIVIDUALS_PER_GEN) << '\t' << std::endl;
 
 
 

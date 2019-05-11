@@ -25,8 +25,8 @@ namespace ZenixAgent
 	bool apply_moveset(TModule::LiteModule& mod, const char& x,
 		const unsigned char& y, TEngine::Rotation const& rotation);
 
-	bool can_move_piece(const TModule::LiteModule& mod, const char& x,
-		const unsigned char& y, TEngine::Rotation const& rotation);
+	bool can_move_piece(const TModule::LiteModule& mod, char& x,
+		unsigned char& y, TEngine::Rotation const& rotation);
 
 	////Sum of absolute difference of adjacent pieces
 	//double calculate_builkiness(const TModule::LiteModule& mod);
