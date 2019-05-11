@@ -6,7 +6,7 @@ TMath::GameRNG::RNGSeed TMath::GameRNG::generate_random_seed()
 	//Hardcoded because 0xDEADBEEF is a valid number : ^)
 	RNGSeed x[1] = { 0xDEADBEEF };
 	//Have it undergo some task to eliminate the upcoming RNGClock::now() the exact same
-	for (int i = 0; i < 0x001000; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		x[0] = xorshift64(x);
 	}
@@ -21,6 +21,8 @@ TMath::GameRNG::RNGSeed TMath::GameRNG::generate_random_seed()
 	//We don't want that to happen since the xorshift will produce only 0s if
 	//we throw a 0 as the seed.
 	x[0] = (x[0] / 2) + (y / 2);
+	//Just randomize :)
+	x[0] = xorshift64(x);
 	return x[0];
 }
 
@@ -30,8 +32,41 @@ bool TMath::GameRNG::get_bool(RNGSeed state[1], double percentage)
 	if (percentage >= 1.0) val = true;
 	else
 	{
-		val = (static_cast<double>(state[0]) / static_cast<double>(RNGSEED_MAX) > percentage);
+		//val = (static_cast<double>(state[0]) / static_cast<double>(RNGSEED_MAX) > percentage);
+		val = (state[0]-1) < ((RNGSEED_MAX-1) * percentage);
 	}
 	state[0] = xorshift64(state);
 	return val;
+}
+
+bool TMath::GameRNG::get_bool(RNGUnion state[1], double percentage)
+{
+	bool val;
+	if (percentage >= 1.0) val = true;
+	else
+	{
+		//val = (static_cast<double>(state[0]) / static_cast<double>(RNGSEED_MAX) > percentage);
+		val = (state[0].long_expr - 1) < ((RNGSEED_MAX - 1) * percentage);
+	}
+	state[0] = xorshift64(state);
+	return val;
+}
+
+double TMath::GameRNG::get_value(RNGUnion state[1], double const& min, double const& max)
+{
+#define IS_POSITIVE(signbit) (signbit == 0)
+	if (isnan(state[0].double_expr))
+	{
+		if (IS_POSITIVE(std::signbit(state[0].double_expr)))
+		{
+			return max;
+		}
+		else
+		{
+			return min;
+		}
+	}
+	double range = max - min;
+	return min + ((state[0].double_expr / std::numeric_limits<double>::max()) * range);
+#undef IS_POSITIVE
 }

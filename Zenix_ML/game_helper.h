@@ -19,10 +19,13 @@ namespace ZenixAgent
 			;
 	};
 
-	bool attempt_move_piece(TModule::LiteModule& mod, const unsigned char& x,
+	bool attempt_move_piece(TModule::LiteModule& mod, const char& x,
+		const unsigned char& y, TEngine::Rotation const& rotation, unsigned char & burned);
+
+	bool apply_moveset(TModule::LiteModule& mod, const char& x,
 		const unsigned char& y, TEngine::Rotation const& rotation);
 
-	bool can_move_piece(const TModule::LiteModule& mod, const unsigned char& x,
+	bool can_move_piece(const TModule::LiteModule& mod, const char& x,
 		const unsigned char& y, TEngine::Rotation const& rotation);
 
 	////Sum of absolute difference of adjacent pieces

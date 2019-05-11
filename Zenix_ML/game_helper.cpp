@@ -1,6 +1,6 @@
 #include "game_helper.h"
 
-bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const unsigned char& x, const unsigned char& y, TEngine::Rotation const& rotation)
+bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const char& x, const unsigned char& y, TEngine::Rotation const& rotation, unsigned char & burned)
 {
 	//rot upd
 	UpdateInfo rotate_inf;
@@ -32,11 +32,54 @@ bool ZenixAgent::attempt_move_piece(TModule::LiteModule& mod, const unsigned cha
 	//y upd
 	temp_inf.n_frames_update = 1;
 	temp_inf.input = TModule::Input::DOWN;
-	if (!mod.try_update(temp_inf)) return false;
-
+	//if (!mod.try_update(temp_inf)) return false;
+	bool game_not_over;
+	burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
+	if (!game_not_over) return false;
+	return true;
 }
 
-bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const unsigned char& x, const unsigned char& y, TEngine::Rotation const& rotation)
+
+bool ZenixAgent::apply_moveset(TModule::LiteModule& mod, const char& x, const unsigned char& y, TEngine::Rotation const& rotation)
+{
+	//rot upd
+	UpdateInfo rotate_inf;
+	rotate_inf.input = TModule::ROTATE;
+	if (rotation < mod.controlling_piece.current_rot) //0 < 3
+	{
+		rotate_inf.n_frames_update = rotation * 4 - mod.controlling_piece.current_rot;
+	}
+	else
+	{
+		rotate_inf.n_frames_update = rotation - mod.controlling_piece.current_rot;
+	}
+
+	if (!mod.try_update(rotate_inf)) return false;
+
+	//x upd
+	UpdateInfo temp_inf;
+	temp_inf.n_frames_update = abs(mod.controlling_piece.current_position.x - x);
+	if (x > mod.controlling_piece.current_position.x) //Desired position is to the right
+	{
+		temp_inf.input = TModule::Input::LEFT;
+	}
+	else
+	{
+		temp_inf.input = TModule::Input::RIGHT;
+	}
+	if (!mod.try_update(temp_inf)) return false;
+
+	//y upd
+	temp_inf.n_frames_update = 1;
+	temp_inf.input = TModule::Input::DOWN;
+	//if (!mod.try_update(temp_inf)) return false;
+	//bool game_not_over;
+	//burned = LiteAPI::simulate(mod, game_not_over, temp_inf);
+	//if (!game_not_over) return false;
+	return mod.try_update(temp_inf);
+}
+
+bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const char& x, const unsigned char& y, TEngine::Rotation const& rotation)
 {
 	//Unoptimized way. Probably can use math.
 	auto temp_mod = mod;
@@ -68,7 +111,7 @@ bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const unsigned c
 	}
 
 	//check for X
-	if ((unsigned char)temp_mod.controlling_piece.current_position.x != x) //Only see if the x value is different
+	if ((char)temp_mod.controlling_piece.current_position.x != x) //Only see if the x value is different
 	{
 		UpdateInfo temp_inf;
 		temp_inf.n_frames_update = abs(temp_mod.controlling_piece.current_position.x - x);
@@ -100,6 +143,7 @@ bool ZenixAgent::can_move_piece(const TModule::LiteModule& mod, const unsigned c
 			return false;
 		}
 	}
+	return true;
 }
 
 ZenixAgent::RawObservation ZenixAgent::get_raw_observation(const TEngine::TetrisField& field)

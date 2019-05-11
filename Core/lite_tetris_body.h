@@ -46,6 +46,11 @@ namespace LGEngine
 	class TetrisBody
 	{
 	public:
+#pragma region Constant declarations
+		static constexpr double MIN_POS_X = -1.0;
+		static constexpr double MAX_POS_X = (double) FIELD_WIDTH - 2.0;
+		static constexpr double MIN_POS_Y = 0.0;
+		static constexpr double MAX_POS_Y = (double)FIELD_HEIGHT - 1.0;
 #pragma endregion
 
 #pragma region Helpers

@@ -24,9 +24,6 @@
     <ClCompile Include="game_helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\DebugConsole\lite_renderer.cpp">
-      <Filter>Coped</Filter>
-    </ClCompile>
     <ClCompile Include="Zenx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
   <ItemGroup>
     <ClInclude Include="game_helper.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DebugConsole\lite_renderer.h">
-      <Filter>Coped</Filter>
     </ClInclude>
     <ClInclude Include="Zenx.h">
       <Filter>Header Files</Filter>

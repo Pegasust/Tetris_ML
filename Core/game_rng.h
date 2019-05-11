@@ -16,6 +16,11 @@ namespace TMath
 		//I use 64-bit because its max value (18,446,744,073,709,551,615) is enough randomness
 		typedef uint64_t
 			RNGSeed;
+		union RNGUnion
+		{
+			uint64_t long_expr;
+			double double_expr;
+		};
 		static constexpr RNGSeed RNGSEED_MAX = std::numeric_limits<RNGSeed>::max();
 		typedef std::chrono::steady_clock RNGClock;
 		//https://en.wikipedia.org/wiki/Xorshift
@@ -28,9 +33,22 @@ namespace TMath
 			x ^= x << 17;
 			return state[0] = x;
 		}
+		inline static RNGUnion xorshift64(RNGUnion state[1])
+		{
+			RNGUnion x = state[0];
+			x.long_expr ^= x.long_expr << 13;
+			x.long_expr ^= x.long_expr >> 7;
+			x.long_expr ^= x.long_expr << 17;
+			return state[0] = x;
+		}
 		//Based on time
 		static RNGSeed generate_random_seed();
 
 		static bool get_bool(RNGSeed state[1], double percentage);
+
+		static bool get_bool(RNGUnion state[1], double percentage);
+
+		//Inclusive
+		static double get_value(RNGUnion state[1], double const& min, double const& max);
 	};
 }

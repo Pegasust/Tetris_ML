@@ -152,13 +152,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\DebugConsole\lite_renderer.cpp" />
     <ClCompile Include="game_helper.cpp" />
     <ClCompile Include="Zenix_ML.cpp" />
     <ClCompile Include="Zenx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DebugConsole\lite_renderer.h" />
     <ClInclude Include="game_helper.h" />
     <ClInclude Include="Zenx.h" />
   </ItemGroup>
