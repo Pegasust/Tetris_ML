@@ -34,6 +34,10 @@ namespace TetrisML
 		void push_data(std::ostream & fstream,
 			const DNAArray& dna, ZenxMetaInfo const& best_zenx_info, 
 			ZenxMetaInfo const& gen_avg_info);
-		static void render();
+		void push_data(std::ostream& fstream,
+			ZenxMetaInfo const& best_zenx_info,
+			ZenxMetaInfo const& gen_avg_info);
+		static void render(const LiteGameModule::LiteModule& mod);
+		//static void render();
 	};
 }

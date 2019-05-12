@@ -50,6 +50,20 @@ TetrisML::DNAConfig& TetrisML::DNAConfig::operator*=(const double& rhs)
 	return *this;
 }
 
+bool TetrisML::DNAConfig::operator==(const DNAConfig& rhs)
+{
+	return this->aggregate_height_scale == rhs.aggregate_height_scale &&
+		this->bulkiness_scale == rhs.bulkiness_scale &&
+		this->burn_scale == rhs.burn_scale &&
+		this->holes_scale == rhs.holes_scale &&
+		this->score_scale == rhs.score_scale;
+}
+
+bool TetrisML::DNAConfig::operator!=(const DNAConfig& rhs)
+{
+	return !(*this == rhs);
+}
+
 
 TetrisML::Zenx::Fitness TetrisML::Zenx::get_fitness(const ZenixAgent::RawObservation& obsv)
 {
@@ -351,9 +365,10 @@ ZenixAgent::RawObservation TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion se
 	return best_lifetime_obsv;
 }
 
-ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)())
+ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion seed[1], void(*render_func)(LiteGameModule::LiteModule const&) , void(*render_simulation_func)(LiteGameModule::LiteModule const&) )
 {
-	ZenixAgent::TModule::LiteModule exp_mod((TMath::GameRNG::RNGSeed*) & seed);
+	auto passing_seed = (TMath::GameRNG::RNGSeed*) seed;
+	ZenixAgent::TModule::LiteModule exp_mod(passing_seed);
 	ZenixAgent::RawObservation observation = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 	unsigned long long moves_made = 0;
 	observation.burn = 0.0;
@@ -389,7 +404,7 @@ ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion s
 					if (ZenixAgent::attempt_move_piece(sim_mod, x, y, rot, burned)) //Make a move on the simulation module
 					//Kinda a perfect (if I made this move, what result will it yields)
 					{
-						render_simulation_func(//sim_mod
+						render_simulation_func(sim_mod
 						); //Show the mod
 						auto data = ZenixAgent::get_raw_observation(sim_mod.field);
 						data.score = sim_mod.score;
@@ -413,8 +428,8 @@ ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion s
 
 		if (fittest_x == std::numeric_limits<char>::lowest()) //It is not reassigned. Hence it has no move
 		{
-			//GAME_LOSE, RENDER?
-			render_func();
+			////GAME_LOSE, RENDER?
+			//render_func(exp_mod);
 			game_over = true;
 #ifdef RENDER
 			std::cout << "fittest_x is lowest." << std::endl;
@@ -427,6 +442,7 @@ ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion s
 		else //Has the fittest move ready
 		{
 			game_over = !ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+			render_func(exp_mod);
 		}
 #ifdef _DEBUG
 		Renderer::RenderUnit rdr(exp_mod);

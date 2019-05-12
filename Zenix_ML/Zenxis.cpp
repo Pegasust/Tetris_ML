@@ -44,7 +44,7 @@ void TetrisML::Zenxis::big_bang()
 		best_zenx[i] = i;
 		avg_hscore += population[i].lifetime_record.highest_score;
 		avg_burns += obs.burn;
-		avg_level += population[i].lifetime_record.level;
+		avg_level += (double)population[i].lifetime_record.level;
 	}
 	//Because it is a hasty assignment, reassign if we have to.
 	if (best_scores[0] < best_scores[1])
@@ -192,9 +192,9 @@ void TetrisML::Zenxis::experiment(unsigned int const& n_exp, std::ofstream& stor
 			//And its level with population[i].lifetime_record.level
 			//SeedHelper::xorshift64(seed);
 			avg_obsv += observation;
-			zenx_avg_level += population[i].lifetime_record.level;
+			zenx_avg_level += static_cast<double>(population[i].lifetime_record.level);
 		}
-		double avg_hscore = population[i].sum_hscore / (double)population[i].times_played;
+		double avg_hscore = population[i].sum_hscore / static_cast<double>(population[i].times_played);
 		zenx_avg_level /=(double) n_exp;
 		avg_obsv /= (double) n_exp;
 
@@ -228,15 +228,39 @@ void TetrisML::Zenxis::experiment(unsigned int const& n_exp, std::ofstream& stor
 	gen_avg_level /= N_INDIVIDUALS_PER_GEN;
 
 	//store data
+
+	//if ( best_avgscores[0] > current_best_score && current_best.dna_config.dna != population[best_zenx[0]].dna)
+	//	//Only when there is a new dna configuration that beats the current_best_score
+	//{
+	//	//They might be less consistent... but I think that's okay
+	//	current_best_score = best_avgscores[0];
+	//	current_best.dna_config.dna = population[best_zenx[0]].dna;
+	//	current_best.generation = generation;
+	//}
+
 	ZenxMetaInfo best_inf = { best_zenx_avgobsv, best_zenx_avg_level, best_avgscores[0] };
 	ZenxMetaInfo gen_inf = { gen_avgobsv, gen_avg_level, gen_avg_hscore };
-	push_data(store_stream, *(DNAArray*)(&population[best_zenx[0]].dna),
-		best_inf,
-		gen_inf);
+	if (current_best.dna_config.dna != population[best_zenx[0]].dna) //Only show coefs when they are different. Quality of life.
+	{
+		push_data(store_stream, *(DNAArray*)(&population[best_zenx[0]].dna),
+			best_inf,
+			gen_inf);
 
-	push_data(std::cout, *(DNAArray*)(&population[best_zenx[0]].dna),
-		best_inf,
-		gen_inf);
+		push_data(std::cout, *(DNAArray*)(&population[best_zenx[0]].dna),
+			best_inf,
+			gen_inf);
+		current_best.dna_config.dna = population[best_zenx[0]].dna;
+	}
+	else
+	{
+		push_data(store_stream, 
+			best_inf,
+			gen_inf);
+
+		push_data(std::cout, 
+			best_inf,
+			gen_inf);
+	}
 
 
 	//Get ready for a new generation
@@ -289,10 +313,10 @@ void TetrisML::Zenxis::experiment(unsigned int const& n_exp, std::ofstream& stor
 
 void TetrisML::Zenxis::push_data(std::ostream & fstream, const DNAArray& dna, ZenxMetaInfo const& best_zenx_info, ZenxMetaInfo const& gen_avg_info)
 {
-#define PRINT_OBSV(obsv, fs) fs<<"{" << obsv.score<<','<<obsv.bulkiness<<','<<obsv.burn<<','<<obsv.aggregate_height<<','<<obsv.holes<<"}"
-#define PRINT_META(meta, fs) PRINT_OBSV(meta.obsv, fs); fs<<","<<meta.level<<","<<meta.high_score;
+#define PRINT_OBSV(obsv, fs) fs<<"{" <<obsv.bulkiness<<'|'<<obsv.burn<<'|'<<obsv.aggregate_height<<'|'<<obsv.holes<<"}"
+#define PRINT_META(meta, fs) fs<<meta.high_score<<'|'<<meta.level<<','; PRINT_OBSV(meta.obsv, fs);
 	//fstream.precision(std::numeric_limits<double>::max_digits10);
-	fstream << 'G' << generation << "\t:{";
+	fstream << "#G" << generation << "#\t:{";
 	for (unsigned char i = 0; i < sizeof(DNAArray) / sizeof(double); i++)
 	{
 		fstream << (dna.arr[i]);
@@ -301,16 +325,39 @@ void TetrisML::Zenxis::push_data(std::ostream & fstream, const DNAArray& dna, Ze
 			fstream << ",";
 		}
 	}
-	fstream << "};\tbest_inf:";
+	fstream << "};\tRecord:";
 	PRINT_META(best_zenx_info, fstream);
-	fstream << "\tgen_inf:";
+	fstream << "\tGen:";
 	PRINT_META(gen_avg_info, fstream);
 	fstream << std::endl;
 #undef PRINT_META
 #undef PRINT_OBSV
 }
 
-void TetrisML::Zenxis::render()
+void TetrisML::Zenxis::push_data(std::ostream& fstream, ZenxMetaInfo const& best_zenx_info, ZenxMetaInfo const& gen_avg_info)
+{
+#define PRINT_OBSV(obsv, fs) fs<<"{" <<obsv.bulkiness<<'|'<<obsv.burn<<'|'<<obsv.aggregate_height<<'|'<<obsv.holes<<"}"
+#define PRINT_META(meta, fs) fs<<meta.high_score<<'|'<<meta.level<<','; PRINT_OBSV(meta.obsv, fs);
+	//fstream.precision(std::numeric_limits<double>::max_digits10);
+	fstream << "_G" << generation << "\t:{";
+	for (unsigned char i = 0; i < sizeof(DNAArray) / sizeof(double); i++)
+	{
+		fstream << "____";
+		if (i != sizeof(DNAArray) / sizeof(double) - 1)
+		{
+			fstream << "___";
+		}
+	}
+	fstream << "};\t\tRecord:";
+	PRINT_META(best_zenx_info, fstream);
+	fstream << "\tGen:";
+	PRINT_META(gen_avg_info, fstream);
+	fstream << std::endl;
+#undef PRINT_META
+#undef PRINT_OBSV
+}
+
+void TetrisML::Zenxis::render(const LiteGameModule::LiteModule & mod)
 {
 }
 

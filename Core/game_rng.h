@@ -40,7 +40,7 @@ namespace TMath
 			x.long_expr ^= x.long_expr >> 7;
 			x.long_expr ^= x.long_expr << 17;
 			state[0] = x;
-			return state[0];
+			return x;
 		}
 		//Based on time
 		static RNGSeed generate_random_seed();

@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Zenxis.h"
 #include <conio.h>
+#include <iomanip>
+
 int main()
 {
 	auto x = TetrisML::SeedHelper::generate_random_seed();
@@ -12,33 +14,61 @@ int main()
 	//std::cout.precision(std::numeric_limits<double>::max_digits10);
 	std::cout.precision(5);
 	//std::ofstream file_output("C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core
-	std::string file_name = "C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core\\";
-	file_name+=
+
+	//get time as string
+
+	auto t = std::time(nullptr);
+	//auto tm = *std::localtime_s(&t);
+	tm tm;
+	localtime_s(&tm, &t);
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+	std::string str = oss.str();
+
+	std::string file_name = "D:\\Senior Project\\Senior Project proofs\\FINAL\\coefs\\";
+	file_name += std::to_string(TetrisML::N_INDIVIDUALS_PER_GEN);
+	file_name += "_";
+	file_name += std::to_string(TetrisML::EXPERIMENTS_PER_LIFE);
+	file_name += "_";
+	file_name +=
 #ifdef _DEBUG
-		"DEBUG\\zenxis_expr.txt";
+		"d_zenxis_";
 #else
 
-		"Release\\zenxis_experiment.txt";
+		"r_zenxis_";
 #endif
-		std::ofstream file_output(file_name);
+	file_name += str;
+	file_name += ".txt";
+	std::ofstream file_output(file_name);
 	file_output.precision(std::numeric_limits<double>::max_digits10);
 	if (!file_output)
 	{
-		std::cerr << "Can't open file zenxis_experiment.txt" << std::endl;
+		std::cerr << "Can't open "<<file_name << std::endl;
 		return -1;
+	}
+	else
+	{
+		std::cout << "Writing in path " << file_name << std::endl;
 	}
 	bool exit = false;
 	do
 	{
 		//zenxis.big_bang();
-		zenxis.experiment(3, file_output);
-		if (_kbhit())
+		zenxis.experiment(TetrisML::EXPERIMENTS_PER_LIFE, file_output);
+		bool reply_once = false;
+		while (_kbhit())
 		{
 			int key = _getch();
 			if (key == 27) //ESCAPE KEY
 			{
 				exit = true;
 				break;
+			}
+			else if(!reply_once) //Havne't update on whether Zenix people are still living
+			{
+				//reply
+				std::cout << "currently at G" << zenxis.generation << std::endl;
+				reply_once = true;
 			}
 		}
 	} while (!exit);

@@ -5,7 +5,14 @@ namespace TetrisML
 #if defined _DEBUG || defined RELEASE_N_OP
 		10
 #else
-		1000
+		50000
+#endif
+		;
+	const unsigned int EXPERIMENTS_PER_LIFE =
+#if defined _DEBUG || RELEASE_N_OP
+		3
+#else
+		30
 #endif
 		;
 	constexpr double SURVIVING_RATIO = 0.2;

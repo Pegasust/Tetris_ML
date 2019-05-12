@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{837aca21-89f2-4194-af93-2a36c7dfe5da}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\game_helper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenxis.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\game_helper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenxis.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx_Consts.h" />
+  </ItemGroup>
+</Project>

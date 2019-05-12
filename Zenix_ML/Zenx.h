@@ -26,13 +26,14 @@ namespace TetrisML
 		DNAConfig& operator+=(const DNAConfig& rhs);
 		DNAConfig& operator /=(const double& rhs);
 		DNAConfig& operator *=(const double& rhs);
+		bool operator==(const DNAConfig& rhs);
+		bool operator !=(const DNAConfig& rhs);
 	};
 	union DNAArray
 	{
 		DNAConfig dna;
-#define NOT_0 sizeof(DNAConfig)/sizeof(double)
-		double arr[NOT_0];
-#undef NOT_0
+		static constexpr unsigned int ARR_LENGTH = sizeof(DNAConfig) / sizeof(double);
+		double arr[ARR_LENGTH];
 	};
 	struct MetaInfo
 	{
@@ -66,7 +67,7 @@ namespace TetrisML
 		//Also assign best_fitness, lifetime_record
 		ZenixAgent::RawObservation play_once(TMath::GameRNG::RNGUnion seed[1]);
 		//Returns a more scientific and sensible observation
-		ZenixAgent::RawObservation experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)());
+		ZenixAgent::RawObservation experiment(TMath::GameRNG::RNGUnion seed[1], void(*render_func)(LiteGameModule::LiteModule const&) , void(*render_simulation_func)(LiteGameModule::LiteModule const&) );
 		//RETURNS UNNORMALIZED DNA
 		static DNAConfig reproduce(const Zenx& parent1, const Zenx& parent2);
 		//RETURNS UNNORMALIZED DNA

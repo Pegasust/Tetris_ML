@@ -38,10 +38,10 @@
     <ClInclude Include="Zenx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Zenxis.h">
+    <ClInclude Include="Zenx_Consts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Zenx_Consts.h">
+    <ClInclude Include="Zenxis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
