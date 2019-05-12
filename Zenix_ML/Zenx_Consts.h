@@ -1,7 +1,13 @@
 #pragma once
 namespace TetrisML
 {
-	const unsigned long long N_INDIVIDUALS_PER_GEN = 10000;
+	const unsigned long long N_INDIVIDUALS_PER_GEN = 
+#ifdef _DEBUG
+		10
+#else
+		1000
+#endif
+		;
 	constexpr double SURVIVING_RATIO = 0.2;
 	constexpr double MUTATION_RATIO = 0.05;
 	constexpr double MUTATE_RANGE = 0.4; //interval is +- (MUTATE_RANGE / 2), inclusive

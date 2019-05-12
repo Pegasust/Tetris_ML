@@ -30,7 +30,7 @@ namespace TetrisML
 	union DNAArray
 	{
 		DNAConfig dna;
-#define NOT_0 3
+#define NOT_0 sizeof(DNAConfig)/sizeof(double)
 		double arr[NOT_0];
 #undef NOT_0
 	};

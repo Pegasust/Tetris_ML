@@ -11,8 +11,16 @@ int main()
 	TetrisML::Zenxis zenxis(s);
 	//std::cout.precision(std::numeric_limits<double>::max_digits10);
 	std::cout.precision(5);
-	
-	std::ofstream file_output("C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core\\Release\\zenxis_experiment.txt");
+	//std::ofstream file_output("C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core
+	std::string file_name = "C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core\\";
+	file_name+=
+#ifdef _DEBUG
+		"DEBUG\\zenxis_expr.txt";
+#else
+
+		"Release\\zenxis_experiment.txt";
+#endif
+		std::ofstream file_output(file_name);
 	file_output.precision(std::numeric_limits<double>::max_digits10);
 	if (!file_output)
 	{

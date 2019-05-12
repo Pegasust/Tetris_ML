@@ -415,7 +415,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion 
 		{
 			//GAME_LOSE, RENDER?
 			render_func();
-			break;
+			game_over = true;
 #ifdef RENDER
 			std::cout << "fittest_x is lowest." << std::endl;
 			_getch();
@@ -424,7 +424,10 @@ ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion 
 			rdr.render();
 #endif
 		}
-		game_over =! ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+		else //Has the fittest move ready
+		{
+			game_over = !ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+		}
 #ifdef _DEBUG
 		Renderer::RenderUnit rdr(exp_mod);
 		Renderer::clear_console();
@@ -437,6 +440,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion 
 			observation.bulkiness += move_observation.bulkiness;
 			observation.holes += move_observation.holes;
 			moves_made++;
+			TMath::GameRNG::xorshift64(seed);
 		}
 		else
 		{

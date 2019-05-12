@@ -190,7 +190,7 @@ void TetrisML::Zenxis::experiment(unsigned int const& n_exp, std::ofstream& stor
 			//observation contains average aggregate height, bulk, holes, and total # burns
 			//One can access its highest_score_sum with population[i].sum_hscore
 			//And its level with population[i].lifetime_record.level
-			SeedHelper::xorshift64(seed);
+			//SeedHelper::xorshift64(seed);
 			avg_obsv += observation;
 			zenx_avg_level += population[i].lifetime_record.level;
 		}
@@ -228,13 +228,15 @@ void TetrisML::Zenxis::experiment(unsigned int const& n_exp, std::ofstream& stor
 	gen_avg_level /= N_INDIVIDUALS_PER_GEN;
 
 	//store data
+	ZenxMetaInfo best_inf = { best_zenx_avgobsv, best_zenx_avg_level, best_avgscores[0] };
+	ZenxMetaInfo gen_inf = { gen_avgobsv, gen_avg_level, gen_avg_hscore };
 	push_data(store_stream, *(DNAArray*)(&population[best_zenx[0]].dna),
-		{ best_zenx_avgobsv, best_zenx_avg_level, best_avgscores[0] },
-		{ gen_avgobsv, gen_avg_level, gen_avg_hscore});
+		best_inf,
+		gen_inf);
 
 	push_data(std::cout, *(DNAArray*)(&population[best_zenx[0]].dna),
-		{ best_zenx_avgobsv, best_zenx_avg_level, best_avgscores[0] },
-		{ gen_avgobsv, gen_avg_level, gen_avg_hscore });
+		best_inf,
+		gen_inf);
 
 
 	//Get ready for a new generation
