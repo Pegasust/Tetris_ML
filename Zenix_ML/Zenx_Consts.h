@@ -2,7 +2,7 @@
 namespace TetrisML
 {
 	const unsigned long long N_INDIVIDUALS_PER_GEN = 
-#ifdef _DEBUG
+#if defined _DEBUG || defined RELEASE_N_OP
 		10
 #else
 		1000

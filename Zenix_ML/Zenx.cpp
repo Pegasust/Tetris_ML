@@ -64,7 +64,7 @@ TetrisML::Zenx::Fitness TetrisML::Zenx::get_fitness(const ZenixAgent::RawObserva
 	return f;
 }
 
-ZenixAgent::RawObservation& TetrisML::Zenx::play_once()
+ZenixAgent::RawObservation TetrisML::Zenx::play_once()
 {
 	times_played++;
 	TMath::GameRNG::RNGSeed seed[] = {
@@ -148,7 +148,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once()
 	return best_lifetime_obsv;
 }
 
-TetrisML::DNAConfig& TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& parent2)
+TetrisML::DNAConfig TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& parent2)
 {
 	//Scale each parent's DNA by their best fitness
 	DNAConfig scaled_1 = parent1.dna;
@@ -160,7 +160,7 @@ TetrisML::DNAConfig& TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& 
 	return scaled_1;
 }
 
-TetrisML::DNAConfig& TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& parent2, const Bias& bi)
+TetrisML::DNAConfig TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& parent2, const Bias& bi)
 {
 #if _DEBUG
 	if (bi > 1.0 || bi < -1.0) throw "Bias should be in the range [-1.0, 1.0] (TetrisML::Zenx::reproduce)";
@@ -223,7 +223,7 @@ void TetrisML::RecordInfo::assign(ZenixAgent::TModule::LiteModule const& mod)
 }
 
 
-ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion seed[1])
+ZenixAgent::RawObservation TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion seed[1])
 {
 	ZenixAgent::TModule::LiteModule main_mod = ZenixAgent::TModule::LiteModule((TMath::GameRNG::RNGSeed*)&seed);
 	//ZenixAgent::TModule::InputInfo input;
@@ -351,7 +351,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 	return best_lifetime_obsv;
 }
 
-ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)())
+ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)())
 {
 	ZenixAgent::TModule::LiteModule exp_mod((TMath::GameRNG::RNGSeed*) & seed);
 	ZenixAgent::RawObservation observation = { 0.0, 0.0, 0.0, 0.0, 0.0 };

@@ -62,16 +62,16 @@ namespace TetrisML
 		//std::vector<TMath::GameRNG::RNGSeed> played_seeds;
 
 		//Also assign best_fitness, lifetime_record
-		ZenixAgent::RawObservation& play_once();
+		ZenixAgent::RawObservation play_once();
 		//Also assign best_fitness, lifetime_record
-		ZenixAgent::RawObservation& play_once(TMath::GameRNG::RNGUnion seed[1]);
+		ZenixAgent::RawObservation play_once(TMath::GameRNG::RNGUnion seed[1]);
 		//Returns a more scientific and sensible observation
-		ZenixAgent::RawObservation& experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)());
+		ZenixAgent::RawObservation experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)());
 		//RETURNS UNNORMALIZED DNA
-		static DNAConfig& reproduce(const Zenx& parent1, const Zenx& parent2);
+		static DNAConfig reproduce(const Zenx& parent1, const Zenx& parent2);
 		//RETURNS UNNORMALIZED DNA
 		//If bi is negative, value is more biased towards one and vice versa
-		static DNAConfig& reproduce(const Zenx& p1, const Zenx& p2, const Bias& bi);
+		static DNAConfig reproduce(const Zenx& p1, const Zenx& p2, const Bias& bi);
 		static bool try_mutate(DNAConfig& child_dna, TMath::GameRNG::RNGUnion x[1]);
 		Zenx(const DNAArray& dna);
 
