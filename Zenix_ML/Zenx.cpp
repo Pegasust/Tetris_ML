@@ -66,6 +66,7 @@ TetrisML::Zenx::Fitness TetrisML::Zenx::get_fitness(const ZenixAgent::RawObserva
 
 ZenixAgent::RawObservation& TetrisML::Zenx::play_once()
 {
+	times_played++;
 	TMath::GameRNG::RNGSeed seed[] = {
 #ifdef SEED
 		SEED
@@ -201,7 +202,7 @@ bool TetrisML::Zenx::try_mutate(DNAConfig& child_dna, TMath::GameRNG::RNGUnion x
 }
 
 TetrisML::Zenx::Zenx(const DNAArray& dna):
-	dna(dna.dna), lifetime_record({ 0, 0.0 })
+	dna(dna.dna), lifetime_record({ 0, 0.0 }), sum_hscore(0.0), times_played(0)
 {
 }
 
@@ -211,7 +212,7 @@ bool TetrisML::Zenx::operator>(Zenx const& rhs)
 }
 
 TetrisML::Zenx::Zenx():
-	dna({ 0.0, 0.0, 0.0, 0.0, 0.0 }), lifetime_record({ 0, 0.0 })
+	dna({ 0.0, 0.0, 0.0, 0.0, 0.0 }), lifetime_record({ 0, 0.0 }), sum_hscore(0.0), times_played(0)
 {
 }
 
@@ -226,7 +227,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 {
 	ZenixAgent::TModule::LiteModule main_mod = ZenixAgent::TModule::LiteModule((TMath::GameRNG::RNGSeed*)&seed);
 	//ZenixAgent::TModule::InputInfo input;
-	ZenixAgent::RawObservation best_lifetime_obsv;
+	ZenixAgent::RawObservation best_lifetime_obsv = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
 
 #ifdef RENDER
 	Renderer::RenderUnit rdr(main_mod);
@@ -284,6 +285,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 							rdr.render();
 							std::cout << "Attempt: <" << (int)x << ", " << (int)y << ", " << (int) rot << ">.";
 #endif
+							best_lifetime_obsv.burn += burned;
 							//gather info
 							auto obsv = ZenixAgent::get_raw_observation(cloned_mod.field);
 							//Since this is not game over, data are surely not altered.
@@ -334,7 +336,7 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 #endif
 			//Well, it's equal to loss anyways
 		}
-	} while (ZenixAgent::apply_moveset(main_mod, fittest_x, fittest_x, fittest_rot));
+	} while (ZenixAgent::apply_moveset(main_mod, fittest_x, fittest_y, fittest_rot));
 #ifdef RENDER
 	Renderer::clear_console();
 	std::cout << "Game over." << std::endl;
@@ -345,6 +347,101 @@ ZenixAgent::RawObservation& TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion s
 #endif
 #endif
 	lifetime_record.assign(main_mod);
-
+	sum_hscore += main_mod.highest_score;
 	return best_lifetime_obsv;
+}
+
+ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)())
+{
+	ZenixAgent::TModule::LiteModule exp_mod((TMath::GameRNG::RNGSeed*) & seed);
+	ZenixAgent::RawObservation observation = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+	unsigned long long moves_made = 0;
+	observation.burn = 0.0;
+	bool game_over;
+	do
+	{
+		Fitness fittest_move_value = std::numeric_limits<Fitness>::lowest();
+		ZenixAgent::RawObservation move_observation; //observation for the best move
+		char fittest_x = std::numeric_limits<char>::lowest();
+		unsigned char fittest_y;
+		ZenixAgent::TEngine::Rotation fittest_rot = LGEngine::UP;
+		//unsigned char fittest_y;
+		for (LGEngine::Rotation rot = LGEngine::UP; rot <= LGEngine::LEFT; rot++)
+		{
+			ZenixAgent::TEngine::TetrisCollider col;
+			ZenixAgent::TEngine::TetrisBody::rotate(col, rot, exp_mod.controlling_piece.type);
+			for (char x = LGEngine::TetrisBody::MIN_POS_X; x <= LGEngine::TetrisBody::MAX_POS_X; x++)
+			{
+				double y_d = LiteAPI::down_cast(col, x, exp_mod.field);
+				if (y_d == -1.0) //If check_collider at (x, 0) returns false, or the piece is at illegal x_pos
+				{
+					continue;
+				}
+
+				unsigned char y = (unsigned char)y_d;
+				//Theoretically (without actually moving the piece), we could achieve this x, y and rot
+				//Let's try if we can actually achieve it by simulating the movement.				
+				if (ZenixAgent::can_move_piece(exp_mod, x, y, rot)) //TODO: Put renderer func here;
+				{
+					//Now that we know the move can be made.
+					ZenixAgent::TModule::LiteModule sim_mod(exp_mod);
+					unsigned char burned;
+					if (ZenixAgent::attempt_move_piece(sim_mod, x, y, rot, burned)) //Make a move on the simulation module
+					//Kinda a perfect (if I made this move, what result will it yields)
+					{
+						render_simulation_func(//sim_mod
+						); //Show the mod
+						auto data = ZenixAgent::get_raw_observation(sim_mod.field);
+						data.score = sim_mod.score;
+						data.burn = burned;
+						Fitness move_fitness = get_fitness(data);
+						if (move_fitness > fittest_move_value) //If this move is fitter than any other previously discovered move
+						{
+							fittest_move_value = move_fitness;
+							fittest_x = x;
+							fittest_y = y;
+							fittest_rot = rot;
+							move_observation = data;
+						}
+
+					}
+
+				}
+			}
+		}
+
+
+		if (fittest_x == std::numeric_limits<char>::lowest()) //It is not reassigned. Hence it has no move
+		{
+			//GAME_LOSE, RENDER?
+			render_func();
+			break;
+#ifdef RENDER
+			Renderer::RenderUnit rdr(exp_mod);
+			Renderer::clear_console();
+			rdr.render();
+#endif
+		}
+		game_over = ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+		observation.burn += move_observation.burn;
+		if (!game_over)
+		{
+			observation.aggregate_height += move_observation.aggregate_height;
+			observation.bulkiness += move_observation.bulkiness;
+			observation.holes += move_observation.holes;
+			moves_made++;
+		}
+		else
+		{
+			lifetime_record.level = exp_mod.current_level;
+			break;
+		}
+	} while (true);
+	observation.aggregate_height /= moves_made;
+	observation.bulkiness /= moves_made;
+	observation.holes /= moves_made;
+	//observation contains average aggregate height, bulk, holes, and total # burns
+	sum_hscore += exp_mod.highest_score;
+	times_played++;
+	return observation;
 }

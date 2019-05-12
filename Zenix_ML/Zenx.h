@@ -55,7 +55,8 @@ namespace TetrisML
 		//H: Zenxis remember their past life.
 		RecordInfo lifetime_record;
 
-
+		double sum_hscore;
+		unsigned long long times_played;
 		Fitness get_fitness(const ZenixAgent::RawObservation& obsv);
 
 		//std::vector<TMath::GameRNG::RNGSeed> played_seeds;
@@ -64,6 +65,8 @@ namespace TetrisML
 		ZenixAgent::RawObservation& play_once();
 		//Also assign best_fitness, lifetime_record
 		ZenixAgent::RawObservation& play_once(TMath::GameRNG::RNGUnion seed[1]);
+		//Returns a more scientific and sensible observation
+		ZenixAgent::RawObservation& experiment(TMath::GameRNG::RNGUnion seed[1], void (*render_func)(), void (*render_simulation_func)());
 		//RETURNS UNNORMALIZED DNA
 		static DNAConfig& reproduce(const Zenx& parent1, const Zenx& parent2);
 		//RETURNS UNNORMALIZED DNA

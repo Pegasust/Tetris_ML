@@ -234,3 +234,32 @@ ZenixAgent::RawObservation ZenixAgent::get_raw_observation(const TEngine::Tetris
 	}
 	return return_value;
 }
+
+ZenixAgent::RawObservation& ZenixAgent::RawObservation::operator+=(RawObservation const& rhs)
+{
+	score += rhs.score;
+	bulkiness += rhs.bulkiness;
+	burn += rhs.burn;
+	aggregate_height += rhs.aggregate_height;
+	holes += rhs.holes;
+	return *this;
+}
+
+ZenixAgent::RawObservation& ZenixAgent::RawObservation::operator/=(RawObservation const& rhs)
+{
+	score /= rhs.score;
+	bulkiness /= rhs.bulkiness;
+	burn /= rhs.burn;
+	aggregate_height /= rhs.aggregate_height;
+	holes /= rhs.holes;
+	return *this;
+}
+
+ZenixAgent::RawObservation& ZenixAgent::RawObservation::operator/=(double const& rhs)
+{
+	bulkiness /= rhs;
+	burn /= rhs;
+	aggregate_height /= rhs;
+	holes /= rhs;
+	return *this;
+}

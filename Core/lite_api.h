@@ -12,6 +12,8 @@ namespace LiteAPI
 	//Returns the position of y if casted down
 	double down_cast(LGEngine::TetrisBody const& body, LGEngine::TetrisField const& field);
 
+	double down_cast(LGEngine::TetrisCollider const& collider, double const & x_pos, LGEngine::TetrisField const& field);
+
 	//Displacement: to the right is positive, to the left is negative.
 	//Returns the displacement of the body after the cast
 	//char side_cast(LGEngine::TetrisBody const& body, char const& displacement, LGEngine::TetrisField const& field);

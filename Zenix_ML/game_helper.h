@@ -17,6 +17,9 @@ namespace ZenixAgent
 			aggregate_height, //c
 			holes //c
 			;
+		RawObservation& operator +=(RawObservation const& rhs);
+		RawObservation& operator /=(RawObservation const& rhs);
+		RawObservation& operator /=(double const& rhs);
 	};
 
 	bool attempt_move_piece(TModule::LiteModule& mod, const char& x,

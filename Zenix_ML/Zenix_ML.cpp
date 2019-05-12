@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Zenxis.h"
+#include <conio.h>
 int main()
 {
 	auto x = TetrisML::SeedHelper::generate_random_seed();
@@ -10,10 +11,30 @@ int main()
 	TetrisML::Zenxis zenxis(s);
 	//std::cout.precision(std::numeric_limits<double>::max_digits10);
 	std::cout.precision(5);
+	
+	std::ofstream file_output("C:\\Users\\Pegasus\\source\\repos\\Pegasust\\Tetris_ML\\Core\\Release\\zenxis_experiment.txt");
+	file_output.precision(std::numeric_limits<double>::max_digits10);
+	if (!file_output)
+	{
+		std::cerr << "Can't open file zenxis_experiment.txt" << std::endl;
+		return -1;
+	}
+	bool exit = false;
 	do
 	{
-		zenxis.big_bang();
-	} while (1);
+		//zenxis.big_bang();
+		zenxis.experiment(3, file_output);
+		if (_kbhit())
+		{
+			int key = _getch();
+			if (key == 27) //ESCAPE KEY
+			{
+				exit = true;
+				break;
+			}
+		}
+	} while (!exit);
+	file_output.close();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

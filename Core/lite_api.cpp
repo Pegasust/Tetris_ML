@@ -2,14 +2,26 @@
 
 double LiteAPI::down_cast(LGEngine::TetrisBody const& body, LGEngine::TetrisField const& field)
 {
-	double return_val = floor(body.current_position.y);
-	while (field.check_collider(body.collider, { body.current_position.x, return_val + 1.0 }))
-		//While it can still go downwards
+	//double return_val = floor(body.current_position.y);
+	//while (field.check_collider(body.collider, { body.current_position.x, return_val + 1.0 }))
+	//	//While it can still go downwards
+	//{
+	//	return_val += 1.0;
+	//}
+	//return return_val;
+	return down_cast(body.collider, body.current_position.x, field);
+}
+
+double LiteAPI::down_cast(LGEngine::TetrisCollider const& collider, double const& x_pos, LGEngine::TetrisField const& field)
+{
+	double return_val = -1.0;
+	while (field.check_collider(collider, { x_pos, return_val + 1.0 }))
 	{
 		return_val += 1.0;
 	}
 	return return_val;
 }
+
 
 char LiteAPI::simulate (LiteGameModule::LiteModule& mod, bool& game_not_over, LiteGameModule::InputInfo& info)
 {
