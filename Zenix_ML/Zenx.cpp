@@ -417,12 +417,19 @@ ZenixAgent::RawObservation& TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion 
 			render_func();
 			break;
 #ifdef RENDER
+			std::cout << "fittest_x is lowest." << std::endl;
+			_getch();
 			Renderer::RenderUnit rdr(exp_mod);
 			Renderer::clear_console();
 			rdr.render();
 #endif
 		}
-		game_over = ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+		game_over =! ZenixAgent::apply_moveset(exp_mod, fittest_x, fittest_y, fittest_rot);
+#ifdef _DEBUG
+		Renderer::RenderUnit rdr(exp_mod);
+		Renderer::clear_console();
+		rdr.render();
+#endif
 		observation.burn += move_observation.burn;
 		if (!game_over)
 		{

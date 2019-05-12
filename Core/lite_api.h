@@ -1,6 +1,6 @@
 #pragma once
 #ifdef _DEBUG
-#define RENDER
+//#define RENDER
 #endif
 #ifdef RENDER
 #include <conio.h>
