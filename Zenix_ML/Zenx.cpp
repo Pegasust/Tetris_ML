@@ -132,9 +132,9 @@ ZenixAgent::RawObservation TetrisML::Zenx::play_once()
 								fittest_x = x;
 								fittest_y = y;
 								fittest_rot = rot;
-								if (situation_fitness > best_fitness)
+								if (situation_fitness > total_fitness)
 								{
-									best_fitness = situation_fitness;
+									total_fitness = situation_fitness;
 									best_lifetime_obsv = obsv;
 								}
 							}
@@ -166,9 +166,9 @@ TetrisML::DNAConfig TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& p
 {
 	//Scale each parent's DNA by their best fitness
 	DNAConfig scaled_1 = parent1.dna;
-	scaled_1 *= parent1.best_fitness;
+	scaled_1 *= (parent1.total_fitness/static_cast<double>(parent1.times_played));
 	DNAConfig scaled_2 = parent2.dna;
-	scaled_2 *= parent2.best_fitness;
+	scaled_2 *= (parent2.total_fitness/static_cast<double>(parent2.times_played));
 	scaled_1 += scaled_2;
 	//This is not normalized. Be sure to normalize dna before testing
 	return scaled_1;
@@ -181,10 +181,10 @@ TetrisML::DNAConfig TetrisML::Zenx::reproduce(const Zenx& parent1, const Zenx& p
 #endif
 	//Scale each parent's DNA by their best fitness
 	DNAConfig scaled_1 = parent1.dna;
-	scaled_1 *= parent1.best_fitness;
+	scaled_1 *= (parent1.total_fitness / static_cast<double>(parent1.times_played));
 	scaled_1 *= (1 - bi) / 2; //bi = 1, mult = 0, bi = 0, mult = 1/2, bi = -1, mult = 1
 	DNAConfig scaled_2 = parent2.dna;
-	scaled_2 *= parent2.best_fitness;
+	scaled_2 *= (parent2.total_fitness / static_cast<double>(parent2.times_played));
 	scaled_2 *= (1 + bi) / 2; //bi = 1, mult = 1, bi = 0, mult = 1/2, bi = -1, mult = 0
 	scaled_1 += scaled_2;
 	//This is not normalized. Be sure to normalize dna before testing
@@ -314,9 +314,9 @@ ZenixAgent::RawObservation TetrisML::Zenx::play_once(TMath::GameRNG::RNGUnion se
 								fittest_x = x;
 								fittest_y = y;
 								fittest_rot = rot;
-								if (situation_fitness > best_fitness)
+								if (situation_fitness > total_fitness)
 								{
-									best_fitness = situation_fitness;
+									total_fitness = situation_fitness;
 									best_lifetime_obsv = obsv;
 								}
 							}
@@ -467,8 +467,11 @@ ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion s
 	observation.aggregate_height /= moves_made;
 	observation.bulkiness /= moves_made;
 	observation.holes /= moves_made;
-	//observation contains average aggregate height, bulk, holes, and total # burns
+	observation.score = exp_mod.highest_score;
+	//observation contains average aggregate height, bulk, holes, and total # burns now, too contains highest score from mod
 	sum_hscore += exp_mod.highest_score;
 	times_played++;
+	Fitness this_fit = get_fitness(observation);
+	total_fitness += this_fit;
 	return observation;
 }

@@ -52,7 +52,7 @@ namespace TetrisML
 		typedef double Fitness;
 		typedef double Bias;
 		DNAConfig dna;
-		Fitness best_fitness = std::numeric_limits<Fitness>::lowest();
+		Fitness total_fitness = 0.0;
 		//H: Zenxis remember their past life.
 		RecordInfo lifetime_record;
 
