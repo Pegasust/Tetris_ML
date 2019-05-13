@@ -79,3 +79,5 @@ double TMath::GameRNG::get_value(RNGUnion state[1], double const& min, double co
 	xorshift64(state);
 	return min + increment;
 }
+
+//std::mutex TMath::mtx = std::mutex();

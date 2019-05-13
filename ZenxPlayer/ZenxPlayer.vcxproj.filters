@@ -23,5 +23,8 @@
     <ClInclude Include="ZenxPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Zenix_ML\Zenx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,18 +1,21 @@
 #pragma once
 namespace TetrisML
 {
+#ifdef MULTI_THREAD
+	const unsigned char THREADS = 2;
+#endif
 	const unsigned long long N_INDIVIDUALS_PER_GEN = 
-#if defined _DEBUG || defined RELEASE_N_OP
+#if defined (_DEBUG) || defined (RELEASE_N_OP)
 		10
 #else
-		50000
+		1000
 #endif
 		;
 	const unsigned int EXPERIMENTS_PER_LIFE =
-#if defined _DEBUG || RELEASE_N_OP
+#if defined (_DEBUG) || defined (RELEASE_N_OP)
 		3
 #else
-		30
+		10
 #endif
 		;
 	constexpr double SURVIVING_RATIO = 0.2;

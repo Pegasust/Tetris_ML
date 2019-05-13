@@ -3,6 +3,9 @@
 #include <unordered_set>
 #include <fstream>
 #include <sstream>
+#include <thread>
+#include <iostream>
+#include <functional>
 namespace TetrisML
 {
 	typedef TMath::GameRNG::RNGUnion Seed;
@@ -30,6 +33,7 @@ namespace TetrisML
 			double level;
 			double high_score;
 		};
+		void experiment_multi_thread(unsigned int const& n_exp, std::ofstream& store_stream);
 		//std::string serialize_string(const DNAArray& dna, ZenxMetaInfo const& best_zenx_info, ZenxMetaInfo const& gen_avg_info);
 		void push_data(std::ostream & fstream,
 			const DNAArray& dna, ZenxMetaInfo const& best_zenx_info, 

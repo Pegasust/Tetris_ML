@@ -5,9 +5,13 @@
 #ifdef _DEBUG
 #include <iostream>
 #endif
+
+#include <mutex>
+
+
 namespace TMath
 {
-
+	static std::mutex mtx;
 	//I am using the xorshift algorithm because it can be manipulated, which might be useful
 	//for machine learnings that want to learn single seed run (back-tracking).
 	class GameRNG
@@ -27,20 +31,25 @@ namespace TMath
 		//One of the fastest non-crypto rng algorithm.
 		inline static RNGSeed xorshift64(RNGSeed state[1])
 		{
+			mtx.lock();
 			RNGSeed x = state[0];
 			x ^= x << 13;
 			x ^= x >> 7;
 			x ^= x << 17;
-			return state[0] = x;
+			state[0] = x;
+			mtx.unlock();
+			return state[0];
 		}
 		inline static RNGUnion xorshift64(RNGUnion state[1])
 		{
+			mtx.lock();
 			RNGUnion x = state[0];
 			x.long_expr ^= x.long_expr << 13;
 			x.long_expr ^= x.long_expr >> 7;
 			x.long_expr ^= x.long_expr << 17;
 			state[0] = x;
-			return x;
+			mtx.unlock();
+			return state[0];
 		}
 		//Based on time
 		static RNGSeed generate_random_seed();

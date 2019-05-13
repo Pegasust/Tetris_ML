@@ -8,7 +8,8 @@
 
 int main()
 {
-	auto x = TetrisML::SeedHelper::generate_random_seed();
+	//auto x = TetrisML::SeedHelper::generate_random_seed();
+	TMath::GameRNG::RNGSeed x = 0xDEADBEEF;
 	TetrisML::Seed s(*(TetrisML::Seed*) &x);
 	TetrisML::Zenxis zenxis(s);
 	//std::cout.precision(std::numeric_limits<double>::max_digits10);
