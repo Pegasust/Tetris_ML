@@ -132,6 +132,7 @@ void LGEngine::TetrisBody::rotate(TetrisCollider& collider, const Rotation& rot,
 			break;
 		case LEFT:
 			//Darn sign.
+			//j = (WIDTH - 1) + y + (WIDTH * x);
 			j = (WIDTH - 1) - y + (WIDTH * x);
 			break;
 		}

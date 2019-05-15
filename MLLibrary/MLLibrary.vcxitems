@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\game_helper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenxis.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx_Consts.h" />
   </ItemGroup>

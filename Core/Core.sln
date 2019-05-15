@@ -20,6 +20,7 @@ Global
 		..\MLLibrary\MLLibrary.vcxitems*{837aca21-89f2-4194-af93-2a36c7dfe5da}*SharedItemsImports = 9
 		Core.vcxitems*{93a94113-b7bf-4215-88e5-64bf2fedba2f}*SharedItemsImports = 4
 		Core.vcxitems*{c0b156c6-db09-4d13-8699-6dadc1ca393c}*SharedItemsImports = 4
+		..\MLLibrary\MLLibrary.vcxitems*{c0b156c6-db09-4d13-8699-6dadc1ca393c}*SharedItemsImports = 4
 		Core.vcxitems*{c7d5cb17-0c8b-4575-a825-f02cbff79cbb}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
