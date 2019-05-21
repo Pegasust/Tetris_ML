@@ -3,7 +3,7 @@
 #include "rounding.h"
 #include <limits>
 #include "game_rng.h"
-
+#include <cstring>
 namespace LGEngine
 {
 	typedef unsigned char Rotation;
@@ -58,12 +58,12 @@ namespace LGEngine
 		static constexpr double initial_y = 0.0;
 		static constexpr unsigned char xy2i(const unsigned char& x, const unsigned char& y)
 		{
-			return y * 4 + x;
+			return y * 4u + x;
 		}
 		static constexpr void i2xy(const unsigned char& i, unsigned char& x, unsigned char& y)
 		{
-			y = i / 4;
-			x = i - (y * 4);
+			y = i / (unsigned char) 4;
+			x = i - (y * (unsigned char) 4);
 		}
 		static const TetrisCollider colliders[8];
 #pragma endregion

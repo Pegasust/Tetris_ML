@@ -8,16 +8,24 @@
 using namespace std;
 namespace LiteGameModule
 {
-	typedef unsigned long long Level;
+	typedef uint32_t Level;
 	constexpr Level MAX_LEVEL = std::numeric_limits<Level>::max();
 	constexpr Level MIN_LEVEL = std::numeric_limits<Level>::min();;
 	constexpr double v_gravity0 = 10.0; // blocks per second
 	constexpr double v_gravity_max = 98.0; //blocks per second
 	constexpr double seconds_per_update = 1.0 / (v_gravity_max+ 21.0);
 	//constexpr double expr_s_per_up = seconds_per_update;
-	constexpr double v_gravity_at(Level level);
+	constexpr double v_gravity_at(Level level)
+	{
+		//Lienar scaling: m * x + b
+		return (v_gravity_max - v_gravity0) / static_cast<double>(MAX_LEVEL - MIN_LEVEL) // slope
+			* level + v_gravity0;
+	}
 	const unsigned long long required_rows0 = 7;
-	constexpr unsigned long long required_rows(const Level& level);
+	constexpr unsigned long long required_rows(const Level& level)
+	{
+		return required_rows0 + (level / 3);
+	}
 	enum Input
 	{
 		//0

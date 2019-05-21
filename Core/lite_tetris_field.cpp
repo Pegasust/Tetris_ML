@@ -25,11 +25,8 @@ unsigned char LGEngine::TetrisField::update_collider(const TetrisBody body)
 	//look for burn signals
 	unsigned char burned_rows = 0;
 	//TODO: NOT NECESSARY TO CHECK FROM BOT, JUST CHECK FROM WHERE WE PLACED IT TO PIECE's TOP
-	for (char y = FIELD_BOTTOM; 
-		y >= FIELD_TOP;//y--
-#ifdef _DEBUG
-		y--
-#endif
+	for (unsigned char y = (FIELD_BOTTOM); 
+		;//y >= (FIELD_TOP);//y--
 		) //From bot to top
 	{
 		//Check for row being able to burn
@@ -62,16 +59,15 @@ unsigned char LGEngine::TetrisField::update_collider(const TetrisBody body)
 				//unsigned char this_index = xy2i(_x, 0);
 				collider[_x] = BodyType::BLANK;
 			}
-#if _DEBUG
-			y++;
-#endif
 
 		}
 		else
 		{
-#ifndef _DEBUG
+			if (y == FIELD_TOP)
+			{
+				break;
+			}
 			y--; //Since row is not deleting, it should go up
-#endif
 		}
 	}
 	return burned_rows;

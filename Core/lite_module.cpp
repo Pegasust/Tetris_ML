@@ -147,15 +147,15 @@ LiteGameModule::LiteModule::LiteModule(TMath::GameRNG::RNGSeed initial_seed[1]) 
 //{
 //
 //}
-
-constexpr double LiteGameModule::v_gravity_at(Level level)
-{
-	//Lienar scaling
-	auto m = (v_gravity_max - v_gravity0) / (MAX_LEVEL - MIN_LEVEL);
-	return m * level + v_gravity0;
-}
-
-constexpr unsigned long long LiteGameModule::required_rows(const Level& level)
-{
-		return required_rows0 + (level / 3);
-}
+//constexpr double LiteGameModule::v_gravity_at(Level level);
+//constexpr double LiteGameModule::v_gravity_at(Level level)
+//{
+//	//Lienar scaling: m * x + b
+//	return (v_gravity_max - v_gravity0) / static_cast<double>(MAX_LEVEL - MIN_LEVEL) // slope
+//		* level + v_gravity0;
+//}
+//constexpr unsigned long long LiteGameModule::required_rows(const Level& level);
+//constexpr unsigned long long LiteGameModule::required_rows(const Level& level)
+//{
+//		return required_rows0 + (level / 3);
+//}

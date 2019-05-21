@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{6bc095b5-de8f-4932-96c4-af2aabed9112}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)command.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)cross_inputing.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ExZenxis.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ZConsole.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)command.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)cross_inputing.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExZenxis.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mkdir.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ZConsole.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{1a1ec411-9536-4c8b-be3d-1dfe165c44cd}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_agent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_coefficients.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zeny.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\MLLibrary\zmath.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_agent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_coefficients.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zenoy_config.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\Zeny.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\MLLibrary\zmath.cpp" />
+  </ItemGroup>
+</Project>

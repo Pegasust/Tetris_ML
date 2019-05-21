@@ -473,5 +473,6 @@ ZenixAgent::RawObservation TetrisML::Zenx::experiment(TMath::GameRNG::RNGUnion s
 	times_played++;
 	Fitness this_fit = get_fitness(observation);
 	total_fitness += this_fit;
+	total_fitness /= static_cast<double>(times_played);
 	return observation;
 }

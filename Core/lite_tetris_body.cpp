@@ -66,13 +66,13 @@ const LGEngine::TetrisCollider LGEngine::TetrisBody::colliders[] =
 
 
 template<typename T>
-LGEngine::BodyType LGEngine::body_type_val<T>(T input)
+LGEngine::BodyType LGEngine::body_type_val(T input)
 {
 	return (LGEngine::BodyType) ((input % 7) + 1);
 }
 
 template<>
-LGEngine::BodyType LGEngine::body_type_val(TMath::GameRNG::RNGSeed input)
+LGEngine::BodyType LGEngine::body_type_val<TMath::GameRNG::RNGSeed>(TMath::GameRNG::RNGSeed input)
 {
 	//TODO: can definitely make this a less biased algorithm
 	return (LGEngine::BodyType) ((input % 7) + 1);
@@ -81,12 +81,12 @@ LGEngine::BodyType LGEngine::body_type_val(TMath::GameRNG::RNGSeed input)
 LGEngine::TetrisBody::TetrisBody(const BodyType& type, const Position2D& initial_pos, const Rotation& initial_rot) :
 	type(type), current_position(initial_pos), current_rot(initial_rot), collider()
 {
-	memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
+	std::memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
 }
 LGEngine::TetrisBody::TetrisBody(const BodyType& type) :
 	type(type), current_position({ initial_x, initial_y }), current_rot(UP), collider()
 {
-	memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
+	std::memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
 }
 
 //constexpr unsigned char LGEngine::TetrisBody::xy2i(const unsigned char& x, const unsigned char& y)

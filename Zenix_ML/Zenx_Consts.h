@@ -2,20 +2,36 @@
 namespace TetrisML
 {
 #ifdef MULTI_THREAD
-	const unsigned char THREADS = 2;
+	const unsigned char THREADS =
+#if defined (_RASPI) || defined (_RASPI64)
+		4
+#else
+		2
+
 #endif
+	;
+#endif
+
 	const unsigned long long N_INDIVIDUALS_PER_GEN = 
 #if defined (_DEBUG) || defined (RELEASE_N_OP)
 		10
+#else		
+#if defined (_RASPI) || defined (_RASPI64)
+		400
 #else
 		1000
+#endif
 #endif
 		;
 	const unsigned int EXPERIMENTS_PER_LIFE =
 #if defined (_DEBUG) || defined (RELEASE_N_OP)
 		3
 #else
+#if defined (_RASPI) || defined (_RASPI64)
+		3
+#else
 		10
+#endif
 #endif
 		;
 	constexpr double SURVIVING_RATIO = 0.2;
