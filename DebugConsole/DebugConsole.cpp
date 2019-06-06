@@ -4,7 +4,7 @@
 #define COMMAND_TEST
 #endif // !USER_TEST
 #include <iostream>
-#include "lite_renderer.h"
+#include "../Core/renderer.h"
 #include <thread>
 #include <conio.h>
 #include <stdio.h>
@@ -24,31 +24,34 @@ bool child_func(Module::LiteModule& l_module)
 //#ifndef TIME_BASED
 //	input = _getch();
 //#else
-	auto now = std::chrono::high_resolution_clock::now();
 	bool  timed_out = false;
 	int upds = 1;
+	auto now = std::chrono::high_resolution_clock::now();
 	while (!_kbhit())
 	{
 		auto x = ((std::chrono::high_resolution_clock::now() - now).count());
 		//std::cout << x << std::endl;
-		if (x > (long)(1.0/Module::seconds_per_update))
+		if (x > (static_cast<long>(1.0/Module::seconds_per_update)))
 		{
 			timed_out = true;
-			upds = min((x / (long)(1.0 / Module::seconds_per_update)), 3ll);
+			upds = min((x / static_cast<long>(1.0 / Module::seconds_per_update)), 3ll);
 			break;
 		}
 	}
 	if (!timed_out)
 		input = _getch();
 	else
-		input = 0;
+		input = -1;
 //#endif
 	Module::Input i;
 check_input:
 	switch (input)
 	{
+		case 0:
+		case -32:
+			input = _getch();
 		case keyboard_input::DOWN_ARROW:
-			i = Module::DOWN;
+			i = Module::DRAG_DOWN;
 			break;
 		case keyboard_input::RIGHT_ARROW:
 			i = Module::RIGHT;
@@ -56,8 +59,11 @@ check_input:
 		case keyboard_input::LEFT_ARROW:
 			i = Module::LEFT;
 			break;
-		case keyboard_input::ENTER:
+		case keyboard_input::DELETE:
 			i = Module::ROTATE;
+			break;
+		case keyboard_input::ENTER:
+			i = Module::DOWN;
 			break;
 		case keyboard_input::ESCAPE:
 			Renderer::clear_console();
@@ -69,26 +75,34 @@ check_input:
 			i = Module::NONE;
 			break;
 	}
-	Module::InputInfo info = { i, upds };
-	if (l_module.try_update(info)) //Not lost
+	unsigned char n_burns, burn_y;
+	bool useful_input;
+	for (; upds > 0; upds--)
 	{
-		//render
-//#ifdef _DEBUG
-//		std::cout << "not lost yet. \0" << std::endl;
-//#endif
-		Renderer::clear_console();
-		r_unit->update_string(l_module);
-		r_unit->render();
-		std::cout << "Frames: " << std::to_string(++frames) << std::endl;
-		return true;
+		if (l_module.try_flex_update(i, n_burns, burn_y, useful_input, true)) //Not lost
+		{
+			//render
+	//#ifdef _DEBUG
+	//		std::cout << "not lost yet. \0" << std::endl;
+	//#endif
+			Renderer::clear_console();
+			if (n_burns > 0)
+			{
+				r_unit->show_burns(n_burns, burn_y, 200);
+				Renderer::clear_console();
+			}
+			r_unit->update_string(l_module);
+			r_unit->show_shadow(l_module);
+			return true;
+		}
+		else
+		{
+			//do something, player is lost
+			Renderer::clear_console();
+			std::cout << "You lost.\0" << std::endl;
+			return false;
+		}
 	}
-	else
-	{
-		//do something, player is lost
-		Renderer::clear_console();
-		std::cout << "You lost.\0" << std::endl;
-		return false;
-	}	
 }
 
 int main()
@@ -111,6 +125,7 @@ int main()
 		int key = _getch();
 		std::this_thread::sleep_for(100ms); //This will prevent user from pressing down twice!
 		delete l_module;
+		TMath::GameRNG::xorshift64(rng);
 		l_module = new Module::LiteModule(rng);
 	} while (1);
 

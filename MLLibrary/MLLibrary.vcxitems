@@ -17,11 +17,13 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\game_helper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenxis.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Zenxis_Multithread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\game_helper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenxis.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\Zenix_ML\Zenx_Consts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Zenxis_Multithread.h" />
   </ItemGroup>
 </Project>

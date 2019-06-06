@@ -23,6 +23,12 @@
       <Filter>ConsoleRenderer</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)lite_api.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BodyType.cpp">
+      <Filter>HardLiteGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)renderer.cpp">
+      <Filter>ConsoleRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)rounding.h">
@@ -47,6 +53,12 @@
       <Filter>ConsoleRenderer</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)lite_api.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BodyType.h">
+      <Filter>HardLiteGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)renderer.h">
+      <Filter>ConsoleRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

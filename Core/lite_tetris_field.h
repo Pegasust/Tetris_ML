@@ -18,6 +18,7 @@ namespace LGEngine
 		FieldCollider collider;
 
 		TetrisField();
+		unsigned char update_collider(const TetrisBody& body, unsigned char& burn_y);
 		//Returns the number of rows burned
 		unsigned char update_collider(const TetrisBody body); //Trust me and just update without check.
 		bool check_collider(const TetrisCollider& col, const Position2D& new_position) const;

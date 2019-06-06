@@ -290,7 +290,7 @@ char LiteAPI::update_yield_burn(LiteGameModule::InputInfo& info, LiteGameModule:
 						//no reassignment needed
 			mod.controlling_piece.current_position = new_position;
 			//This will encourage ML to press DOWN
-			mod.score -= ((double)mod.current_level + 1.0) / 8000.0;
+			//mod.score -= ((double)mod.current_level + 1.0) / 8000.0;
 		}
 		if (mod.highest_score < mod.score) mod.highest_score = mod.score;
 	}

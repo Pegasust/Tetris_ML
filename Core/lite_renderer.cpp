@@ -5,7 +5,9 @@ std::string Renderer::get_score_info(const LiteGameModule::LiteModule& mod)
 	//score and highest score
 	std::string score_str = "_score: ";
 	score_str += std::to_string(mod.score);
+#ifdef PUNISH_USELESS_MOVE
 	score_str += "\nhscore: ";
+#endif
 	score_str += std::to_string(mod.highest_score);
 	score_str += "\n_level: ";
 	score_str += std::to_string(mod.current_level);
@@ -13,7 +15,7 @@ std::string Renderer::get_score_info(const LiteGameModule::LiteModule& mod)
 	score_str += std::to_string(mod.n_level_up_rows);
 	score_str += "\n_current_seed: ";
 	score_str += std::to_string(mod.current_seed);
-	score_str += "\n_current_x: ";
+	score_str += "\n_current_pos: ";
 	score_str += std::to_string(mod.controlling_piece.current_position.x);
 	score_str += ", ";
 	score_str += std::to_string(mod.controlling_piece.current_position.y);
@@ -107,7 +109,7 @@ void Renderer::clear_console()
 #endif
 }
 
-void Renderer::RenderUnit::update_string(const LiteGameModule::LiteModule& mod)
+void Renderer::LiteRenderUnit::update_string(const LiteGameModule::LiteModule& mod)
 {
 	//Reassign 
 	//for (unsigned char y = LGEngine::TetrisField::FIELD_TOP; y <= LGEngine::TetrisField::FIELD_BOTTOM; y++)
@@ -124,7 +126,7 @@ void Renderer::RenderUnit::update_string(const LiteGameModule::LiteModule& mod)
 	upcoming = get_upcoming_str(mod);
 }
 
-void Renderer::RenderUnit::render()
+void Renderer::LiteRenderUnit::render()
 {
 	std::string render(field);
 	render += info;
@@ -134,7 +136,7 @@ void Renderer::RenderUnit::render()
 	std::cout << "frames: " << std::to_string(++frames) << std::endl;
 }
 
-Renderer::RenderUnit::RenderUnit(const LiteGameModule::LiteModule& mod) :
+Renderer::LiteRenderUnit::LiteRenderUnit(const LiteGameModule::LiteModule& mod) :
 	field(get_field_str(mod)), info(get_score_info(mod)), upcoming(get_upcoming_str(mod))
 {
 

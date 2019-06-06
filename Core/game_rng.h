@@ -60,5 +60,7 @@ namespace TMath
 
 		//Exclusive
 		static double get_value(RNGUnion state[1], double const& min, double const& max);
+		//Exclusive
+		static double get_value(const RNGUnion state[1], double const& min, double const& max);
 	};
 }

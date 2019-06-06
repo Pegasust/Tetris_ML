@@ -12,7 +12,8 @@ namespace keyboard_input
 		RIGHT_ARROW = 77,
 		LEFT_ARROW = 75,
 		ESCAPE = 27,
-		ENTER = 13;
+		ENTER = 13,
+		DELETE = 83;
 	class KeyboardInputProcessing
 	{
 	public:

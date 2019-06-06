@@ -79,5 +79,28 @@ double TMath::GameRNG::get_value(RNGUnion state[1], double const& min, double co
 	xorshift64(state);
 	return min + increment;
 }
-
+double TMath::GameRNG::get_value(const RNGUnion state[1], double const& min, double const& max)
+{
+	//#define IS_POSITIVE(signbit) (signbit == 0)
+	//	if (isnan(state[0].double_expr))
+	//	{
+	//		if (IS_POSITIVE(std::signbit(state[0].double_expr)))
+	//		{
+	//			return max;
+	//		}
+	//		else
+	//		{
+	//			return min;
+	//		}
+	//	}
+	//	double range = max - min;
+	//	return min + ((state[0].double_expr / std::numeric_limits<double>::max()) * range);
+	//#undef IS_POSITIVE
+	double range = max - min;
+	const unsigned long long stepper = 100000000000;
+	double stepper_inc = range / stepper;
+	uint64_t step_mult = state[0].long_expr % stepper;
+	double increment = step_mult * stepper_inc; //unsigned
+	return min + increment;
+}
 //std::mutex TMath::mtx = std::mutex();

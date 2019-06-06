@@ -4,7 +4,7 @@ namespace TetrisML
 #ifdef MULTI_THREAD
 	const unsigned char THREADS =
 #if defined (_RASPI) || defined (_RASPI64)
-		4
+		1
 #else
 		2
 
@@ -14,10 +14,10 @@ namespace TetrisML
 
 	const unsigned long long N_INDIVIDUALS_PER_GEN = 
 #if defined (_DEBUG) || defined (RELEASE_N_OP)
-		10
+		100
 #else		
 #if defined (_RASPI) || defined (_RASPI64)
-		400
+		20
 #else
 		1000
 #endif

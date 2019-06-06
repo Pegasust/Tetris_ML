@@ -5,6 +5,78 @@ LGEngine::TetrisField::TetrisField()
 	LGEngine::TetrisField::assign_empty_field(this->collider);
 }
 
+unsigned char LGEngine::TetrisField::update_collider(const TetrisBody& body, unsigned char& burn_y)
+{
+	//update the collider
+	unsigned char rounded_x = TMath::round_nearest(body.current_position.x),
+		rounded_y = TMath::round_nearest(body.current_position.y);
+	for (unsigned char i = 0; i < T_COLLIDER_LEN; i++)
+	{
+		//MAKE SURE BEFORE THIS IS CALLED, THERE LOSE CHECK MUST BE CALLED
+		if (body.collider[i]) //If there is collider
+		{
+			unsigned char global_x, global_y; //<<Notice this is unsigned.
+			body.i2xy(i, global_x, global_y);
+			global_x += rounded_x;
+			global_y += rounded_y;
+			this->collider[xy2i(global_x, global_y)] = body.type;
+		}
+	}
+	//look for burn signals
+	unsigned char burned_rows = 0;
+	unsigned char _y = (static_cast<char>(body.current_position.y) + 4);
+
+	//TODO: NOT NECESSARY TO CHECK FROM BOT, JUST CHECK FROM WHERE WE PLACED IT TO PIECE's TOP
+	for (unsigned char y = (_y>FIELD_BOTTOM-1?FIELD_BOTTOM-1:_y);
+		;//y >= (FIELD_TOP);//y--
+		) //From bot to top
+	{
+		//Check for row being able to burn
+		bool delete_row = true;
+		for (unsigned char x = FIELD_LEFT; x <= FIELD_RIGHT; x++)
+		{
+			//TODO: can be optimized into index + x_increment (?)
+			if (collider[xy2i(x, y)] == BodyType::BLANK)
+			{
+				delete_row = false;
+				break;
+			}
+		}
+		if (delete_row)
+		{
+			burn_y = y;
+			burned_rows++;
+			//From current height to top (exclusive)
+			for (unsigned char _y = y; _y > FIELD_TOP; _y--)
+			{
+				for (unsigned char _x = FIELD_LEFT; _x <= FIELD_RIGHT; _x++)
+				{
+					//TODO: DEBUG: blame this if burn algorithm doesn't yield good data
+					//col[xy2i(_x, _y)] = col[xy2i(_x,_y-1)];
+					unsigned char this_index = xy2i(_x, _y);
+					collider[this_index] = collider[this_index - WIDTH];
+				}
+			}
+			//highest (y = 0)
+			for (unsigned char _x = FIELD_LEFT; _x <= FIELD_RIGHT; _x++)
+			{
+				//unsigned char this_index = xy2i(_x, 0);
+				collider[_x] = BodyType::BLANK;
+			}
+
+		}
+		else
+		{
+			if (y == FIELD_TOP)
+			{
+				break;
+			}
+			y--; //Since row is not deleting, it should go up
+		}
+	}
+	return burned_rows;
+}
+
 unsigned char LGEngine::TetrisField::update_collider(const TetrisBody body)
 {
 	//update the collider

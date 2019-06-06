@@ -5,6 +5,13 @@
 #include <iostream>
 #include <iomanip>
 #endif
+
+#define SCALE_BURN //makes levelling up easier and more satisfying by scaling burn by current level
+#define SCALE_SCORE //encourages going to higher level by scaling score by current level
+#ifdef USE_INITIAL_SETTINGS
+#define PUNISH_USELESS_MOVE //minus score for every frame updated
+#else
+#endif
 using namespace std;
 namespace LiteGameModule
 {
@@ -14,6 +21,7 @@ namespace LiteGameModule
 	constexpr double v_gravity0 = 10.0; // blocks per second
 	constexpr double v_gravity_max = 98.0; //blocks per second
 	constexpr double seconds_per_update = 1.0 / (v_gravity_max+ 21.0);
+	constexpr double dragdown_gravity_mult = 4.0;
 	//constexpr double expr_s_per_up = seconds_per_update;
 	constexpr double v_gravity_at(Level level)
 	{
@@ -37,6 +45,8 @@ namespace LiteGameModule
 		//3
 		ROTATE, //Rot++
 		//4
+		DRAG_DOWN,
+		//5
 		NONE
 	};
 	struct InputInfo
@@ -62,9 +72,18 @@ namespace LiteGameModule
 		double highest_score;
 	public:
 		bool try_update(InputInfo& info); //return false when game over
+		bool try_flex_update(const Input & input, 
+			unsigned char& n_burned,
+			unsigned char& burn_y,
+			bool& useful_input, const bool& reassign_controlling_piece);
 		LiteModule(TMath::GameRNG::RNGSeed initial_seed[1]);
+		//returns distance
+		static double down_cast(const LGEngine::TetrisBody& body, LGEngine::TetrisField const& field);
 		//LiteModule();
 	private:
 		//LGEngine::TetrisBody<10, 20>* create_new_body(const TMath::GameRNG::RNGSeed & seed);
+		static unsigned char scaled_burn(const unsigned char& burned, const Level& current_level);
+		static constexpr double scaled_score_increment(const unsigned char& scaled_burn, const Level& current_level);
+		static constexpr double useless_move_decrement(const unsigned char& current_level);
 	};
 }
