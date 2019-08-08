@@ -1,0 +1,185 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "src",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src"
+				},
+				{
+					"build" : "src/initial_tests",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/initial_tests",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "src/common",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/common",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "src/tetris",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/tetris",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "src/renderer",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/renderer",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "src/video_core",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/video_core"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					],
+					"name" : "Cmake_Zenix",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Cmake_Zenix::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Cmake_Zenix-Debug-54c90474fbf4f8d1f75c.json",
+					"name" : "Cmake_Zenix",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "common::@af79f3804eddddbfa7f1",
+					"jsonFile" : "target-common-Debug-3c4dcfca55ea4c34b472.json",
+					"name" : "common",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "initial_tests::@05f49b1e276d15d3a19a",
+					"jsonFile" : "target-initial_tests-Debug-ccd2b3cb115e5dfa9c3e.json",
+					"name" : "initial_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "renderer::@cc07643e4269eb53963a",
+					"jsonFile" : "target-renderer-Debug-4c93b10a3f2678388d8d.json",
+					"name" : "renderer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "tetris::@e716ee35adbdbcc60ee5",
+					"jsonFile" : "target-tetris-Debug-bf37c3c812cd373a84f3.json",
+					"name" : "tetris",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug",
+		"source" : "C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

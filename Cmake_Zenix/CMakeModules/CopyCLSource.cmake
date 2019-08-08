@@ -1,0 +1,10 @@
+function(copy_cl_source cl_src_folders dest_folders)
+	foreach(src_folder IN LISTS cl_src_folders)
+		file(GLOB_RECURSE cl_files RELATIVE
+		"${cl_src_folder}/" )
+		foreach(dest IN LISTS dest_folders)
+			foreach(cl_file IN LISTS cl_files)
+			configure_file(cl_file dest COPYONLY)
+		endforeach()
+	endforeach()
+endfunction()

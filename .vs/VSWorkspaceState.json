@@ -1,10 +1,15 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Core",
-    "\\DebugConsole",
-    "\\WindowsRenderer"
+    "\\Cmake_Zenix",
+    "\\Cmake_Zenix\\CMakeModules",
+    "\\Cmake_Zenix\\out",
+    "\\Cmake_Zenix\\src",
+    "\\Cmake_Zenix\\src\\common",
+    "\\Cmake_Zenix\\src\\initial_tests",
+    "\\Cmake_Zenix\\src\\renderer",
+    "\\Cmake_Zenix\\src\\tetris"
   ],
-  "SelectedNode": "\\Core\\Core.sln",
+  "SelectedNode": "\\Cmake_Zenix\\src\\renderer\\renderer.cpp",
   "PreviewInSolutionExplorer": false
 }

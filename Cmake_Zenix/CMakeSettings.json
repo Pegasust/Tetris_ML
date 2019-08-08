@@ -10,7 +10,14 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_VERBOSE_MAKEFILE",
+          "value": "False",
+          "type": "BOOL"
+        }
+      ],
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ]
 }

@@ -6,3 +6,5 @@
 #include <iostream>
 
 // TODO: Reference additional headers your program requires here.
+#include "src/initial_tests/processor_count.cc"
+#include "src/common/zmath.h"

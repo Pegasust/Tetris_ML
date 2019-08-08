@@ -22,7 +22,7 @@ msvc_deps_prefix = Note: including file:
 
 rule CXX_COMPILER__Cmake_Zenix
   deps = msvc
-  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27706\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -30,7 +30,7 @@ rule CXX_COMPILER__Cmake_Zenix
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__Cmake_Zenix
-  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --intdir=$OBJECT_DIR --rc="D:\Windows Kits\10\bin\10.0.17763.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.17763.0\x64\mt.exe" --manifests $MANIFESTS -- "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27706\bin\Hostx64\x64\link.exe" /nologo $in  /out:$TARGET_FILE /implib:$TARGET_IMPLIB /pdb:$TARGET_PDB /version:0.0  $LINK_FLAGS $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
+  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --intdir=$OBJECT_DIR --rc="D:\Windows Kits\10\bin\10.0.18362.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.18362.0\x64\mt.exe" --manifests $MANIFESTS -- "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\Hostx64\x64\link.exe" /nologo $in  /out:$TARGET_FILE /implib:$TARGET_IMPLIB /pdb:$TARGET_PDB /version:0.0  $LINK_FLAGS $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
 
@@ -41,6 +41,78 @@ rule CXX_EXECUTABLE_LINKER__Cmake_Zenix
 rule CUSTOM_COMMAND
   command = $COMMAND
   description = $DESC
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__initial_tests
+  deps = msvc
+  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX static library.
+
+rule CXX_STATIC_LIBRARY_LINKER__initial_tests
+  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\Hostx64\x64\link.exe" /lib /nologo $LINK_FLAGS /out:$TARGET_FILE $in  && $POST_BUILD"
+  description = Linking CXX static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__common
+  deps = msvc
+  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX static library.
+
+rule CXX_STATIC_LIBRARY_LINKER__common
+  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\Hostx64\x64\link.exe" /lib /nologo $LINK_FLAGS /out:$TARGET_FILE $in  && $POST_BUILD"
+  description = Linking CXX static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__tetris
+  deps = msvc
+  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX static library.
+
+rule CXX_STATIC_LIBRARY_LINKER__tetris
+  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\Hostx64\x64\link.exe" /lib /nologo $LINK_FLAGS /out:$TARGET_FILE $in  && $POST_BUILD"
+  description = Linking CXX static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__renderer
+  deps = msvc
+  command = "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\HostX64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX executable.
+
+rule CXX_EXECUTABLE_LINKER__renderer
+  command = cmd.exe /C "$PRE_LINK && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --intdir=$OBJECT_DIR --rc="D:\Windows Kits\10\bin\10.0.18362.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.18362.0\x64\mt.exe" --manifests $MANIFESTS -- "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\VC\Tools\MSVC\14.22.27905\bin\Hostx64\x64\link.exe" /nologo $in  /out:$TARGET_FILE /implib:$TARGET_IMPLIB /pdb:$TARGET_PDB /version:0.0  $LINK_FLAGS $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
+  description = Linking CXX executable $TARGET_FILE
+  restat = $RESTAT
 
 
 #############################################

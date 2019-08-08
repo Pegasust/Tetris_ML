@@ -3,10 +3,14 @@
 
 #include "Cmake_Zenix.h"
 
-using namespace std;
-
 int main()
 {
-	cout << "Hello CMake." << endl;
+	std::cout << "Hello CMake." << std::endl;
+	std::cout << "There are " << N_PROCESSOR_DETECTED << " processors detected." << std::endl;
+	char* input = new char[16];
+
+	std::cin >> input;
+
+	std::cout << "Input was rounded to nearest: " << Common::ZMath::round_nearest(atof(input)) << std::endl;
 	return 0;
 }
