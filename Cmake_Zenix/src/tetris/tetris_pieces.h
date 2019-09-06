@@ -144,6 +144,7 @@ namespace Tetris
 		unsigned char update_collider(const TetrisBody body); //Trust me and just update without check.
 		//Returns the number of rows burned
 		unsigned char update_collider(const TetrisBody& body, unsigned char& burn_y);
+		void update_collider(const TetrisBody& body, unsigned char burn_y[4], unsigned char& n_burned);
 		bool check_collider(const TetrisCollider& col, const Position2D& new_position) const;
 		//bool check_collider(const TetrisCollider& col, const Position2D& new_position, const Rotation & new_rot) const;
 		bool check_collider(const TetrisBody& body) const;
@@ -158,6 +159,8 @@ namespace Tetris
 			y = i / WIDTH;
 			x = i - (WIDTH * i);
 		}
+	private:
+		bool should_delete_row(const unsigned char& field_index0);
 	};
 	bool try_rotate(TetrisBody& collider, const Tetris::Rotation& new_rot, const TetrisField& field);
 

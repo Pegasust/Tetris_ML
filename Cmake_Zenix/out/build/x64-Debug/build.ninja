@@ -38,8 +38,8 @@ include rules.ninja
 
 build cmake_object_order_depends_target_Cmake_Zenix: phony || cmake_object_order_depends_target_common
 build CMakeFiles\Cmake_Zenix.dir\Cmake_Zenix.cpp.obj: CXX_COMPILER__Cmake_Zenix ..\..\..\Cmake_Zenix.cpp || cmake_object_order_depends_target_Cmake_Zenix
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4 -DDEBUG_DEFINED
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -std:c++17
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -ID:\IntelSWTools\OpenCL\sdk\include
   OBJECT_DIR = CMakeFiles\Cmake_Zenix.dir
   OBJECT_FILE_DIR = CMakeFiles\Cmake_Zenix.dir
@@ -121,7 +121,8 @@ build src\rebuild_cache: phony src\CMakeFiles\rebuild_cache.util
 
 build cmake_object_order_depends_target_initial_tests: phony || src\initial_tests\CMakeFiles\initial_tests.dir
 build src\initial_tests\CMakeFiles\initial_tests.dir\processor_count.cc.obj: CXX_COMPILER__initial_tests ..\..\..\src\initial_tests\processor_count.cc || cmake_object_order_depends_target_initial_tests
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\initial_tests\CMakeFiles\initial_tests.dir
   OBJECT_FILE_DIR = src\initial_tests\CMakeFiles\initial_tests.dir
@@ -177,21 +178,24 @@ build src\initial_tests\rebuild_cache: phony src\initial_tests\CMakeFiles\rebuil
 
 build cmake_object_order_depends_target_common: phony || src\common\CMakeFiles\common.dir
 build src\common\CMakeFiles\common.dir\zmath.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\zmath.cpp || cmake_object_order_depends_target_common
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
   TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
   TARGET_PDB = src\common\common.pdb
 build src\common\CMakeFiles\common.dir\rng.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\rng.cpp || cmake_object_order_depends_target_common
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
   TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
   TARGET_PDB = src\common\common.pdb
 build src\common\CMakeFiles\common.dir\game_clock.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\game_clock.cpp || cmake_object_order_depends_target_common
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
@@ -256,14 +260,16 @@ build src\tetris\edit_cache: phony src\tetris\CMakeFiles\edit_cache.util
 
 build cmake_object_order_depends_target_tetris: phony || cmake_object_order_depends_target_common
 build src\tetris\CMakeFiles\tetris.dir\tetris_pieces.cpp.obj: CXX_COMPILER__tetris ..\..\..\src\tetris\tetris_pieces.cpp || cmake_object_order_depends_target_tetris
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\tetris\CMakeFiles\tetris.dir
   OBJECT_FILE_DIR = src\tetris\CMakeFiles\tetris.dir
   TARGET_COMPILE_PDB = src\tetris\CMakeFiles\tetris.dir\tetris.pdb
   TARGET_PDB = src\tetris\tetris.pdb
 build src\tetris\CMakeFiles\tetris.dir\game_module.cpp.obj: CXX_COMPILER__tetris ..\..\..\src\tetris\game_module.cpp || cmake_object_order_depends_target_tetris
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\tetris\CMakeFiles\tetris.dir
   OBJECT_FILE_DIR = src\tetris\CMakeFiles\tetris.dir
@@ -302,46 +308,73 @@ build src\tetris\rebuild_cache: phony src\tetris\CMakeFiles\rebuild_cache.util
 # =============================================================================
 
 # =============================================================================
-# Object build statements for EXECUTABLE target renderer
+# Object build statements for STATIC_LIBRARY target renderer
 
 
 #############################################
 # Order-only phony target for renderer
 
 build cmake_object_order_depends_target_renderer: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_tetris
-build src\renderer\CMakeFiles\renderer.dir\renderer.cpp.obj: CXX_COMPILER__renderer ..\..\..\src\renderer\renderer.cpp || cmake_object_order_depends_target_renderer
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
-  INCLUDES = -I..\..\..\src\.
-  OBJECT_DIR = src\renderer\CMakeFiles\renderer.dir
-  OBJECT_FILE_DIR = src\renderer\CMakeFiles\renderer.dir
-  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer.dir\
-  TARGET_PDB = src\renderer\renderer.pdb
 build src\renderer\CMakeFiles\renderer.dir\game_renderer.cpp.obj: CXX_COMPILER__renderer ..\..\..\src\renderer\game_renderer.cpp || cmake_object_order_depends_target_renderer
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\renderer\CMakeFiles\renderer.dir
   OBJECT_FILE_DIR = src\renderer\CMakeFiles\renderer.dir
-  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer.dir\
+  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer.dir\renderer.pdb
   TARGET_PDB = src\renderer\renderer.pdb
 
 # =============================================================================
-# Link build statements for EXECUTABLE target renderer
+# Link build statements for STATIC_LIBRARY target renderer
 
 
 #############################################
-# Link the executable src\renderer\renderer.exe
+# Link the static library src\renderer\renderer.lib
 
-build src\renderer\renderer.exe: CXX_EXECUTABLE_LINKER__renderer src\renderer\CMakeFiles\renderer.dir\renderer.cpp.obj src\renderer\CMakeFiles\renderer.dir\game_renderer.cpp.obj | src\common\common.lib src\tetris\tetris.lib src\common\common.lib || src\common\common.lib src\tetris\tetris.lib
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
-  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = src\common\common.lib src\tetris\tetris.lib src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+build src\renderer\renderer.lib: CXX_STATIC_LIBRARY_LINKER__renderer src\renderer\CMakeFiles\renderer.dir\game_renderer.cpp.obj || src\common\common.lib src\tetris\tetris.lib
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64
   OBJECT_DIR = src\renderer\CMakeFiles\renderer.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer.dir\
-  TARGET_FILE = src\renderer\renderer.exe
-  TARGET_IMPLIB = src\renderer\renderer.lib
+  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer.dir\renderer.pdb
+  TARGET_FILE = src\renderer\renderer.lib
   TARGET_PDB = src\renderer\renderer.pdb
+# =============================================================================
+# Object build statements for EXECUTABLE target renderer_exe
+
+
+#############################################
+# Order-only phony target for renderer_exe
+
+build cmake_object_order_depends_target_renderer_exe: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris
+build src\renderer\CMakeFiles\renderer_exe.dir\renderer.cpp.obj: CXX_COMPILER__renderer_exe ..\..\..\src\renderer\renderer.cpp || cmake_object_order_depends_target_renderer_exe
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\renderer\CMakeFiles\renderer_exe.dir
+  OBJECT_FILE_DIR = src\renderer\CMakeFiles\renderer_exe.dir
+  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer_exe.dir\
+  TARGET_PDB = bin\renderer_exe.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target renderer_exe
+
+
+#############################################
+# Link the executable bin\renderer_exe.exe
+
+build bin\renderer_exe.exe: CXX_EXECUTABLE_LINKER__renderer_exe src\renderer\CMakeFiles\renderer_exe.dir\renderer.cpp.obj | src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = src\renderer\CMakeFiles\renderer_exe.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\renderer\CMakeFiles\renderer_exe.dir\
+  TARGET_FILE = bin\renderer_exe.exe
+  TARGET_IMPLIB = src\renderer\renderer_exe.lib
+  TARGET_PDB = bin\renderer_exe.pdb
 
 #############################################
 # Utility command for edit_cache
@@ -366,15 +399,39 @@ build src\renderer\rebuild_cache: phony src\renderer\CMakeFiles\rebuild_cache.ut
 # C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/src/CMakeLists.txt
 # =============================================================================
 
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target video_core
+
 
 #############################################
-# Utility command for edit_cache
+# Order-only phony target for video_core
 
-build src\video_core\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\video_core && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
-  DESC = No interactive CMake dialog available...
-  restat = 1
-build src\video_core\edit_cache: phony src\video_core\CMakeFiles\edit_cache.util
+build cmake_object_order_depends_target_video_core: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris
+build src\video_core\CMakeFiles\video_core.dir\video_core.cpp.obj: CXX_COMPILER__video_core ..\..\..\src\video_core\video_core.cpp || cmake_object_order_depends_target_video_core
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\video_core\CMakeFiles\video_core.dir
+  OBJECT_FILE_DIR = src\video_core\CMakeFiles\video_core.dir
+  TARGET_COMPILE_PDB = src\video_core\CMakeFiles\video_core.dir\video_core.pdb
+  TARGET_PDB = src\video_core\video_core.pdb
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target video_core
+
+
+#############################################
+# Link the static library src\video_core\video_core.lib
+
+build src\video_core\video_core.lib: CXX_STATIC_LIBRARY_LINKER__video_core src\video_core\CMakeFiles\video_core.dir\video_core.cpp.obj || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = src\video_core\CMakeFiles\video_core.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\video_core\CMakeFiles\video_core.dir\video_core.pdb
+  TARGET_FILE = src\video_core\video_core.lib
+  TARGET_PDB = src\video_core\video_core.pdb
 
 #############################################
 # Utility command for rebuild_cache
@@ -386,6 +443,50 @@ build src\video_core\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
   restat = 1
 build src\video_core\rebuild_cache: phony src\video_core\CMakeFiles\rebuild_cache.util
 # =============================================================================
+# Object build statements for EXECUTABLE target video_core_exe
+
+
+#############################################
+# Order-only phony target for video_core_exe
+
+build cmake_object_order_depends_target_video_core_exe: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris cmake_object_order_depends_target_video_core
+build src\video_core\CMakeFiles\video_core_exe.dir\tester.cpp.obj: CXX_COMPILER__video_core_exe ..\..\..\src\video_core\tester.cpp || cmake_object_order_depends_target_video_core_exe
+  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\video_core\CMakeFiles\video_core_exe.dir
+  OBJECT_FILE_DIR = src\video_core\CMakeFiles\video_core_exe.dir
+  TARGET_COMPILE_PDB = src\video_core\CMakeFiles\video_core_exe.dir\
+  TARGET_PDB = bin\video_core_exe.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target video_core_exe
+
+
+#############################################
+# Link the executable bin\video_core_exe.exe
+
+build bin\video_core_exe.exe: CXX_EXECUTABLE_LINKER__video_core_exe src\video_core\CMakeFiles\video_core_exe.dir\tester.cpp.obj | src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\video_core\video_core.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = src\video_core\CMakeFiles\video_core_exe.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\video_core\CMakeFiles\video_core_exe.dir\
+  TARGET_FILE = bin\video_core_exe.exe
+  TARGET_IMPLIB = src\video_core\video_core_exe.lib
+  TARGET_PDB = bin\video_core_exe.pdb
+
+#############################################
+# Utility command for edit_cache
+
+build src\video_core\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\video_core && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+build src\video_core\edit_cache: phony src\video_core\CMakeFiles\edit_cache.util
+# =============================================================================
 # Target aliases.
 
 build Cmake_Zenix: phony bin\Cmake_Zenix.exe
@@ -394,10 +495,16 @@ build common: phony src\common\common.lib
 build common.lib: phony src\common\common.lib
 build initial_tests: phony src\initial_tests\initial_tests.lib
 build initial_tests.lib: phony src\initial_tests\initial_tests.lib
-build renderer: phony src\renderer\renderer.exe
-build renderer.exe: phony src\renderer\renderer.exe
+build renderer: phony src\renderer\renderer.lib
+build renderer.lib: phony src\renderer\renderer.lib
+build renderer_exe: phony bin\renderer_exe.exe
+build renderer_exe.exe: phony bin\renderer_exe.exe
 build tetris: phony src\tetris\tetris.lib
 build tetris.lib: phony src\tetris\tetris.lib
+build video_core: phony src\video_core\video_core.lib
+build video_core.lib: phony src\video_core\video_core.lib
+build video_core_exe: phony bin\video_core_exe.exe
+build video_core_exe.exe: phony bin\video_core_exe.exe
 # =============================================================================
 # Folder targets.
 
@@ -425,7 +532,7 @@ build  src\initial_tests\all: phony initial_tests
 #############################################
 # Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer
 
-build  src\renderer\all: phony renderer
+build  src\renderer\all: phony renderer renderer_exe
 # =============================================================================
 
 #############################################
@@ -437,7 +544,7 @@ build  src\tetris\all: phony tetris
 #############################################
 # Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core
 
-build  src\video_core\all: phony
+build  src\video_core\all: phony video_core video_core_exe
 # =============================================================================
 # Built-in targets
 
@@ -445,7 +552,7 @@ build  src\video_core\all: phony
 #############################################
 # The main all target.
 
-build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib src\tetris\tetris.lib src\renderer\renderer.exe
+build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib src\tetris\tetris.lib src\renderer\renderer.lib bin\renderer_exe.exe src\video_core\video_core.lib bin\video_core_exe.exe
 
 #############################################
 # Make the all target the default.

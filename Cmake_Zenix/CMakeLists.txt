@@ -22,7 +22,6 @@ function(create_target_directory_groups target_name)
 endfunction()
 
 
-add_subdirectory(src)
 
 #======= Compile flags =======
 #C++ standard
@@ -32,12 +31,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-add_definitions(-DDEBUG_DEFINED)
+add_compile_options(/DDEBUG_DEFINED)
 message(STATUS "DEBUG_DEFINED is defined")
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-add_definitions(-DRELEASE_DEFINED)
+add_compile_options(/DRELEASE_DEFINED)
 message(STATUS "RELEASE_DEFINED is defined")
 endif()
 
@@ -52,9 +51,11 @@ add_definitions(-DCMAKE_N_PROCESSOR_DETECTED=${N_PROCESSOR})
 message(STATUS "Cmake detected # of processor is ${N_PROCESSOR}")
 endif()
 
+add_subdirectory(src)
 #===== Packaging/libraries =====
 find_package (OpenCL REQUIRED)
 find_package (Threads REQUIRED) #for multithreading/pthread
+option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
 # Add source to this project's executable.
 add_executable (Cmake_Zenix "Cmake_Zenix.cpp" "Cmake_Zenix.h")

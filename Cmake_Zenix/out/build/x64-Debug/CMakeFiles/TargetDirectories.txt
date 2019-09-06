@@ -13,7 +13,10 @@ C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris/CMakeFiles/tetris.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris/CMakeFiles/rebuild_cache.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer/CMakeFiles/renderer.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer/CMakeFiles/renderer_exe.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer/CMakeFiles/edit_cache.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer/CMakeFiles/rebuild_cache.dir
-C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/CMakeFiles/edit_cache.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/CMakeFiles/video_core.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/CMakeFiles/rebuild_cache.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/CMakeFiles/video_core_exe.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/CMakeFiles/edit_cache.dir

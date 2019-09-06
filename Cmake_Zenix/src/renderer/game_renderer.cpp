@@ -1,9 +1,10 @@
 #include "game_renderer.h"
+#include "game_renderer.h"
 
 #ifdef USE_TXT_CONSOLE_RENDERER
 void Renderer::StdTxtRenderer::clear_screen()
 {
-#ifdef __cplusplus__
+#ifdef __cplusplus
 	std::cout << std::string(100, '\n');
 #else
 	int n;
@@ -14,7 +15,7 @@ void Renderer::StdTxtRenderer::clear_screen()
 #endif
 }
 
-bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod)
+bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderData& new_data)
 {
 	//VERY SIMPLISTIC
 	clear_screen();
@@ -23,22 +24,35 @@ bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod)
 	RenderStrings game_info = tetris_game_info(mod);
 	RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
 
-	std::string str;
-#define ITERATE(str_vec) for(std::vector<std::string>::const_iterator  it = str_vec.begin(); it != str_vec.end(); ++it)\
+	std::string new_str;
+#define ITERATE(str_vec, empty_str) for(std::vector<std::string>::const_iterator  it = str_vec.begin(); it != str_vec.end(); ++it)\
 {																																\
-	str += *it;																												\
-	str += '\n';																											\
+	empty_str += *it;																												\
+	empty_str += '\n';																											\
 }
-	ITERATE(tetris_field);
-	str += '\n';
-	ITERATE(scoreboard);
-	str += '\n';
-	ITERATE(game_info);
-	str += '\n';
-	ITERATE(coming_pieces);
+	ITERATE(tetris_field, new_str);
+	new_str += '\n';
+	ITERATE(scoreboard, new_str);
+	new_str += '\n';
+	ITERATE(game_info, new_str);
+	new_str += '\n';
+	ITERATE(coming_pieces, new_str);
 
-	std::cout << str << std::endl;
+	new_data = new_str;
+	//clear_screen();
+	//RenderStrings tetris_field = tetris_field_string(mod.game_field, mod.controlling_piece);
+	//RenderStrings scoreboard = tetris_scoreboard(mod);
+	//RenderStrings game_info = tetris_game_info(mod);
+	//RenderStrings upcoming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
 
+	//Not yet implemented the priority yet
+
+	return true;
+}
+
+bool Renderer::StdTxtRenderer::try_display(const RenderData& data)
+{
+	std::cout << data << std::endl;
 	return true;
 }
 
@@ -179,8 +193,10 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_in
 		rs.push_back("Seed");
 		//Seed display
 		std::string seed = std::to_string(mod.current_seed.seed);
-		seed += "(";
-		seed += std::to_string(Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed);
+		seed += " (";
+		seed += std::to_string(Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed));
+		seed += ")";
+		rs.push_back(seed);
 #endif
 		rs.push_back("Fall Velocity");
 		rs.push_back(std::to_string(Tetris::v_fall_at(mod.current_level)));

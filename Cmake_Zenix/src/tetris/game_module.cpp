@@ -165,10 +165,130 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 
 
 
-bool Tetris::GameModule::try_update(Input const& input, unsigned char& n_burned, unsigned char& burn_y, bool const& reassign_controlling_piece, double const& seconds_since_last_update, double const pre_static_threshold)
+bool Tetris::GameModule::fast_deprecated_try_update(Input const& input, unsigned char& n_burned, unsigned char& burn_y, bool const& reassign_controlling_piece, double const& seconds_since_last_update, double const pre_static_threshold)
 {
 	double gravity_mult = 1.0;
 	bool useful_input = false;
+	handle_input(input, useful_input, gravity_mult);
+	//Handle the fact that the tetrimino is falling down
+	if (input != Input::CAST_DOWN)
+	{
+		double gravity_displacement = v_fall_at(current_level) * seconds_since_last_update * gravity_mult;
+		double dist = down_cast(controlling_piece, game_field);
+		if (gravity_displacement < (dist + pre_static_threshold)) //This one is not going to place it down
+		{
+			//score -= useless_move_decrement(current_level);
+			n_burned = 0;
+			controlling_piece.current_position.y += gravity_displacement;
+			return useful_input; //DO NOT STATICIZE THE PIECE
+		}
+		else
+		{
+			controlling_piece.current_position.y += gravity_displacement;
+		}
+	}
+	//Reachable only when the current piece should be staticized
+	//modify score & level up if necessary
+	n_burned = game_field.update_collider(controlling_piece, burn_y);
+	unsigned char scaled_burned = 0;
+	if (n_burned > 0)
+	{
+		n_rows_burned += n_burned;
+		if (n_burned == 4)
+		{
+			tetris_scored++;
+		}
+		//scoring and levelling up
+		scaled_burned = calculate_scaled_burn_score(n_burned);
+		if (scaled_burned < n_rows)
+		{
+			n_rows -= scaled_burned;
+		}
+		else
+		{
+			//level up
+			n_rows += calculate_scaled_burn_score(++current_level) - scaled_burned;
+			score += static_cast<double>(current_level + 1.0) / 100.0;
+		}
+	}
+	score += score_displacement(scaled_burned);
+	if (highest_score < score) highest_score = score;
+	if (n_burned < 4 && 
+		!game_field.check_collider(
+			Tetris::TetrisBody::colliders[
+				Tetris::TetrisBody::get_min_index(
+		coming_pieces.front())], { Tetris::TetrisBody::initial_x, Tetris::TetrisBody::initial_y })) //game over
+	{
+		lost = true;
+		return useful_input;
+	}
+	if (reassign_controlling_piece)
+	{
+		controlling_piece.reassign(coming_pieces.front());
+		coming_pieces.pop();
+		coming_pieces.push(Tetris::body_type_val(current_seed.get_value()));
+	}
+	return useful_input;
+}
+
+void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4], 
+	unsigned char& n_burned, bool const& reassign_controlling_piece, 
+	double const& delta_seconds, double const pre_static_threshold)
+{
+	double gravity_mult = 1.0;
+	handle_input(input, gravity_mult);
+
+	if (input != Input::CAST_DOWN)
+	{
+		double gravity_displacement = v_fall_at(current_level) * delta_seconds * gravity_mult;
+		double dist = down_cast(controlling_piece, game_field);
+		if (gravity_displacement < (dist + pre_static_threshold))
+		{
+			//if displacement from gravity is not enough to put the piece
+			//in such position to be staticized
+			n_burned = 0;
+			controlling_piece.current_position.y += gravity_displacement;
+			return;
+		}
+		//displacement from gravity should be sufficient for this piece
+		//to be staticized
+		controlling_piece.current_position.y += gravity_displacement;
+	}
+	game_field.update_collider(controlling_piece, burn_y, n_burned);
+	unsigned char scaled_burned = 0;
+	if (n_burned > 0)
+	{
+		n_rows_burned += n_burned;
+		if (n_burned == 4)
+		{
+			tetris_scored++;
+		}
+		//scoring and levelling up
+		scaled_burned = calculate_scaled_burn_score(n_burned);
+		if (scaled_burned < n_rows)
+		{
+			n_rows -= scaled_burned;
+		}
+		else
+		{
+			//level up
+			n_rows += calculate_scaled_burn_score(++current_level) - scaled_burned;
+			score += static_cast<double>(current_level + 1.0) / 100.0;
+		}
+	}
+	score += score_displacement(scaled_burned);
+	if (highest_score < score) highest_score = score;
+	lost = lose_check(n_burned, game_field, coming_pieces.front());
+	if (reassign_controlling_piece)
+	{
+		controlling_piece.reassign(coming_pieces.front());
+		coming_pieces.pop();
+		coming_pieces.push(Tetris::body_type_val(current_seed.get_value()));
+	}
+}
+
+void Tetris::GameModule::handle_input(const Tetris::Input& input, bool& useful_input, double& gravity_mult)
+{
 	switch (input)
 	{
 	case CAST_DOWN:
@@ -221,64 +341,50 @@ bool Tetris::GameModule::try_update(Input const& input, unsigned char& n_burned,
 	}
 	break;
 	}
-	if (input != Input::CAST_DOWN)
+}
+
+void Tetris::GameModule::handle_input(const Tetris::Input& input, double& gravity_mult)
+{
+	switch (input)
 	{
-		double gravity_displacement = v_fall_at(current_level) * seconds_since_last_update * gravity_mult;
+	case CAST_DOWN:
+	{
 		double dist = down_cast(controlling_piece, game_field);
-		if (gravity_displacement < (dist + pre_static_threshold)) //This one is not going to place it down
-		{
-			//score -= useless_move_decrement(current_level);
-			n_burned = 0;
-			controlling_piece.current_position.y += gravity_displacement;
-			return useful_input;
-		}
-		else
-		{
-			controlling_piece.current_position.y += gravity_displacement;
-		}
+		controlling_piece.current_position.y += dist;
 	}
-	//staticize = true
-	//modify score & level up if necessary
-	n_burned = game_field.update_collider(controlling_piece, burn_y);
-	unsigned char scaled_burned = 0;
-	if (n_burned > 0)
+	break;
+	case LEFT:
 	{
-		n_rows_burned += n_burned;
-		if (n_burned == 4)
+		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x - 1.0, controlling_piece.current_position.y }))
 		{
-			tetris_scored++;
-		}
-		//scoring and levelling up
-		scaled_burned = calculate_scaled_burn_score(n_burned);
-		if (scaled_burned < n_rows)
-		{
-			n_rows -= scaled_burned;
-		}
-		else
-		{
-			//level up
-			n_rows += calculate_scaled_burn_score(++current_level) - scaled_burned;
-			score += static_cast<double>(current_level + 1.0) / 100.0;
+			controlling_piece.current_position.x -= 1.0;
 		}
 	}
-	score += score_displacement(scaled_burned);
-	if (highest_score < score) highest_score = score;
-	if (n_burned < 4 && 
-		!game_field.check_collider(
-			Tetris::TetrisBody::colliders[
-				Tetris::TetrisBody::get_min_index(
-		coming_pieces.front())], { Tetris::TetrisBody::initial_x, Tetris::TetrisBody::initial_y })) //game over
+	break;
+	case RIGHT:
 	{
-		lost = true;
-		return useful_input;
+		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x + 1.0, controlling_piece.current_position.y }))
+		{
+			controlling_piece.current_position.x += 1.0;
+		}
 	}
-	if (reassign_controlling_piece)
+	break;
+	case ROTATE:
 	{
-		controlling_piece.reassign(coming_pieces.front());
-		coming_pieces.pop();
-		coming_pieces.push(Tetris::body_type_val(current_seed.get_value()));
+		Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
 	}
-	return useful_input;
+	break;
+	case DOWN:
+	{
+		gravity_mult = dragdown_gravity_mult;
+	}
+	break;
+	case UP:
+	{
+		gravity_mult = dragup_gravity_mult;
+	}
+	break;
+	}
 }
 
 Tetris::GameModule::GameModule(const unsigned long long& initial_seed)

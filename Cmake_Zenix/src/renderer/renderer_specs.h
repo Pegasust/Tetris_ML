@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..//tetris/game_module.h"
-
+#include <type_traits>
 //Here is the list of macros that can be defined.
 //If multiple flags are set, the program will *HOPEFULLY* run every flag set
 //by the program
@@ -184,5 +184,14 @@ constexpr Priority name##_PRIORITY = priority;
 
 #undef DECLARE_RENDER_ENTRY
 
+
+
+	//===============Priority=================
+	//class Prioritizing
+	//{
+	//public:
+	//	template <typename ReturnType,typename Arg, typename... Types, typename std::enable_if<std::is_integral<Arg>::value>::type * = nullptr>
+	//	inline ReturnType* get_order_of(int order, Arg obj_ptr, uint)
+	//};
 }
 #endif

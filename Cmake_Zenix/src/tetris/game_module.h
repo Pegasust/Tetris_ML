@@ -2,7 +2,7 @@
 
 #include "tetris_pieces.h"
 #include <queue>
-
+#include <ostream>
 namespace Tetris
 {
 	typedef unsigned long long Level;
@@ -35,6 +35,8 @@ namespace Tetris
 		ROTATE,
 	};
 	using namespace Tetris;
+#ifdef DEBUG_DEFINED
+#endif
 	class GameModule
 	{
 	public:
@@ -66,7 +68,7 @@ namespace Tetris
 		//bool try_update(const Input& info, double const& seconds_since_last_update);
 
 		//Return if it's a useful input
-		bool try_update(Input const& input,
+		bool fast_deprecated_try_update(Input const& input,
 			unsigned char& n_burned,
 			unsigned char& burn_y,
 			bool const& reassign_controlling_piece,
@@ -74,10 +76,20 @@ namespace Tetris
 			double const pre_static_threshold = 0.8
 		);
 
+		void update(Input const& input,
+			unsigned char burn_y[4],
+			unsigned char& n_burned,
+			bool const& reassign_controlling_piece,
+			double const& delta_seconds,
+			double const pre_static_threshold = 0.8
+		);
+
 		GameModule(const unsigned long long& initial_seed);
 	private:
 		unsigned char calculate_scaled_burn_score(unsigned char const& burned) const;
-		constexpr double score_displacement(unsigned char const& scaled_burn) 
+		void handle_input(const Tetris::Input& input, bool& useful_input, double& gravity_mult);
+		void handle_input(const Tetris::Input& input, double& gravity_mult);
+		constexpr double score_displacement(unsigned char const& scaled_burn)
 		{
 			return (static_cast<double>(current_level) + 1.0) / 700.0 + (static_cast<double>(scaled_burn * (current_level + 1)) / 125.0);
 		}
@@ -85,5 +97,14 @@ namespace Tetris
 		{
 			return static_cast<double>(current_level + 1.0) / 100.0;
 		}
-	};
+		constexpr bool lose_check(const unsigned char& n_burned, const TetrisField& game_field,
+			const BodyType& upcoming_type)
+		{
+			return n_burned < 4 && !game_field.check_collider(Tetris::TetrisBody::colliders
+				[Tetris::TetrisBody::get_min_index(upcoming_type)],
+				{ TetrisBody::initial_x, TetrisBody::initial_y }
+			);
+		}
+};
+
 }

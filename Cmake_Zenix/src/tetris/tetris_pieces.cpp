@@ -387,6 +387,93 @@ unsigned char Tetris::TetrisField::update_collider(const TetrisBody body)
 	return update_collider(body, x);
 }
 
+void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char burn_y[4], unsigned char& n_burned)
+{
+	//(x,y) in which this represents the top left of the piece in global position
+	unsigned char rounded_x = RoundingExt::position_round<unsigned char>(body.current_position.x),
+		rounded_y = RoundingExt::position_round<unsigned char>(body.current_position.y);
+	//Iterate through the tetris body and assign it into the field's collider
+	unsigned char bottom_most_global_y = rounded_y + 1;
+	for (unsigned char i = 0; i < T_COLLIDER_LEN; i++)
+	{
+		if (body.collider[i])
+		{
+			unsigned char global_x, global_y;
+			body.i2xy(i, global_x, global_y);
+			global_x += rounded_x;
+			global_y += rounded_y;
+			if (global_y > bottom_most_global_y) bottom_most_global_y = global_y;
+			this->collider[xy2i(global_x, global_y)] = body.type;
+		}
+	}
+	//--Handle burning--
+	//Iterate from bot of the current piece to top.
+	//Purpose: check for burn and drag everything from upwards of the burning row
+	//downwards
+	//PLEASE WORK ON REWORDING, HOLY SMOKES
+	n_burned = 0;
+#define iterating_y bottom_most_global_y
+	//O(1)
+	for (; iterating_y >= rounded_y; iterating_y--)
+	{
+		unsigned char field_index0 = xy2i(FIELD_LEFT, iterating_y);
+		if (should_delete_row(field_index0))
+		{
+			//row delete handling
+			burn_y[n_burned++] = iterating_y;
+		}
+	}
+#undef iterating_y
+	if (n_burned == 0) return;
+	//We can merge both clearing the burn_y rows and
+	//handling falling physics by replacing the supposed empty
+	//row with the nearest non-to-be-empty above row(s)
+	//burn_y will have the order from bot to top
+	unsigned char next_empty = 1;
+#define empties_found next_empty
+	//O(n)
+	//TODO: make sure whether y should have char type
+	//TODO: surely, we can optimize this even more
+	//		by looping until next_empty < n_burned
+	//		then assign only blank values until top.
+	//		This would eliminate condition checking.
+	for (unsigned char base_y = burn_y[0]; base_y > FIELD_TOP; base_y--)
+	{
+		while (next_empty < n_burned && (base_y - next_empty) == burn_y[next_empty])
+		{
+			next_empty++;
+		}
+		//note: swap_y = base_y - next_empty
+		unsigned char base_index0 = xy2i(FIELD_LEFT, base_y);
+		for (unsigned char x = FIELD_LEFT; x <= FIELD_RIGHT; x++)
+		{
+			if (base_y >= burn_y[n_burned-1])
+			{
+				collider[base_index0 + x] = BodyType::BLANK;
+			}
+			else
+			{
+				collider[base_index0 + x] = collider[xy2i(x, base_y - empties_found)];
+			}
+		}
+#undef empties_found
+	}
+}
+
+bool Tetris::TetrisField::should_delete_row(const unsigned char& field_index0)
+{
+	//check left to right, if there is a hole, just get done checking the row
+	//since it shouldn't be burned or deleted
+	for (unsigned char x = FIELD_LEFT; x <= FIELD_RIGHT; x++)
+	{
+		if (collider[field_index0 + x] == BodyType::BLANK)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 bool Tetris::TetrisField::check_collider(const TetrisCollider& col, const Position2D& new_position) const
 {
 #ifdef USE_ROUND_NEAREST
