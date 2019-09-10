@@ -35,8 +35,6 @@ namespace Tetris
 		ROTATE,
 	};
 	using namespace Tetris;
-#ifdef DEBUG_DEFINED
-#endif
 	class GameModule
 	{
 	public:

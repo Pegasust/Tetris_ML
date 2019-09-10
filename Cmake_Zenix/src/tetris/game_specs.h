@@ -1,7 +1,7 @@
 #pragma once
 #include "../common/zmath.h"
 
-#define USE_ROUND_NEAREST //if not defined, the physics will use round down instead
+//#define USE_ROUND_NEAREST //if not defined, the physics will use round down instead
 
 
 

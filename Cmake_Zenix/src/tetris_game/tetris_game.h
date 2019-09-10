@@ -28,6 +28,7 @@ namespace TetrisGame
 				{32, ::Tetris::Input::CAST_DOWN}, //space
 				{122, ::Tetris::Input::ROTATE} //z button
 			};
+			if (key2inp.find(keypress) == key2inp.end()) return ::Tetris::Input::NONE;
 			return key2inp.at(keypress);
 		}
 		static constexpr uint64_t frametime_micros = (1000 * 1000 / target_framerate);

@@ -445,7 +445,7 @@ void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char 
 		}
 		//note: swap_y = base_y - next_empty
 		unsigned char base_index0 = xy2i(FIELD_LEFT, base_y);
-		for (unsigned char x = FIELD_LEFT; x <= FIELD_RIGHT; x++)
+		for (unsigned char x = FIELD_LEFT; x < FIELD_RIGHT; x++)
 		{
 			if (base_y >= burn_y[n_burned-1])
 			{
