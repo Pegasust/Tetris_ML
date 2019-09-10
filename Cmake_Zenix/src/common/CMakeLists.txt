@@ -8,11 +8,19 @@ rng.h
 rng.cpp
 game_clock.h
 game_clock.cpp
+keyboard_input.h
+keyboard_input.cpp
+)
+
+add_executable(keyboard_test
+keyboard_test.cpp
 )
 
 create_target_directory_groups(common)
-find_library(M_LIB m)
+create_target_directory_groups(keyboard_test)
 
+target_link_libraries(keyboard_test common)
 if (UNIX)
+	find_library(M_LIB m)
 	target_link_libraries(Cmake_Zenix m)
 endif()

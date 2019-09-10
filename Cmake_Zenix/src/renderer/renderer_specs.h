@@ -14,7 +14,6 @@
 
 
 
-
 //Here is the region which the design is set.
 
 #ifdef USE_TXT_CONSOLE_RENDERER

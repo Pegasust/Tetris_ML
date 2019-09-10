@@ -38,8 +38,7 @@ include rules.ninja
 
 build cmake_object_order_depends_target_Cmake_Zenix: phony || cmake_object_order_depends_target_common
 build CMakeFiles\Cmake_Zenix.dir\Cmake_Zenix.cpp.obj: CXX_COMPILER__Cmake_Zenix ..\..\..\Cmake_Zenix.cpp || cmake_object_order_depends_target_Cmake_Zenix
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -ID:\IntelSWTools\OpenCL\sdk\include
   OBJECT_DIR = CMakeFiles\Cmake_Zenix.dir
   OBJECT_FILE_DIR = CMakeFiles\Cmake_Zenix.dir
@@ -121,8 +120,7 @@ build src\rebuild_cache: phony src\CMakeFiles\rebuild_cache.util
 
 build cmake_object_order_depends_target_initial_tests: phony || src\initial_tests\CMakeFiles\initial_tests.dir
 build src\initial_tests\CMakeFiles\initial_tests.dir\processor_count.cc.obj: CXX_COMPILER__initial_tests ..\..\..\src\initial_tests\processor_count.cc || cmake_object_order_depends_target_initial_tests
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\initial_tests\CMakeFiles\initial_tests.dir
   OBJECT_FILE_DIR = src\initial_tests\CMakeFiles\initial_tests.dir
@@ -178,24 +176,28 @@ build src\initial_tests\rebuild_cache: phony src\initial_tests\CMakeFiles\rebuil
 
 build cmake_object_order_depends_target_common: phony || src\common\CMakeFiles\common.dir
 build src\common\CMakeFiles\common.dir\zmath.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\zmath.cpp || cmake_object_order_depends_target_common
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
   TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
   TARGET_PDB = src\common\common.pdb
 build src\common\CMakeFiles\common.dir\rng.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\rng.cpp || cmake_object_order_depends_target_common
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
   TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
   TARGET_PDB = src\common\common.pdb
 build src\common\CMakeFiles\common.dir\game_clock.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\game_clock.cpp || cmake_object_order_depends_target_common
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\common\CMakeFiles\common.dir
+  OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
+  TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
+  TARGET_PDB = src\common\common.pdb
+build src\common\CMakeFiles\common.dir\keyboard_input.cpp.obj: CXX_COMPILER__common ..\..\..\src\common\keyboard_input.cpp || cmake_object_order_depends_target_common
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\common\CMakeFiles\common.dir
   OBJECT_FILE_DIR = src\common\CMakeFiles\common.dir
@@ -209,7 +211,7 @@ build src\common\CMakeFiles\common.dir\game_clock.cpp.obj: CXX_COMPILER__common 
 #############################################
 # Link the static library src\common\common.lib
 
-build src\common\common.lib: CXX_STATIC_LIBRARY_LINKER__common src\common\CMakeFiles\common.dir\zmath.cpp.obj src\common\CMakeFiles\common.dir\rng.cpp.obj src\common\CMakeFiles\common.dir\game_clock.cpp.obj
+build src\common\common.lib: CXX_STATIC_LIBRARY_LINKER__common src\common\CMakeFiles\common.dir\zmath.cpp.obj src\common\CMakeFiles\common.dir\rng.cpp.obj src\common\CMakeFiles\common.dir\game_clock.cpp.obj src\common\CMakeFiles\common.dir\keyboard_input.cpp.obj
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = src\common\CMakeFiles\common.dir
@@ -218,6 +220,40 @@ build src\common\common.lib: CXX_STATIC_LIBRARY_LINKER__common src\common\CMakeF
   TARGET_COMPILE_PDB = src\common\CMakeFiles\common.dir\common.pdb
   TARGET_FILE = src\common\common.lib
   TARGET_PDB = src\common\common.pdb
+# =============================================================================
+# Object build statements for EXECUTABLE target keyboard_test
+
+
+#############################################
+# Order-only phony target for keyboard_test
+
+build cmake_object_order_depends_target_keyboard_test: phony || cmake_object_order_depends_target_common
+build src\common\CMakeFiles\keyboard_test.dir\keyboard_test.cpp.obj: CXX_COMPILER__keyboard_test ..\..\..\src\common\keyboard_test.cpp || cmake_object_order_depends_target_keyboard_test
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\common\CMakeFiles\keyboard_test.dir
+  OBJECT_FILE_DIR = src\common\CMakeFiles\keyboard_test.dir
+  TARGET_COMPILE_PDB = src\common\CMakeFiles\keyboard_test.dir\
+  TARGET_PDB = bin\keyboard_test.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target keyboard_test
+
+
+#############################################
+# Link the executable bin\keyboard_test.exe
+
+build bin\keyboard_test.exe: CXX_EXECUTABLE_LINKER__keyboard_test src\common\CMakeFiles\keyboard_test.dir\keyboard_test.cpp.obj | src\common\common.lib || src\common\common.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = src\common\CMakeFiles\keyboard_test.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\common\CMakeFiles\keyboard_test.dir\
+  TARGET_FILE = bin\keyboard_test.exe
+  TARGET_IMPLIB = src\common\keyboard_test.lib
+  TARGET_PDB = bin\keyboard_test.pdb
 
 #############################################
 # Utility command for edit_cache
@@ -260,16 +296,14 @@ build src\tetris\edit_cache: phony src\tetris\CMakeFiles\edit_cache.util
 
 build cmake_object_order_depends_target_tetris: phony || cmake_object_order_depends_target_common
 build src\tetris\CMakeFiles\tetris.dir\tetris_pieces.cpp.obj: CXX_COMPILER__tetris ..\..\..\src\tetris\tetris_pieces.cpp || cmake_object_order_depends_target_tetris
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\tetris\CMakeFiles\tetris.dir
   OBJECT_FILE_DIR = src\tetris\CMakeFiles\tetris.dir
   TARGET_COMPILE_PDB = src\tetris\CMakeFiles\tetris.dir\tetris.pdb
   TARGET_PDB = src\tetris\tetris.pdb
 build src\tetris\CMakeFiles\tetris.dir\game_module.cpp.obj: CXX_COMPILER__tetris ..\..\..\src\tetris\game_module.cpp || cmake_object_order_depends_target_tetris
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\tetris\CMakeFiles\tetris.dir
   OBJECT_FILE_DIR = src\tetris\CMakeFiles\tetris.dir
@@ -316,8 +350,7 @@ build src\tetris\rebuild_cache: phony src\tetris\CMakeFiles\rebuild_cache.util
 
 build cmake_object_order_depends_target_renderer: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_tetris
 build src\renderer\CMakeFiles\renderer.dir\game_renderer.cpp.obj: CXX_COMPILER__renderer ..\..\..\src\renderer\game_renderer.cpp || cmake_object_order_depends_target_renderer
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\renderer\CMakeFiles\renderer.dir
   OBJECT_FILE_DIR = src\renderer\CMakeFiles\renderer.dir
@@ -349,8 +382,7 @@ build src\renderer\renderer.lib: CXX_STATIC_LIBRARY_LINKER__renderer src\rendere
 
 build cmake_object_order_depends_target_renderer_exe: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris
 build src\renderer\CMakeFiles\renderer_exe.dir\renderer.cpp.obj: CXX_COMPILER__renderer_exe ..\..\..\src\renderer\renderer.cpp || cmake_object_order_depends_target_renderer_exe
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\renderer\CMakeFiles\renderer_exe.dir
   OBJECT_FILE_DIR = src\renderer\CMakeFiles\renderer_exe.dir
@@ -408,8 +440,7 @@ build src\renderer\rebuild_cache: phony src\renderer\CMakeFiles\rebuild_cache.ut
 
 build cmake_object_order_depends_target_video_core: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris
 build src\video_core\CMakeFiles\video_core.dir\video_core.cpp.obj: CXX_COMPILER__video_core ..\..\..\src\video_core\video_core.cpp || cmake_object_order_depends_target_video_core
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\video_core\CMakeFiles\video_core.dir
   OBJECT_FILE_DIR = src\video_core\CMakeFiles\video_core.dir
@@ -451,8 +482,7 @@ build src\video_core\rebuild_cache: phony src\video_core\CMakeFiles\rebuild_cach
 
 build cmake_object_order_depends_target_video_core_exe: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris cmake_object_order_depends_target_video_core
 build src\video_core\CMakeFiles\video_core_exe.dir\tester.cpp.obj: CXX_COMPILER__video_core_exe ..\..\..\src\video_core\tester.cpp || cmake_object_order_depends_target_video_core_exe
-  DEFINES = -DCMAKE_N_PROCESSOR_DETECTED=4
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   /DDEBUG_DEFINED -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
   INCLUDES = -I..\..\..\src\.
   OBJECT_DIR = src\video_core\CMakeFiles\video_core_exe.dir
   OBJECT_FILE_DIR = src\video_core\CMakeFiles\video_core_exe.dir
@@ -495,6 +525,8 @@ build common: phony src\common\common.lib
 build common.lib: phony src\common\common.lib
 build initial_tests: phony src\initial_tests\initial_tests.lib
 build initial_tests.lib: phony src\initial_tests\initial_tests.lib
+build keyboard_test: phony bin\keyboard_test.exe
+build keyboard_test.exe: phony bin\keyboard_test.exe
 build renderer: phony src\renderer\renderer.lib
 build renderer.lib: phony src\renderer\renderer.lib
 build renderer_exe: phony bin\renderer_exe.exe
@@ -520,7 +552,7 @@ build  src\all: phony src\initial_tests\all src\common\all src\tetris\all src\re
 #############################################
 # Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/common
 
-build  src\common\all: phony common
+build  src\common\all: phony common keyboard_test
 # =============================================================================
 
 #############################################
@@ -552,7 +584,7 @@ build  src\video_core\all: phony video_core video_core_exe
 #############################################
 # The main all target.
 
-build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib src\tetris\tetris.lib src\renderer\renderer.lib bin\renderer_exe.exe src\video_core\video_core.lib bin\video_core_exe.exe
+build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib bin\keyboard_test.exe src\tetris\tetris.lib src\renderer\renderer.lib bin\renderer_exe.exe src\video_core\video_core.lib bin\video_core_exe.exe
 
 #############################################
 # Make the all target the default.

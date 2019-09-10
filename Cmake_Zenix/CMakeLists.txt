@@ -31,23 +31,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-add_compile_options(/DDEBUG_DEFINED)
+add_compile_options(-DDEBUG_DEFINED)
 message(STATUS "DEBUG_DEFINED is defined")
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-add_compile_options(/DRELEASE_DEFINED)
+add_compile_options(-DRELEASE_DEFINED)
 message(STATUS "RELEASE_DEFINED is defined")
 endif()
 
-
+if(WIN32)
+add_compile_options(-DWINDOWS_DEFINED)
+message(STATUS "WINDOWS_DEFINED is defined")
+endif()
 
 #processor count
 include(ProcessorCount)
 ProcessorCount(N_PROCESSOR)
 if(NOT N_PROCESSOR EQUAL 0) #ProcessorCount returns 0 if it can't determine core count'
 #add_compile_definitions(CMAKE_N_PROCESSOR_DETECTED=${N_PROCESSOR})
-add_definitions(-DCMAKE_N_PROCESSOR_DETECTED=${N_PROCESSOR})
+add_compile_options(-DCMAKE_N_PROCESSOR_DETECTED=${N_PROCESSOR})
 message(STATUS "Cmake detected # of processor is ${N_PROCESSOR}")
 endif()
 
@@ -55,7 +58,9 @@ add_subdirectory(src)
 #===== Packaging/libraries =====
 find_package (OpenCL REQUIRED)
 find_package (Threads REQUIRED) #for multithreading/pthread
+if(WIN32)
 option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
+endif()
 
 # Add source to this project's executable.
 add_executable (Cmake_Zenix "Cmake_Zenix.cpp" "Cmake_Zenix.h")
