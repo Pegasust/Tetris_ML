@@ -517,6 +517,154 @@ build src\video_core\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
   restat = 1
 build src\video_core\edit_cache: phony src\video_core\CMakeFiles\edit_cache.util
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/src/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target tetris_game
+
+
+#############################################
+# Order-only phony target for tetris_game
+
+build cmake_object_order_depends_target_tetris_game: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris cmake_object_order_depends_target_video_core
+build src\tetris_game\CMakeFiles\tetris_game.dir\tetris_game.cpp.obj: CXX_COMPILER__tetris_game ..\..\..\src\tetris_game\tetris_game.cpp || cmake_object_order_depends_target_tetris_game
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\tetris_game\CMakeFiles\tetris_game.dir
+  OBJECT_FILE_DIR = src\tetris_game\CMakeFiles\tetris_game.dir
+  TARGET_COMPILE_PDB = src\tetris_game\CMakeFiles\tetris_game.dir\tetris_game.pdb
+  TARGET_PDB = src\tetris_game\tetris_game.pdb
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target tetris_game
+
+
+#############################################
+# Link the static library src\tetris_game\tetris_game.lib
+
+build src\tetris_game\tetris_game.lib: CXX_STATIC_LIBRARY_LINKER__tetris_game src\tetris_game\CMakeFiles\tetris_game.dir\tetris_game.cpp.obj || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\video_core\video_core.lib
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = src\tetris_game\CMakeFiles\tetris_game.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\tetris_game\CMakeFiles\tetris_game.dir\tetris_game.pdb
+  TARGET_FILE = src\tetris_game\tetris_game.lib
+  TARGET_PDB = src\tetris_game\tetris_game.pdb
+
+#############################################
+# Utility command for edit_cache
+
+build src\tetris_game\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\tetris_game && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+build src\tetris_game\edit_cache: phony src\tetris_game\CMakeFiles\edit_cache.util
+
+#############################################
+# Utility command for rebuild_cache
+
+build src\tetris_game\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\tetris_game && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix -BC:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+build src\tetris_game\rebuild_cache: phony src\tetris_game\CMakeFiles\rebuild_cache.util
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/src/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target tetris_ml
+
+
+#############################################
+# Order-only phony target for tetris_ml
+
+build cmake_object_order_depends_target_tetris_ml: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris cmake_object_order_depends_target_video_core
+build src\tetris_ml\CMakeFiles\tetris_ml.dir\tetris_ml.cpp.obj: CXX_COMPILER__tetris_ml ..\..\..\src\tetris_ml\tetris_ml.cpp || cmake_object_order_depends_target_tetris_ml
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\tetris_ml\CMakeFiles\tetris_ml.dir
+  OBJECT_FILE_DIR = src\tetris_ml\CMakeFiles\tetris_ml.dir
+  TARGET_COMPILE_PDB = src\tetris_ml\CMakeFiles\tetris_ml.dir\
+  TARGET_PDB = bin\tetris_ml.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target tetris_ml
+
+
+#############################################
+# Link the executable bin\tetris_ml.exe
+
+build bin\tetris_ml.exe: CXX_EXECUTABLE_LINKER__tetris_ml src\tetris_ml\CMakeFiles\tetris_ml.dir\tetris_ml.cpp.obj | src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\video_core\video_core.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = src\tetris_ml\CMakeFiles\tetris_ml.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\tetris_ml\CMakeFiles\tetris_ml.dir\
+  TARGET_FILE = bin\tetris_ml.exe
+  TARGET_IMPLIB = src\tetris_ml\tetris_ml.lib
+  TARGET_PDB = bin\tetris_ml.pdb
+# =============================================================================
+# Object build statements for EXECUTABLE target tetris_game_test
+
+
+#############################################
+# Order-only phony target for tetris_game_test
+
+build cmake_object_order_depends_target_tetris_game_test: phony || cmake_object_order_depends_target_common cmake_object_order_depends_target_renderer cmake_object_order_depends_target_tetris cmake_object_order_depends_target_tetris_game cmake_object_order_depends_target_video_core
+build src\tetris_ml\CMakeFiles\tetris_game_test.dir\tetris_game_test.cpp.obj: CXX_COMPILER__tetris_game_test ..\..\..\src\tetris_ml\tetris_game_test.cpp || cmake_object_order_depends_target_tetris_game_test
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC   -DDEBUG_DEFINED -DWINDOWS_DEFINED -DCMAKE_N_PROCESSOR_DETECTED=4 -std:c++17
+  INCLUDES = -I..\..\..\src\.
+  OBJECT_DIR = src\tetris_ml\CMakeFiles\tetris_game_test.dir
+  OBJECT_FILE_DIR = src\tetris_ml\CMakeFiles\tetris_game_test.dir
+  TARGET_COMPILE_PDB = src\tetris_ml\CMakeFiles\tetris_game_test.dir\
+  TARGET_PDB = bin\tetris_game_test.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target tetris_game_test
+
+
+#############################################
+# Link the executable bin\tetris_game_test.exe
+
+build bin\tetris_game_test.exe: CXX_EXECUTABLE_LINKER__tetris_game_test src\tetris_ml\CMakeFiles\tetris_game_test.dir\tetris_game_test.cpp.obj | src\tetris_game\tetris_game.lib src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib || src\common\common.lib src\renderer\renderer.lib src\tetris\tetris.lib src\tetris_game\tetris_game.lib src\video_core\video_core.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /ZI /Ob0 /Od /RTC1 /JMC
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = src\tetris_game\tetris_game.lib src\video_core\video_core.lib src\renderer\renderer.lib src\tetris\tetris.lib src\common\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = src\tetris_ml\CMakeFiles\tetris_game_test.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = src\tetris_ml\CMakeFiles\tetris_game_test.dir\
+  TARGET_FILE = bin\tetris_game_test.exe
+  TARGET_IMPLIB = src\tetris_ml\tetris_game_test.lib
+  TARGET_PDB = bin\tetris_game_test.pdb
+
+#############################################
+# Utility command for edit_cache
+
+build src\tetris_ml\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\tetris_ml && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+build src\tetris_ml\edit_cache: phony src\tetris_ml\CMakeFiles\edit_cache.util
+
+#############################################
+# Utility command for rebuild_cache
+
+build src\tetris_ml\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug\src\tetris_ml && "D:\TRUSTED_PROGRAMS\Visual Studio 2019 Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix -BC:\Users\Pegasus\source\repos\Pegasust\Tetris_ML\Cmake_Zenix\out\build\x64-Debug"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+build src\tetris_ml\rebuild_cache: phony src\tetris_ml\CMakeFiles\rebuild_cache.util
+# =============================================================================
 # Target aliases.
 
 build Cmake_Zenix: phony bin\Cmake_Zenix.exe
@@ -533,6 +681,12 @@ build renderer_exe: phony bin\renderer_exe.exe
 build renderer_exe.exe: phony bin\renderer_exe.exe
 build tetris: phony src\tetris\tetris.lib
 build tetris.lib: phony src\tetris\tetris.lib
+build tetris_game: phony src\tetris_game\tetris_game.lib
+build tetris_game.lib: phony src\tetris_game\tetris_game.lib
+build tetris_game_test: phony bin\tetris_game_test.exe
+build tetris_game_test.exe: phony bin\tetris_game_test.exe
+build tetris_ml: phony bin\tetris_ml.exe
+build tetris_ml.exe: phony bin\tetris_ml.exe
 build video_core: phony src\video_core\video_core.lib
 build video_core.lib: phony src\video_core\video_core.lib
 build video_core_exe: phony bin\video_core_exe.exe
@@ -546,7 +700,7 @@ build video_core_exe.exe: phony bin\video_core_exe.exe
 #############################################
 # Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src
 
-build  src\all: phony src\initial_tests\all src\common\all src\tetris\all src\renderer\all src\video_core\all
+build  src\all: phony src\initial_tests\all src\common\all src\tetris\all src\renderer\all src\video_core\all src\tetris_game\all src\tetris_ml\all
 # =============================================================================
 
 #############################################
@@ -574,6 +728,18 @@ build  src\tetris\all: phony tetris
 # =============================================================================
 
 #############################################
+# Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_game
+
+build  src\tetris_game\all: phony tetris_game
+# =============================================================================
+
+#############################################
+# Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_ml
+
+build  src\tetris_ml\all: phony tetris_ml tetris_game_test
+# =============================================================================
+
+#############################################
 # Folder: C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core
 
 build  src\video_core\all: phony video_core video_core_exe
@@ -584,7 +750,7 @@ build  src\video_core\all: phony video_core video_core_exe
 #############################################
 # The main all target.
 
-build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib bin\keyboard_test.exe src\tetris\tetris.lib src\renderer\renderer.lib bin\renderer_exe.exe src\video_core\video_core.lib bin\video_core_exe.exe
+build all: phony bin\Cmake_Zenix.exe src\initial_tests\initial_tests.lib src\common\common.lib bin\keyboard_test.exe src\tetris\tetris.lib src\renderer\renderer.lib bin\renderer_exe.exe src\video_core\video_core.lib bin\video_core_exe.exe src\tetris_game\tetris_game.lib bin\tetris_ml.exe bin\tetris_game_test.exe
 
 #############################################
 # Make the all target the default.
@@ -594,13 +760,13 @@ default all
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ..\..\..\CMakeLists.txt ..\..\..\src\CMakeLists.txt ..\..\..\src\common\CMakeLists.txt ..\..\..\src\initial_tests\CMakeLists.txt ..\..\..\src\renderer\CMakeLists.txt ..\..\..\src\tetris\CMakeLists.txt ..\..\..\src\video_core\CMakeLists.txt CMakeCache.txt CMakeFiles\3.14.19060802-MSVC_2\CMakeCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeCXXCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeRCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakePushCheckState.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckIncludeFile.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckLibraryExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckSymbolExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindOpenCL.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageHandleStandardArgs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageMessage.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindThreads.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\ProcessorCount.cmake
+build build.ninja: RERUN_CMAKE | ..\..\..\CMakeLists.txt ..\..\..\src\CMakeLists.txt ..\..\..\src\common\CMakeLists.txt ..\..\..\src\initial_tests\CMakeLists.txt ..\..\..\src\renderer\CMakeLists.txt ..\..\..\src\tetris\CMakeLists.txt ..\..\..\src\tetris_game\CMakeLists.txt ..\..\..\src\tetris_ml\CMakeLists.txt ..\..\..\src\video_core\CMakeLists.txt CMakeCache.txt CMakeFiles\3.14.19060802-MSVC_2\CMakeCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeCXXCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeRCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakePushCheckState.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckIncludeFile.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckLibraryExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckSymbolExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindOpenCL.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageHandleStandardArgs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageMessage.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindThreads.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\ProcessorCount.cmake
   pool = console
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ..\..\..\CMakeLists.txt ..\..\..\src\CMakeLists.txt ..\..\..\src\common\CMakeLists.txt ..\..\..\src\initial_tests\CMakeLists.txt ..\..\..\src\renderer\CMakeLists.txt ..\..\..\src\tetris\CMakeLists.txt ..\..\..\src\video_core\CMakeLists.txt CMakeCache.txt CMakeFiles\3.14.19060802-MSVC_2\CMakeCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeCXXCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeRCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakePushCheckState.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckIncludeFile.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckLibraryExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckSymbolExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindOpenCL.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageHandleStandardArgs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageMessage.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindThreads.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\ProcessorCount.cmake: phony
+build ..\..\..\CMakeLists.txt ..\..\..\src\CMakeLists.txt ..\..\..\src\common\CMakeLists.txt ..\..\..\src\initial_tests\CMakeLists.txt ..\..\..\src\renderer\CMakeLists.txt ..\..\..\src\tetris\CMakeLists.txt ..\..\..\src\tetris_game\CMakeLists.txt ..\..\..\src\tetris_ml\CMakeLists.txt ..\..\..\src\video_core\CMakeLists.txt CMakeCache.txt CMakeFiles\3.14.19060802-MSVC_2\CMakeCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeCXXCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeRCCompiler.cmake CMakeFiles\3.14.19060802-MSVC_2\CMakeSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakePushCheckState.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckIncludeFile.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckLibraryExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\CheckSymbolExists.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindOpenCL.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageHandleStandardArgs.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindPackageMessage.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\FindThreads.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake D$:\TRUSTED_PROGRAMS\Visual$ Studio$ 2019$ Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.14\Modules\ProcessorCount.cmake: phony
 
 #############################################
 # Clean all the built files.

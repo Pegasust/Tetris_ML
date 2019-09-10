@@ -8,16 +8,16 @@
 namespace Common
 {
 	//TODO: Threading not implemented, sorry
-	template<bool threaded, typename ChronoType, uint64_t time_out>
+	template<bool threaded, uint64_t time_out, typename ChronoType>
 	class KeyboardListener
 	{
 	public:
-		static constexpr int get_key()
+		static inline int get_key()
 		{
 			return get_char();
 		}
 	protected:
-		static constexpr int get_char()
+		static inline int get_char()
 		{
 			if (time_out == 0)
 			{
@@ -35,7 +35,12 @@ namespace Common
 					return -1;
 				}
 			}
-			return _getch();
+			int actual_char = _getch();
+			while (_kbhit())
+			{
+				actual_char = _getch();
+			}
+			return actual_char;
 		}
 	};
 	//template<uint64_t time_out_ns>
