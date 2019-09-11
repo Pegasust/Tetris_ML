@@ -26,6 +26,9 @@ namespace Renderer
 		typedef int CharPosition;
 		using RendererMath = RendererExt::Math<CharPosition>;
 		//static std::vector
+		//This supports shadowing
+		static RenderStrings tetris_field_string(Tetris::GameModule const& mod);
+		//Does not support shadowing
 		static RenderStrings tetris_field_string(Tetris::TetrisField const& game_field,
 			Tetris::TetrisBody const& controlling_piece);
 		static RenderStrings tetris_upcoming_pieces(std::queue<Tetris::BodyType> coming_pieces);

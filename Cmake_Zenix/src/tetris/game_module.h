@@ -70,6 +70,8 @@ namespace Tetris
 		unsigned int tetris_scored;
 	public:
 		//Returns the y value where the piece would fall to
+
+		//Returns the distance in y-axis from the current position to the contacting position
 		double down_cast(TetrisBody const& body, TetrisField const& field) const;
 
 		//Returns -1.0 if game should be over

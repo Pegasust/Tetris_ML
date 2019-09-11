@@ -19,7 +19,8 @@ bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderD
 {
 	//VERY SIMPLISTIC
 	clear_screen();
-	RenderStrings tetris_field = tetris_field_string(mod.game_field, mod.controlling_piece);
+	RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
+		tetris_field_string(mod);
 	RenderStrings scoreboard = tetris_scoreboard(mod);
 	RenderStrings game_info = tetris_game_info(mod);
 	RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
@@ -78,6 +79,63 @@ char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body)
 //	}
 //#endif
 	return char_val.at(body);
+}
+
+Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_string(Tetris::GameModule const& mod)
+{
+	const int n_lines = Tetris::TetrisField::HEIGHT;
+	const int str_length = Tetris::TetrisField::WIDTH;
+	int controlling_x0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.x);
+	int controlling_y0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.y);
+	auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field) + mod.controlling_piece.current_position.y;
+	int shadow_y0 = RoundingExt::position_round<int>(shadow_y0_d);
+	RenderStrings rs;
+	rs.reserve(n_lines);
+	for (int i = 0; i <
+#ifdef RELEASE_DEFINED
+		n_lines - 1
+#else //DEBUG_DEFINED //The last one will be all '#' if it's worked correctly, micro optimization
+		n_lines
+#endif
+		; i++)
+	{
+		std::string str;
+		for (int j = 0; j < str_length; j++)
+		{
+			//str += body_type_2_char(game_field.collider[Tetris::TetrisField::xy2i(i, j)]);
+			unsigned char index = Tetris::TetrisField::xy2i(j, i);
+			Tetris::BodyType this_type = mod.game_field.collider[index];
+			//Shadow casting first
+			bool ctr_piece_in_x_range = j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID;
+
+			//check for controlling piece
+			if (this_type == Tetris::BodyType::BLANK &&
+				i >= controlling_y0 && i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT && //within y range
+				ctr_piece_in_x_range 
+				)
+			{
+				if (mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(j - controlling_x0, i - controlling_y0)])
+				{
+					this_type = mod.controlling_piece.type;
+				}
+			}
+			else if (i >= shadow_y0 && i < shadow_y0 + Tetris::T_COLLIDER_HEIGHT && ctr_piece_in_x_range)
+			{
+				if (mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(j - controlling_x0, i - shadow_y0)])
+				{
+					str += RendererExt::SHADOW_CHAR;
+					continue;
+				}
+			}
+			str += body_type_2_char(this_type);
+		}
+		rs.push_back(str);
+	}
+#ifdef RELEASE_DEFINED
+	rs.push_back(std::string(str_length, body_type_2_char(Tetris::BodyType::BORDER)));
+#endif
+	return rs;
+
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_string

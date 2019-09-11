@@ -18,7 +18,6 @@
 
 #ifdef USE_TXT_CONSOLE_RENDERER
 //Top left is {0, 0}, bot right is {x, y} (unsigned)
-
 namespace RendererExt
 {
 	constexpr float TXT_RENDERER_WIDTH = (Tetris::TetrisField::WIDTH * 4);
@@ -29,7 +28,7 @@ namespace RendererExt
 	const int cx = Common::ZMath::round_nearest(TXT_RENDERER_WIDTH / 2.0f);
 	const int cy = Common::ZMath::round_nearest(TXT_RENDERER_HEIGHT / 2.0f);
 	//constexpr int CENTER_X = Common::ZMath::round_nearest(TXT_RENDERER_MID_WID);
-
+	const char SHADOW_CHAR = '-';
 	enum RenderPosition
 	{
 		TOP_LEFT,
