@@ -165,12 +165,12 @@ Tetris::BodyType Tetris::body_type_val(Common::ZMath::UInt64RNG::RNGSeed input)
 Tetris::TetrisBody::TetrisBody(const BodyType& type, const Position2D& initial_pos, const Rotation& initial_rot) :
 	type(type), current_position(initial_pos), current_rot(initial_rot), collider()
 {
-	memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
+	memcpy(collider, colliders[get_min_index(this->type)], sizeof(TetrisCollider));
 }
 Tetris::TetrisBody::TetrisBody(const BodyType& type) :
 	type(type), current_position({ initial_x, initial_y }), current_rot(R_UP), collider()
 {
-	memcpy(collider, colliders[this->type], sizeof(TetrisCollider));
+	memcpy(collider, colliders[get_min_index(this->type)], sizeof(TetrisCollider));
 }
 
 //constexpr unsigned char Tetris::TetrisBody::xy2i(const unsigned char& x, const unsigned char& y)
@@ -393,7 +393,7 @@ void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char 
 	unsigned char rounded_x = RoundingExt::position_round<unsigned char>(body.current_position.x),
 		rounded_y = RoundingExt::position_round<unsigned char>(body.current_position.y);
 	//Iterate through the tetris body and assign it into the field's collider
-	unsigned char bottom_most_global_y = rounded_y; //+1 to lift it out of bottom border
+	unsigned char bottom_most_global_y = rounded_y;
 	for (unsigned char i = 0; i < T_COLLIDER_LEN; i++)
 	{
 		if (body.collider[i])

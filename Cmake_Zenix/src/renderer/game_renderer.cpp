@@ -71,6 +71,12 @@ char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body)
 		{Tetris::BORDER, '#'}
 	};
 	//std::cout << "Before char_val.at" << std::endl;
+//#ifdef DEBUG_DEFINED
+//	if (char_val.find(body) == char_val.end())
+//	{
+//		return '?';
+//	}
+//#endif
 	return char_val.at(body);
 }
 
