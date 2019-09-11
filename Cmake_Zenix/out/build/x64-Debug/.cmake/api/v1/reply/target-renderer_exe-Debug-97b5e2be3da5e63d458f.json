@@ -77,15 +77,15 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "common::@af79f3804eddddbfa7f1"
-		},
-		{
-			"backtrace" : 2,
 			"id" : "tetris::@e716ee35adbdbcc60ee5"
 		},
 		{
 			"backtrace" : 2,
 			"id" : "renderer::@cc07643e4269eb53963a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "common::@af79f3804eddddbfa7f1"
 		}
 	],
 	"id" : "renderer_exe::@cc07643e4269eb53963a",

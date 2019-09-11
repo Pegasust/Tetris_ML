@@ -3,7 +3,8 @@
 
 //#define USE_ROUND_NEAREST //if not defined, the physics will use round down instead
 
-
+#define V_FALL_0 3.0
+#define V_FALL_MAX 100.8
 
 
 

@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Cmake_Zenix",
-    "\\Cmake_Zenix\\src",
-    "\\Cmake_Zenix\\src\\common",
-    "\\Cmake_Zenix\\src\\video_core"
+    ""
   ],
-  "SelectedNode": "\\Cmake_Zenix\\src\\common\\keyboard_input.h",
+  "SelectedNode": "\\C:\\Users\\Pegasus\\Source\\Repos\\Pegasust\\Tetris_ML\\Cmake_Zenix\\CMakeLists.txt\\tetris.lib (src\\tetris\\tetris.lib)\\game_specs.h",
   "PreviewInSolutionExplorer": false
 }

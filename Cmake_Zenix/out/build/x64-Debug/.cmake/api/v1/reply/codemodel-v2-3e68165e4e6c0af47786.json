@@ -211,14 +211,14 @@
 				{
 					"directoryIndex" : 5,
 					"id" : "renderer::@cc07643e4269eb53963a",
-					"jsonFile" : "target-renderer-Debug-d0ad4d7275c7d104a6ca.json",
+					"jsonFile" : "target-renderer-Debug-640a286f58df1befc1d8.json",
 					"name" : "renderer",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 5,
 					"id" : "renderer_exe::@cc07643e4269eb53963a",
-					"jsonFile" : "target-renderer_exe-Debug-1c2e4db032718bdae939.json",
+					"jsonFile" : "target-renderer_exe-Debug-97b5e2be3da5e63d458f.json",
 					"name" : "renderer_exe",
 					"projectIndex" : 0
 				},
@@ -232,35 +232,35 @@
 				{
 					"directoryIndex" : 7,
 					"id" : "tetris_game::@a98f5124ef40313b7f75",
-					"jsonFile" : "target-tetris_game-Debug-1c470218ad4788ff2de0.json",
+					"jsonFile" : "target-tetris_game-Debug-c80de89b9149361f1496.json",
 					"name" : "tetris_game",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 8,
 					"id" : "tetris_game_test::@233326f5b4ea757c5bee",
-					"jsonFile" : "target-tetris_game_test-Debug-93822690a962c620e53c.json",
+					"jsonFile" : "target-tetris_game_test-Debug-3abd7092321824598656.json",
 					"name" : "tetris_game_test",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 8,
 					"id" : "tetris_ml::@233326f5b4ea757c5bee",
-					"jsonFile" : "target-tetris_ml-Debug-587871ace4051df96226.json",
+					"jsonFile" : "target-tetris_ml-Debug-ae271af6a049e70b3d06.json",
 					"name" : "tetris_ml",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 6,
 					"id" : "video_core::@d7bbc4d3940166546cb3",
-					"jsonFile" : "target-video_core-Debug-6ae703529b2b37e6e322.json",
+					"jsonFile" : "target-video_core-Debug-bef4bc15fc77d43306a4.json",
 					"name" : "video_core",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 6,
 					"id" : "video_core_exe::@d7bbc4d3940166546cb3",
-					"jsonFile" : "target-video_core_exe-Debug-5e0b682410256cdb4fcb.json",
+					"jsonFile" : "target-video_core_exe-Debug-cfe0c1f3ba77bb3d0bb4.json",
 					"name" : "video_core_exe",
 					"projectIndex" : 0
 				}

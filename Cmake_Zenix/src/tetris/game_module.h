@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tetris_pieces.h"
+#include "game_specs.h"
 #include <queue>
 #include <ostream>
 namespace Tetris
@@ -9,8 +10,20 @@ namespace Tetris
 	constexpr Level MAX_LEVEL = std::numeric_limits<Level>::max();
 	constexpr Level MIN_LEVEL = std::numeric_limits<Level>::min();;
 
-	constexpr double v_fall0 = 10.0; //blocks per second
-	constexpr double v_fall_max = 98.0; //blocks per second
+	constexpr double v_fall0 = 
+#ifdef V_FALL_0
+		V_FALL_0
+#else
+		10.0 //blocks per second
+#endif
+	;
+	constexpr double v_fall_max =
+#ifdef V_FALL_MAX
+		V_FALL_MAX
+#else
+		98.0 //blocks per second
+#endif
+		;
 	constexpr double v_slope = (v_fall_max - v_fall0) / (MAX_LEVEL - MIN_LEVEL);
 
 	constexpr double v_fall_at(const Level& level)

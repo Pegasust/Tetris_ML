@@ -250,9 +250,10 @@ void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4],
 			controlling_piece.current_position.y += gravity_displacement;
 			return;
 		}
-		//displacement from gravity should be sufficient for this piece
-		//to be staticized
-		controlling_piece.current_position.y += gravity_displacement;
+		////displacement from gravity should be sufficient for this piece
+		////to be staticized
+		//controlling_piece.current_position.y += gravity_displacement;
+		controlling_piece.current_position.y += dist;
 	}
 	game_field.update_collider(controlling_piece, burn_y, n_burned);
 	unsigned char scaled_burned = 0;

@@ -393,13 +393,13 @@ void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char 
 	unsigned char rounded_x = RoundingExt::position_round<unsigned char>(body.current_position.x),
 		rounded_y = RoundingExt::position_round<unsigned char>(body.current_position.y);
 	//Iterate through the tetris body and assign it into the field's collider
-	unsigned char bottom_most_global_y = rounded_y + 1;
+	unsigned char bottom_most_global_y = rounded_y; //+1 to lift it out of bottom border
 	for (unsigned char i = 0; i < T_COLLIDER_LEN; i++)
 	{
 		if (body.collider[i])
 		{
 			unsigned char global_x, global_y;
-			body.i2xy(i, global_x, global_y);
+			TetrisBody::i2xy(i, global_x, global_y);
 			global_x += rounded_x;
 			global_y += rounded_y;
 			if (global_y > bottom_most_global_y) bottom_most_global_y = global_y;
@@ -408,22 +408,21 @@ void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char 
 	}
 	//--Handle burning--
 	//Iterate from bot of the current piece to top.
-	//Purpose: check for burn and drag everything from upwards of the burning row
+	//Purpose: check for burn and drag everything from above of the burning row
 	//downwards
 	//PLEASE WORK ON REWORDING, HOLY SMOKES
 	n_burned = 0;
-#define iterating_y bottom_most_global_y
+	int iterating_y = bottom_most_global_y;
 	//O(1)
 	for (; iterating_y >= rounded_y; iterating_y--)
 	{
-		unsigned char field_index0 = xy2i(FIELD_LEFT, iterating_y);
+		unsigned char field_index0 = xy2i(0, iterating_y);
 		if (should_delete_row(field_index0))
 		{
 			//row delete handling
 			burn_y[n_burned++] = iterating_y;
 		}
 	}
-#undef iterating_y
 	if (n_burned == 0) return;
 	//We can merge both clearing the burn_y rows and
 	//handling falling physics by replacing the supposed empty
@@ -444,10 +443,10 @@ void Tetris::TetrisField::update_collider(const TetrisBody& body, unsigned char 
 			next_empty++;
 		}
 		//note: swap_y = base_y - next_empty
-		unsigned char base_index0 = xy2i(FIELD_LEFT, base_y);
-		for (unsigned char x = FIELD_LEFT; x < FIELD_RIGHT; x++)
+		unsigned char base_index0 = xy2i(0, base_y);
+		for (unsigned char x = FIELD_LEFT; x <= FIELD_RIGHT; x++)
 		{
-			if (base_y >= burn_y[n_burned-1])
+			if (base_y > burn_y[n_burned-1])
 			{
 				collider[base_index0 + x] = BodyType::BLANK;
 			}
