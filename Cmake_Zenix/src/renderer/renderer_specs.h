@@ -25,6 +25,19 @@ namespace RendererExt
 	constexpr float TXT_RENDERER_MID_WID = TXT_RENDERER_WIDTH / 2.0f;
 	constexpr float TXT_RENDERER_MID_HEIGHT = TXT_RENDERER_HEIGHT / 2.0f;
 
+	template<typename T, typename std::enable_if_t<std::is_integral<T>::value>>
+	constexpr T xy2i(const T& x, const T& y)
+	{
+		return x * static_cast<T>(TXT_RENDERER_WIDTH) + y;
+	}
+
+	template<typename T, typename std::enable_if_t<std::is_integral<T>::value>>
+	constexpr void i2xy(T& x, T& y, const T& i)
+	{
+		const T WIDTH = static_cast<T>(TXT_RENDERER_WIDTH);
+		y = static_cast<T>(i) / WIDTH;
+		x = static_cast<T>(i) - (y * WIDTH);
+	}
 	const int cx = Common::ZMath::round_nearest(TXT_RENDERER_WIDTH / 2.0f);
 	const int cy = Common::ZMath::round_nearest(TXT_RENDERER_HEIGHT / 2.0f);
 	//constexpr int CENTER_X = Common::ZMath::round_nearest(TXT_RENDERER_MID_WID);
@@ -137,11 +150,14 @@ namespace RendererExt
 	typedef unsigned int Priority;
 
 #define DECLARE_RENDER_ENTRY(name, render_mode, render_position, mod_x, mod_y, priority) \
-const RenderMode name##_MODE = render_mode;\
-const RenderPosition name##_POSITION = render_position; \
-constexpr int name##_MOD_X = mod_x; \
-constexpr int name##_MOD_Y = mod_y; \
-constexpr Priority name##_PRIORITY = priority;
+struct name {\
+ \
+	static const RenderMode MODE = render_mode; \
+	static const RenderPosition POSITION = render_position; \
+	static const int MOD_X = mod_x; \
+	static const int MOD_Y = mod_y; \
+	static const Priority PRIORITY = priority;\
+	}; \
 
 	DECLARE_RENDER_ENTRY(GAME_FIELD, RenderMode::VERTICAL, 
 		RenderPosition::CENTER, Tetris::TetrisField::WIDTH, 

@@ -31,14 +31,16 @@ bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderD
 	empty_str += *it;																												\
 	empty_str += '\n';																											\
 }
-	ITERATE(tetris_field, new_str);
-	new_str += '\n';
-	ITERATE(scoreboard, new_str);
-	new_str += '\n';
-	ITERATE(game_info, new_str);
-	new_str += '\n';
-	ITERATE(coming_pieces, new_str);
+	//ITERATE(tetris_field, new_str);
+	//new_str += '\n';
+	//ITERATE(scoreboard, new_str);
+	//new_str += '\n';
+	//ITERATE(game_info, new_str);
+	//new_str += '\n';
+	//ITERATE(coming_pieces, new_str);
 
+	//new_data = new_str;
+	assign_render_string(mod, true, new_str);
 	new_data = new_str;
 	//clear_screen();
 	//RenderStrings tetris_field = tetris_field_string(mod.game_field, mod.controlling_piece);
@@ -79,6 +81,44 @@ char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body)
 //	}
 //#endif
 	return char_val.at(body);
+}
+
+void Renderer::StdTxtRenderer::assign_render_string(Tetris::GameModule const& mod, const bool& shadow, std::string& str)
+{
+	static const get_func_map func_map
+	{
+		{RendererExt::GAME_FIELD::PRIORITY, tetris_field_string},
+		{RendererExt::GAME_INFO::PRIORITY, tetris_game_info},
+		{RendererExt::SCORE_BOARD::PRIORITY, tetris_scoreboard},
+		{RendererExt::UPCOMING_PIECES::PRIORITY, tetris_upcoming_pieces}
+	};
+	static RendererExt::Priority priority_queue[] = { RendererExt::GAME_FIELD::PRIORITY,
+	RendererExt::GAME_INFO::PRIORITY, RendererExt::SCORE_BOARD::PRIORITY, RendererExt::UPCOMING_PIECES::PRIORITY };
+	static bool sorted = false;
+	if (!sorted)
+	{
+		//bubblesort is nlogn or 3+2+1 = 6 cycles
+		//mergesort is 4 cycles
+		//UNSAFE_SWAP works because there is nothing much on priority
+#define UNSAFE_SWAP(x, y) x = x + y; y = x - y; x = x - y;
+#define UNSAFE_CONDITIONAL_SWAP(smaller, larger) if(smaller > larger) UNSAFE_SWAP(smaller, larger);
+	//inline mergesort
+		UNSAFE_CONDITIONAL_SWAP(priority_queue[0], priority_queue[1]);
+		UNSAFE_CONDITIONAL_SWAP(priority_queue[2], priority_queue[3]);
+		UNSAFE_CONDITIONAL_SWAP(priority_queue[0], priority_queue[2]);
+		UNSAFE_CONDITIONAL_SWAP(priority_queue[1], priority_queue[3]);
+		UNSAFE_CONDITIONAL_SWAP(priority_queue[1], priority_queue[2]);
+#undef UNSAFE_CONDITIONAL_SWAP
+#undef UNSAFE_SWAP
+		sorted = true;
+	}
+	//TODO: Positioning hasn't been implemented.
+	static const int QUEUE_LENGTH = 4;
+	for (int i = 0; i < QUEUE_LENGTH; i++)
+	{
+		auto x = func_map.at(priority_queue[i])(mod);
+		ITERATE(x, str);
+	}
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_string(Tetris::GameModule const& mod)
@@ -186,9 +226,9 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(std::queue<Tetris::BodyType> coming_pieces)
 {
 	RenderStrings rs;
-	if (RendererExt::UPCOMING_PIECES_MODE == RendererExt::RenderMode::VERTICAL)
+	if (RendererExt::UPCOMING_PIECES::MODE == RendererExt::RenderMode::VERTICAL)
 	{
-		rs.reserve(RendererExt::UPCOMING_PIECES_MOD_Y); //the number of lines
+		rs.reserve(RendererExt::UPCOMING_PIECES::MOD_Y); //the number of lines
 		rs.push_back("UPCOMING");
 		rs.push_back(""); //For new line.
 		for (int i = 0; i < Tetris::GameModule::N_PIECE_AHEAD; i++)
@@ -226,10 +266,15 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
 	return rs;
 }
 
+Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(Tetris::GameModule const& mod)
+{
+	return tetris_upcoming_pieces(mod.coming_pieces);
+}
+
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_scoreboard(Tetris::GameModule const& mod)
 {
 	RenderStrings rs;
-	if (RendererExt::SCORE_BOARD_MODE == RendererExt::RenderMode::VERTICAL)
+	if (RendererExt::SCORE_BOARD::MODE == RendererExt::RenderMode::VERTICAL)
 	{
 		rs.reserve(12);
 		rs.push_back("Level");
@@ -251,7 +296,7 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_scorebo
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_info(Tetris::GameModule const& mod)
 {
 	RenderStrings rs;
-	if (RendererExt::GAME_INFO_MODE == RendererExt::RenderMode::VERTICAL)
+	if (RendererExt::GAME_INFO::MODE == RendererExt::RenderMode::VERTICAL)
 	{
 #ifdef DEBUG_DEFINED
 		rs.push_back("Seed");
@@ -279,5 +324,5 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_in
 	}
 	return rs;
 }
-
+#undef ITERATE
 #endif

@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Cmake_Zenix",
+    "\\Cmake_Zenix\\out",
+    "\\Cmake_Zenix\\src",
+    "\\Cmake_Zenix\\src\\renderer",
+    "\\Cmake_Zenix\\src\\tetris",
+    "\\Cmake_Zenix\\src\\tetris_game",
+    "\\Cmake_Zenix\\src\\tetris_ml",
+    "\\Cmake_Zenix\\src\\video_core"
   ],
-  "SelectedNode": "\\C:\\Users\\Pegasus\\Source\\Repos\\Pegasust\\Tetris_ML\\Cmake_Zenix\\CMakeLists.txt\\tetris.lib (src\\tetris\\tetris.lib)\\game_specs.h",
+  "SelectedNode": "\\best_zenx.coef",
   "PreviewInSolutionExplorer": false
 }

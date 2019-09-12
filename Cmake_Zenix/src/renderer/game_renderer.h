@@ -22,6 +22,7 @@ namespace Renderer
 		static bool try_update(Tetris::GameModule const& mod, RenderData& new_data);
 		static bool try_display(const RenderData& data);
 		static char body_type_2_char(Tetris::BodyType const& body);
+		static void assign_render_string(Tetris::GameModule const& mod, const bool& shadow, std::string& str);
 	private:
 		typedef int CharPosition;
 		using RendererMath = RendererExt::Math<CharPosition>;
@@ -32,8 +33,11 @@ namespace Renderer
 		static RenderStrings tetris_field_string(Tetris::TetrisField const& game_field,
 			Tetris::TetrisBody const& controlling_piece);
 		static RenderStrings tetris_upcoming_pieces(std::queue<Tetris::BodyType> coming_pieces);
+		static RenderStrings tetris_upcoming_pieces(Tetris::GameModule const& mod);
 		static RenderStrings tetris_scoreboard(Tetris::GameModule const& mod);
 		static RenderStrings tetris_game_info(Tetris::GameModule const& mod);
+		typedef RenderStrings (*StringGetFunction)(Tetris::GameModule const&);
+		typedef std::unordered_map<RendererExt::Priority, StringGetFunction> get_func_map;
 	};
 	using MainRenderer = StdTxtRenderer;
 #endif

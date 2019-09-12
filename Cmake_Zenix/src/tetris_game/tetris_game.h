@@ -16,7 +16,7 @@ namespace TetrisGame
 	template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 	class Tetris
 	{
-		constexpr ::Tetris::Input get_input(const int& keypress)
+		static constexpr ::Tetris::Input get_input(const int& keypress)
 		{
 			std::unordered_map<int, ::Tetris::Input> key2inp =
 			{

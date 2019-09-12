@@ -12,7 +12,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "src/tetris_game/tetris_game.lib"
+			"path" : "src/video_core/video_core.lib"
 		}
 	],
 	"backtrace" : 1,
@@ -26,7 +26,7 @@
 		],
 		"files" : 
 		[
-			"src/tetris_game/CMakeLists.txt",
+			"src/video_core/CMakeLists.txt",
 			"src/CMakeLists.txt"
 		],
 		"nodes" : 
@@ -43,7 +43,7 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 8,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
@@ -76,7 +76,7 @@
 			"language" : "CXX",
 			"sourceIndexes" : 
 			[
-				2
+				1
 			]
 		}
 	],
@@ -84,11 +84,7 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "tetris::@e716ee35adbdbcc60ee5"
-		},
-		{
-			"backtrace" : 2,
-			"id" : "video_core::@d7bbc4d3940166546cb3"
+			"id" : "common::@af79f3804eddddbfa7f1"
 		},
 		{
 			"backtrace" : 2,
@@ -96,16 +92,16 @@
 		},
 		{
 			"backtrace" : 2,
-			"id" : "common::@af79f3804eddddbfa7f1"
+			"id" : "tetris::@e716ee35adbdbcc60ee5"
 		}
 	],
-	"id" : "tetris_game::@a98f5124ef40313b7f75",
-	"name" : "tetris_game",
-	"nameOnDisk" : "tetris_game.lib",
+	"id" : "video_core::@d7bbc4d3940166546cb3",
+	"name" : "video_core",
+	"nameOnDisk" : "video_core.lib",
 	"paths" : 
 	{
-		"build" : "src/tetris_game",
-		"source" : "src/tetris_game"
+		"build" : "src/video_core",
+		"source" : "src/video_core"
 	},
 	"sourceGroups" : 
 	[
@@ -114,8 +110,7 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1,
-				2
+				1
 			]
 		}
 	],
@@ -123,18 +118,13 @@
 	[
 		{
 			"backtrace" : 1,
-			"path" : "src/tetris_game/tetris_game.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "src/tetris_game/tetris_game.ipp",
+			"path" : "src/video_core/video_core.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/tetris_game/tetris_game.cpp",
+			"path" : "src/video_core/video_core.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
