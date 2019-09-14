@@ -518,7 +518,6 @@ bool Tetris::TetrisField::check_collider(const TetrisBody& body) const
 //Please check new_rot.
 bool Tetris::try_rotate(Tetris::TetrisBody& body, const Tetris::Rotation& new_rot, const TetrisField& field)
 {
-
 	TetrisCollider temp;
 	TetrisBody::rotate(temp, new_rot, body.type);
 	if (field.check_collider(temp, body.current_position)) //If rotate doesn't overlap

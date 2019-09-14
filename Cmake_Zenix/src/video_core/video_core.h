@@ -7,6 +7,7 @@ namespace VideoCore
 	public:
 		Renderer::MainRenderer::RenderData display_data;
 		std::thread video_thread;
+		std::thread update_thread;
 		bool keep_displaying_data;
 		bool exit;
 		
@@ -14,7 +15,7 @@ namespace VideoCore
 		void resume_displaying();
 		void stop_displaying();
 		VideoHandler();
-		void start_async_display(const VideoHandler* h);
+		void start_async_display(VideoHandler* h, const ::Tetris::GameModule& game);
 	private:
 		static void thread_main(const double& frametime_sec, 
 			const Renderer::MainRenderer::RenderData& display_data,

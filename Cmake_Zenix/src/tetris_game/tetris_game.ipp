@@ -6,10 +6,8 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 	do
 	{
 		::Tetris::GameModule game(this->rng);
-		Renderer::MainRenderer::try_update(game, videocore.display_data);
 		game_clock = Common::GameClock::Instance();
-		
-		videocore.start_async_display(&videocore);
+		videocore.start_async_display(&videocore, game);
 		while (!game.lost)
 		{
 			int key = KeyboardModule::get_key();
@@ -28,7 +26,14 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 	} while (!exit);
 
 }
-
+template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
+void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::threaded_update(bool& str_upd_done,
+	const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd)
+{
+	str_upd_done = false;
+	Renderer::MainRenderer::try_update(game, rd);
+	str_upd_done = true;
+}
 template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 TetrisGame::Tetris<threaded, target_framerate, rng_seed>::Tetris():
 	rng(rng_seed), exit(false)

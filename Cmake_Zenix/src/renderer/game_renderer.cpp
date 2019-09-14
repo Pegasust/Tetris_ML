@@ -5,7 +5,7 @@
 void Renderer::StdTxtRenderer::clear_screen()
 {
 #ifdef __cplusplus
-	std::cout << std::string(100, '\n');
+	std::cout << std::string(100, '\n')<<std::endl;
 #else
 	int n;
 	for (n = 0; n < 10; n++)
@@ -19,11 +19,11 @@ bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderD
 {
 	//VERY SIMPLISTIC
 	clear_screen();
-	RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
-		tetris_field_string(mod);
-	RenderStrings scoreboard = tetris_scoreboard(mod);
-	RenderStrings game_info = tetris_game_info(mod);
-	RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
+	//RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
+	//	tetris_field_string(mod);
+	//RenderStrings scoreboard = tetris_scoreboard(mod);
+	//RenderStrings game_info = tetris_game_info(mod);
+	//RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
 
 	std::string new_str;
 #define ITERATE(str_vec, empty_str) for(std::vector<std::string>::const_iterator  it = str_vec.begin(); it != str_vec.end(); ++it)\

@@ -2,6 +2,8 @@
 //This is only for temporary as this would only work on windows
 #ifdef WINDOWS_DEFINED
 #include <conio.h>
+#else
+#error Linux keyboard support is not yet implemented
 #endif
 #include <thread>
 #include "zmath.h"

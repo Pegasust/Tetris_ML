@@ -1,15 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Cmake_Zenix",
-    "\\Cmake_Zenix\\out",
-    "\\Cmake_Zenix\\src",
-    "\\Cmake_Zenix\\src\\renderer",
-    "\\Cmake_Zenix\\src\\tetris",
-    "\\Cmake_Zenix\\src\\tetris_game",
-    "\\Cmake_Zenix\\src\\tetris_ml",
-    "\\Cmake_Zenix\\src\\video_core"
+    ""
   ],
-  "SelectedNode": "\\best_zenx.coef",
+  "SelectedNode": "\\C:\\Users\\Pegasus\\Source\\Repos\\Pegasust\\Tetris_ML\\Cmake_Zenix\\CMakeLists.txt\\tetris_game_test.exe (bin\\tetris_game_test.exe)\\tetris_game_test.cpp",
   "PreviewInSolutionExplorer": false
 }

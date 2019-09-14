@@ -26,7 +26,8 @@ namespace TetrisGame
 				{75, ::Tetris::Input::LEFT}, //Left arrow
 				{77, ::Tetris::Input::RIGHT }, //Right arrow
 				{32, ::Tetris::Input::CAST_DOWN}, //space
-				{122, ::Tetris::Input::ROTATE} //z button
+				{122, ::Tetris::Input::ROTATE_BACK}, //z button
+				{120, ::Tetris::Input::ROTATE_FORTH } //x button
 			};
 			if (key2inp.find(keypress) == key2inp.end()) return ::Tetris::Input::NONE;
 			return key2inp.at(keypress);
@@ -41,6 +42,9 @@ namespace TetrisGame
 		Common::GameClock::Instance game_clock;
 		Tetris();
 		void start();
+	private:
+		static void threaded_update(bool& str_upd_done,
+			const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd);
 	};
 }
 

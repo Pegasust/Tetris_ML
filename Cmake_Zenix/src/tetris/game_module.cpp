@@ -324,11 +324,15 @@ void Tetris::GameModule::handle_input(const Tetris::Input& input, bool& useful_i
 		}
 	}
 	break;
-	case ROTATE:
+	case ROTATE_FORTH:
 	{
 		useful_input = Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
 	}
 	break;
+	case ROTATE_BACK:
+	{
+		useful_input = Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot - 1) % 4, game_field);
+	}
 	case DOWN:
 	{
 		gravity_mult = dragdown_gravity_mult;
@@ -370,9 +374,18 @@ void Tetris::GameModule::handle_input(const Tetris::Input& input, double& gravit
 		}
 	}
 	break;
-	case ROTATE:
+	case ROTATE_FORTH:
 	{
 		Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
+	}
+	break;
+	case ROTATE_BACK:
+	{
+		//For some weird reasons, if the following expression is a one-liner, the compiler
+		//will optimize the modulo 4 away
+		Rotation new_rot = controlling_piece.current_rot - 1;
+		new_rot = new_rot % 4;
+		Tetris::try_rotate(controlling_piece, new_rot, game_field);
 	}
 	break;
 	case DOWN:

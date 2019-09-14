@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "bin/tetris_ml.exe"
+			"path" : "bin/video_core_exe.exe"
 		},
 		{
-			"path" : "bin/tetris_ml.pdb"
+			"path" : "bin/video_core_exe.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -19,7 +19,7 @@
 		],
 		"files" : 
 		[
-			"src/tetris_ml/CMakeLists.txt",
+			"src/video_core/CMakeLists.txt",
 			"src/CMakeLists.txt"
 		],
 		"nodes" : 
@@ -30,7 +30,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 7,
+				"line" : 6,
 				"parent" : 0
 			},
 			{
@@ -85,14 +85,14 @@
 		},
 		{
 			"backtrace" : 2,
-			"id" : "renderer::@cc07643e4269eb53963a"
+			"id" : "tetris::@e716ee35adbdbcc60ee5"
 		},
 		{
 			"backtrace" : 2,
-			"id" : "tetris::@e716ee35adbdbcc60ee5"
+			"id" : "renderer::@cc07643e4269eb53963a"
 		}
 	],
-	"id" : "tetris_ml::@233326f5b4ea757c5bee",
+	"id" : "video_core_exe::@d7bbc4d3940166546cb3",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -106,18 +106,18 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "..\\common\\common.lib ..\\renderer\\renderer.lib ..\\tetris\\tetris.lib ..\\video_core\\video_core.lib ..\\renderer\\renderer.lib ..\\tetris\\tetris.lib ..\\common\\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"fragment" : "video_core.lib ..\\renderer\\renderer.lib ..\\tetris\\tetris.lib ..\\common\\common.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
 				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
-	"name" : "tetris_ml",
-	"nameOnDisk" : "tetris_ml.exe",
+	"name" : "video_core_exe",
+	"nameOnDisk" : "video_core_exe.exe",
 	"paths" : 
 	{
-		"build" : "src/tetris_ml",
-		"source" : "src/tetris_ml"
+		"build" : "src/video_core",
+		"source" : "src/video_core"
 	},
 	"sourceGroups" : 
 	[
@@ -134,7 +134,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/tetris_ml/tetris_ml.cpp",
+			"path" : "src/video_core/tester.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

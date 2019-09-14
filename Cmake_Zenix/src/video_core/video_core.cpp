@@ -21,13 +21,15 @@ VideoCore::VideoHandler::VideoHandler():exit(false), keep_displaying_data(true)
 	display_data = Renderer::MainRenderer::RenderData();
 }
 
-void VideoCore::VideoHandler::start_async_display(const VideoHandler* h)
+void VideoCore::VideoHandler::start_async_display(VideoHandler* h, const ::Tetris::GameModule& game)
 {
 	keep_displaying_data = true;
 	exit = false;
 	/*	video_thread = std::thread(&VideoCore::VideoHandler::thread_main,
 		1.0 / 60.0, this->display_data, this->keep_displaying_data, this->exit);*/
+	//update_thread = std::thread(Renderer::MainRenderer::try_update(game, h->display_data));
 	video_thread = std::thread(&thread_main_ptr, 1.0 / 60.0, h);
+
 }
 
 void VideoCore::VideoHandler::thread_main(const double& frametime_sec, const Renderer::MainRenderer::RenderData& display_data, const bool& keep_displaying_data, const bool& exit)
