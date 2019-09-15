@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	{
 		Tetris::GameModule game(rng_seed);
 		Renderer::MainRenderer::RenderData rd;
-		Renderer::StdTxtRenderer::try_update(game, rd);		
+		Renderer::MainRenderer::try_update(game, rd);		
 		Renderer::MainRenderer::try_display(rd);
 		Common::GameClock::Instance game_clock;
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 			//game.fast_deprecated_try_update(Tetris::Input::NONE, n_burned, y_burned, true, 
 			//	static_cast<double>(diff.count())/1000000.0);
 			game.update(Tetris::Input::NONE, y_burned, n_burned, true, time_diff);
-			Renderer::StdTxtRenderer::try_update(game, rd);
+			Renderer::MainRenderer::try_update(game, rd);
 			Renderer::MainRenderer::try_display(rd);
 			game_clock.reset_then();
 		}

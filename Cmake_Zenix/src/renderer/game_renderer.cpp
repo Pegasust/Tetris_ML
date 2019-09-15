@@ -113,11 +113,36 @@ void Renderer::StdTxtRenderer::assign_render_string(Tetris::GameModule const& mo
 		sorted = true;
 	}
 	//TODO: Positioning hasn't been implemented.
+	//Use threads to generate each string
 	static const int QUEUE_LENGTH = 4;
+	std::thread th[QUEUE_LENGTH];
+	std::array<RenderStrings, QUEUE_LENGTH> r_d;
+	std::fill(r_d.begin(), r_d.end(), RenderStrings());
 	for (int i = 0; i < QUEUE_LENGTH; i++)
 	{
-		auto x = func_map.at(priority_queue[i])(mod);
-		ITERATE(x, str);
+		auto func = func_map.at(priority_queue[i]);
+		th[i] = std::thread([&r_d, func, &mod, i]()
+			{
+				r_d[i] = func(mod);
+			});
+	}
+	//Wait for everything to be done
+	int remain = QUEUE_LENGTH;
+	while (remain > 0)
+	{
+		for (int i = 0; i < QUEUE_LENGTH; i++)
+		{
+			if (th[i].joinable())
+			{
+				th[i].join();
+				remain--;
+			}
+		}
+	}
+	//Merge
+	for (int i = 0; i < QUEUE_LENGTH; i++)
+	{
+		ITERATE(r_d[i], str);
 	}
 }
 

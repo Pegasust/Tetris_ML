@@ -24,6 +24,9 @@ C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_game/CMakeFiles/tetris_game.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_game/CMakeFiles/edit_cache.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_game/CMakeFiles/rebuild_cache.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/verbosity/CMakeFiles/verbosity.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/verbosity/CMakeFiles/edit_cache.dir
+C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/verbosity/CMakeFiles/rebuild_cache.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_ml/CMakeFiles/tetris_ml.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_ml/CMakeFiles/tetris_game_test.dir
 C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_ml/CMakeFiles/edit_cache.dir

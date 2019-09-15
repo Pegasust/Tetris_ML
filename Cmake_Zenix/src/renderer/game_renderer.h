@@ -4,13 +4,21 @@
 #include <vector>
 #include <unordered_map>
 #include <stdlib.h>
+#include <array>
 #ifdef __cplusplus
 #include <iostream>
 #include <string>
 #endif
 namespace Renderer
 {
-
+	/**Renderers must be implemented with the following contents:
+	- Encapsulated within ifdef
+	- public typedef: RenderData
+	- using MainRenderer = <RendererName>
+	- static void clear_screen() //As means to clear the current display
+	- static bool try_update(const ::Tetris::GameModule&, RenderData&)
+	- static bool try_display(const RenderData&)
+	*/
 #ifdef USE_TXT_CONSOLE_RENDERER
 	class StdTxtRenderer
 	{

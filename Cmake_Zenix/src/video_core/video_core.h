@@ -7,7 +7,6 @@ namespace VideoCore
 	public:
 		Renderer::MainRenderer::RenderData display_data;
 		std::thread video_thread;
-		std::thread update_thread;
 		bool keep_displaying_data;
 		bool exit;
 		

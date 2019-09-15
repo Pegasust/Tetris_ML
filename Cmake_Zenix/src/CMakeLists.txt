@@ -7,5 +7,6 @@ add_subdirectory(tetris)
 add_subdirectory(renderer)
 add_subdirectory(video_core)
 add_subdirectory(tetris_game)
+add_subdirectory(verbosity)
 
 add_subdirectory(tetris_ml)

@@ -7,6 +7,7 @@
 //by the program
 
 #define USE_TXT_CONSOLE_RENDERER
+
 //#define USE_OPENCL_RENDERER //NOT IMPLEMENTED YET
 
 
