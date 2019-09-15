@@ -32,22 +32,22 @@ void VideoCore::VideoHandler::start_async_display(VideoHandler* h, const ::Tetri
 
 }
 
-void VideoCore::VideoHandler::thread_main(const double& frametime_sec, const Renderer::MainRenderer::RenderData& display_data, const bool& keep_displaying_data, const bool& exit)
-{
-	do
-	{
-		auto next_time = std::chrono::high_resolution_clock::now()
-			+ std::chrono::duration<double, std::milli>(frametime_sec);
+//void VideoCore::VideoHandler::thread_main(const double& frametime_sec, const Renderer::MainRenderer::RenderData& display_data, const bool& keep_displaying_data, const bool& exit)
+//{
+//	do
+//	{
+//		auto next_time = std::chrono::high_resolution_clock::now()
+//			+ std::chrono::duration<double, std::milli>(frametime_sec);
+//
+//		if (keep_displaying_data)
+//		{
+//			Renderer::MainRenderer::try_display(display_data);
+//		}
+//		std::this_thread::sleep_until(next_time);
+//	} while (!exit);
+//}
 
-		if (keep_displaying_data)
-		{
-			Renderer::MainRenderer::try_display(display_data);
-		}
-		std::this_thread::sleep_until(next_time);
-	} while (!exit);
-}
-
-void VideoCore::VideoHandler::thread_main_ptr(const double& frametime_s, const VideoHandler* handler_ptr)
+void VideoCore::VideoHandler::thread_main_ptr(const double& frametime_s, VideoHandler* handler_ptr)
 {
 	do
 	{
@@ -56,7 +56,9 @@ void VideoCore::VideoHandler::thread_main_ptr(const double& frametime_s, const V
 
 		if (handler_ptr->keep_displaying_data)
 		{
+			Renderer::MainRenderer::clear_screen();
 			Renderer::MainRenderer::try_display(handler_ptr->display_data);
+			handler_ptr->keep_displaying_data = false;
 		}
 		std::this_thread::sleep_until(next_time);
 	} while (!handler_ptr->exit);

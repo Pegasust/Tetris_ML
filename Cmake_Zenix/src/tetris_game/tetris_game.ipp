@@ -8,13 +8,27 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		::Tetris::GameModule game(this->rng);
 		game_clock = Common::GameClock::Instance();
 		videocore.start_async_display(&videocore, game);
-		std::thread r_upd_th([&, this]()
-			{
-				while (!game.lost)
+		std::thread r_upd_th;
+		bool physics_updated = true;
+		if (threaded)
+		{
+			r_upd_th = std::thread([&, this]()
 				{
-					Renderer::MainRenderer::try_update(game, videocore.display_data);
-				}
-			});
+					while (!game.lost)
+					{
+						if (physics_updated)
+						{
+							Renderer::MainRenderer::try_update(game, videocore.display_data);
+							physics_updated = false;
+							videocore.keep_displaying_data = true;
+						}
+					}
+				});
+		}
+		else
+		{
+			Renderer::MainRenderer::try_update(game, videocore.display_data);
+		}
 		while (!game.lost)
 		{
 			int key = KeyboardModule::get_key();
@@ -24,12 +38,24 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 
 			double time_diff = static_cast<double>(diff.count() / (1000.0 * 1000.0 * 1000.0));
 			game.update(get_input(key), y_burned, n_burned, true, time_diff);
+			if (threaded)
+			{
+				physics_updated = true;
+			}
+			if (!threaded)
+			{
+				Renderer::MainRenderer::try_update(game, videocore.display_data);
+			}
 			game_clock.reset_then();
 		}
 		//On game lost
 		this->rng = game.current_seed.get_value();
 		videocore.stop_displaying();
-		r_upd_th.join();
+
+		if (threaded)
+		{
+			r_upd_th.join();
+		}
 	} while (!exit);
 
 }

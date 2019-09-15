@@ -18,7 +18,7 @@ void Renderer::StdTxtRenderer::clear_screen()
 bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderData& new_data)
 {
 	//VERY SIMPLISTIC
-	clear_screen();
+	//clear_screen();
 	//RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
 	//	tetris_field_string(mod);
 	//RenderStrings scoreboard = tetris_scoreboard(mod);

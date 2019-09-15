@@ -21,6 +21,6 @@ namespace VideoCore
 			const bool& keep_displaying_data,
 			const bool& exit);
 		static void thread_main_ptr(const double& frametime_s,
-			const VideoHandler* handler_ptr);
+			VideoHandler* handler_ptr);
 	};
 }
