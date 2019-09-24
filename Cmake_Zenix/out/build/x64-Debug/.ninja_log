@@ -66,3 +66,6 @@
 4	1614	591053107	src/verbosity/CMakeFiles/verbosity.dir/verbosity_core.cpp.obj	779fca069fed1bd1
 1614	1687	591053107	src/verbosity/verbosity.lib	87155ce55442bd2a
 1687	2032	591053108	bin/tetris_game_test.exe	ea9a49add63e6210
+5	1784	591053519	src/verbosity/CMakeFiles/verbosity.dir/verbosity_core.cpp.obj	779fca069fed1bd1
+1784	1855	591053519	src/verbosity/verbosity.lib	87155ce55442bd2a
+1855	2264	591053519	bin/tetris_game_test.exe	ea9a49add63e6210

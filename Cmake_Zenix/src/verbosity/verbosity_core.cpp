@@ -41,11 +41,11 @@ Verbosity::VerbosityWriter<false>::VerbosityWriter(const std::string& file_path)
 		{
 
 		}
-		output_stream = std::fstream(new_path, std::ios::in | std::ios::out);
+		output_stream = std::fstream(new_path, std::ios::in | std::ios::out | std::ios::trunc);
 	}
 	else
 	{
-		output_stream = std::fstream(file_path, std::ios::in | std::ios::out);
+		output_stream = std::fstream(file_path, std::ios::in | std::ios::out| std::ios::trunc);
 	}
 }
 
@@ -61,11 +61,11 @@ Verbosity::VerbosityWriter<false>::VerbosityWriter(const std::string& file_path,
 		while (std::experimental::filesystem::exists(new_path = file_path + std::to_string(i++)))
 		{
 		}
-		output_stream = std::fstream(new_path, std::ios::in | std::ios::out);
+		output_stream = std::fstream(new_path, std::ios::in | std::ios::out| std::ios::trunc);
 	}
 	else
 	{
-		output_stream = std::fstream(file_path, std::ios::in | std::ios::out);
+		output_stream = std::fstream(file_path, std::ios::in | std::ios::out|std::ios::trunc);
 	}
 }
 
