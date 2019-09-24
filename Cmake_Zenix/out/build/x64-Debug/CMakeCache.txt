@@ -215,7 +215,7 @@ renderer_LIB_DEPENDS:STATIC=general;common;general;tetris;
 tetris_LIB_DEPENDS:STATIC=general;common;
 
 //Dependencies for the target
-tetris_game_LIB_DEPENDS:STATIC=general;common;general;renderer;general;tetris;general;video_core;
+tetris_game_LIB_DEPENDS:STATIC=general;common;general;renderer;general;tetris;general;video_core;general;verbosity;
 
 //Dependencies for the target
 verbosity_LIB_DEPENDS:STATIC=general;common;

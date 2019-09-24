@@ -3,6 +3,11 @@
 template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 {
+	//int dummy;
+	//std::cout << "log output: " << std::experimental::filesystem::canonical(RELATIVE_LOG_ROOT) << std::endl;
+	//std::cin >> dummy;
+	GET_VERBOSITY_LOGGER;
+	VERBOSITY_LOG("Successfully create a new log");
 	do
 	{
 		::Tetris::GameModule game(this->rng);
@@ -28,6 +33,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		else
 		{
 			Renderer::MainRenderer::try_update(game, videocore.display_data);
+			Verbosity::FrameLogger::visual_tm().update_frame_count();
 		}
 		while (!game.lost)
 		{
@@ -38,13 +44,15 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 
 			double time_diff = static_cast<double>(diff.count() / (1000.0 * 1000.0 * 1000.0));
 			game.update(get_input(key), y_burned, n_burned, true, time_diff);
+			Verbosity::FrameLogger::physics_tm().update_frame_count();
 			if (threaded)
 			{
 				physics_updated = true;
 			}
-			if (!threaded)
+			else
 			{
 				Renderer::MainRenderer::try_update(game, videocore.display_data);
+				Verbosity::FrameLogger::visual_tm().update_frame_count();
 			}
 			game_clock.reset_then();
 		}

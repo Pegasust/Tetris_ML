@@ -5,4 +5,4 @@ tetris_game.cpp
 )
 
 create_target_directory_groups(tetris_game)
-target_link_libraries(tetris_game common renderer tetris video_core)
+target_link_libraries(tetris_game common renderer tetris video_core verbosity)

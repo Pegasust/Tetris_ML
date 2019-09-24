@@ -6,7 +6,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 project (Cmake_Zenix)
 
 
-
 #=====Source code inclusion=====
 function(create_target_directory_groups target_name)
     source_group("Other Files" REGULAR_EXPRESSION ".")

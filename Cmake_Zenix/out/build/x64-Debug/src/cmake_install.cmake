@@ -36,11 +36,11 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/initial_tests/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/common/cmake_install.cmake")
+  include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/verbosity/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/renderer/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/video_core/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_game/cmake_install.cmake")
-  include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/verbosity/cmake_install.cmake")
   include("C:/Users/Pegasus/source/repos/Pegasust/Tetris_ML/Cmake_Zenix/out/build/x64-Debug/src/tetris_ml/cmake_install.cmake")
 
 endif()

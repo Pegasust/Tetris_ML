@@ -4,12 +4,16 @@
 #include <stdint.h>
 #include <thread>
 #include <unordered_map>
+#include <experimental/filesystem>
 #include "../common/keyboard_input.h"
 #include "../video_core/video_core.h"
 #include "../tetris/game_module.h"
 #include "../common/zmath.h"
 #include "../common/rng.h"
 #include "../common/game_clock.h"
+#include "../verbosity/framerate.h"
+
+
 
 namespace TetrisGame
 {
@@ -33,7 +37,7 @@ namespace TetrisGame
 			return key2inp.at(keypress);
 		}
 		static constexpr uint64_t frametime_micros = (1000 * 1000 / target_framerate);
-		using KeyboardModule = Common::KeyboardListener<false, frametime_micros, std::chrono::microseconds>;
+		using KeyboardModule = Common::KeyboardListener<false, frametime_micros/3*2, std::chrono::microseconds>;
 		void start_game();
 	public:
 		Common::ZMath::UInt64RNG::RNGSeed rng;
