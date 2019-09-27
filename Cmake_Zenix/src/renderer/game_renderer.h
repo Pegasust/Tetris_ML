@@ -27,7 +27,8 @@ namespace Renderer
 		typedef std::vector<std::string> RenderStrings;
 		typedef std::string RenderData;
 		static void clear_screen();
-		static bool try_update(Tetris::GameModule const& mod, RenderData& new_data);
+		static bool try_initialize(Tetris::GameModule const& mod, RenderData& new_data);
+		static bool try_update(Tetris::GameModule const& mod, RenderData& overriding_data);
 		static bool try_display(const RenderData& data);
 		static char body_type_2_char(Tetris::BodyType const& body);
 		static void assign_render_string(Tetris::GameModule const& mod, const bool& shadow, std::string& str);

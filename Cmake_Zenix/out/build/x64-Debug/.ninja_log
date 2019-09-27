@@ -65,3 +65,9 @@
 3719	3786	591265458	src/tetris_game/tetris_game.lib	f93a40a3bcb4d71c
 21	4005	591265458	src/tetris_ml/CMakeFiles/tetris_game_test.dir/tetris_game_test.cpp.obj	c6d0c53cf37c540a
 4005	4502	591265458	bin/tetris_game_test.exe	ea9a49add63e6210
+4	2933	591298131	src/video_core/CMakeFiles/video_core.dir/video_core.cpp.obj	263ebf64930435c8
+2933	3062	591298131	src/video_core/video_core.lib	38bc9bcaffda6d85
+3062	3816	591298131	bin/tetris_game_test.exe	ea9a49add63e6210
+5	2139	591299262	src/renderer/CMakeFiles/renderer.dir/game_renderer.cpp.obj	89187f295685e03e
+2139	2229	591299262	src/renderer/renderer.lib	9d558b1939a06903
+2230	2608	591299262	bin/tetris_game_test.exe	ea9a49add63e6210

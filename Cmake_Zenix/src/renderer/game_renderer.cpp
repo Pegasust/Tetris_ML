@@ -15,7 +15,7 @@ void Renderer::StdTxtRenderer::clear_screen()
 #endif
 }
 
-bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderData& new_data)
+bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, RenderData& new_data)
 {
 	//VERY SIMPLISTIC
 	//clear_screen();
@@ -114,7 +114,8 @@ void Renderer::StdTxtRenderer::assign_render_string(Tetris::GameModule const& mo
 	}
 	//TODO: Positioning hasn't been implemented.
 	//Use threads to generate each string
-	static const int QUEUE_LENGTH = 4;
+
+	static constexpr int QUEUE_LENGTH = 4;
 	std::thread th[QUEUE_LENGTH];
 	std::array<RenderStrings, QUEUE_LENGTH> r_d;
 	std::fill(r_d.begin(), r_d.end(), RenderStrings());
