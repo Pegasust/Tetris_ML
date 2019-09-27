@@ -44,3 +44,35 @@ void Verbosity::FrameTiming::get_frametime(double& current, double& average)
 	nano2millis(average);
 	last_evoked = evoked;
 }
+
+Verbosity::FrameTiming& Verbosity::FrameLogger::physics_tm()
+{
+	static FrameTiming p_tm;
+	return p_tm;
+}
+
+Verbosity::FrameTiming& Verbosity::FrameLogger::visual_tm()
+{
+	static FrameTiming p_tm;
+	return p_tm;
+}
+
+std::string Verbosity::FrameLogger::dying_msg()
+{
+	double phys = physics_tm().get_average_frametime();
+	double vis = visual_tm().get_average_frametime();
+	double phys_c = FrameTiming::framerate_from(phys);
+	double vis_c = FrameTiming::framerate_from(vis);
+	std::string phys_str = std::to_string(phys_c) + " FPS (" + std::to_string(phys) + " ms)";
+	std::string vis_str = std::to_string(vis_c) + " FPS (" + std::to_string(vis) + " ms)";
+	std::string s = "avg_physics: " + phys_str;
+	s.append("\navg_visuals: " + vis_str);
+	return s;
+}
+
+Verbosity::VerbosityWriter<false>& Verbosity::FrameLogger::get_perf_log()
+{
+	static VerbosityWriter<false> perf_log = VerbosityWriter<false>(
+		LOG_ROOT("performance"), &dying_msg);
+	return perf_log;
+}

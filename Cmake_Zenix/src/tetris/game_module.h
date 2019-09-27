@@ -46,7 +46,8 @@ namespace Tetris
 		RIGHT,
 		CAST_DOWN,
 		ROTATE_FORTH,
-		ROTATE_BACK
+		ROTATE_BACK,
+		PROGRAM_EXIT
 	};
 	using namespace Tetris;
 	class GameModule

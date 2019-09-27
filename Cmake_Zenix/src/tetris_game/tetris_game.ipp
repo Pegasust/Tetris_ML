@@ -3,11 +3,8 @@
 template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 {
-	//int dummy;
-	//std::cout << "log output: " << std::experimental::filesystem::canonical(RELATIVE_LOG_ROOT) << std::endl;
-	//std::cin >> dummy;
 	GET_VERBOSITY_LOGGER;
-	VERBOSITY_LOG("Successfully create a new log");
+	//VERBOSITY_LOG("Successfully create a new log");
 	do
 	{
 		::Tetris::GameModule game(this->rng);
@@ -26,6 +23,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 							Renderer::MainRenderer::try_update(game, videocore.display_data);
 							physics_updated = false;
 							videocore.keep_displaying_data = true;
+							Verbosity::FrameLogger::visual_tm().update_frame_count();
 						}
 					}
 				});
@@ -35,9 +33,19 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 			Renderer::MainRenderer::try_update(game, videocore.display_data);
 			Verbosity::FrameLogger::visual_tm().update_frame_count();
 		}
+		//Initialize performance log
+		Verbosity::FrameLogger::get_perf_log();
 		while (!game.lost)
 		{
 			int key = KeyboardModule::get_key();
+			if (TetrisGame::Tetris<threaded, target_framerate, rng_seed>::get_input(key)
+				== ::Tetris::Input::PROGRAM_EXIT)
+			{
+				videocore.stop_displaying();
+				game.lost = true;
+				r_upd_th.join();
+				return;
+			}
 			auto diff = game_clock.nano_time_diff();
 			unsigned char n_burned;
 			unsigned char y_burned[4];

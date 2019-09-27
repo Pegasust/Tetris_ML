@@ -1,14 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Cmake_Zenix",
-    "\\Cmake_Zenix\\src",
-    "\\Cmake_Zenix\\src\\renderer",
-    "\\Cmake_Zenix\\src\\tetris",
-    "\\Cmake_Zenix\\src\\tetris_game",
-    "\\Cmake_Zenix\\src\\tetris_ml",
-    "\\Cmake_Zenix\\src\\verbosity"
+    ""
   ],
-  "SelectedNode": "\\Cmake_Zenix\\src\\verbosity\\framerate.cpp",
   "PreviewInSolutionExplorer": false
 }

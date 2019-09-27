@@ -22,7 +22,7 @@ namespace TetrisGame
 	{
 		static constexpr ::Tetris::Input get_input(const int& keypress)
 		{
-			std::unordered_map<int, ::Tetris::Input> key2inp =
+			static std::unordered_map<int, ::Tetris::Input> key2inp =
 			{
 				{-1, ::Tetris::Input::NONE},
 				{80, ::Tetris::Input::DOWN}, //Down arrow
@@ -31,7 +31,8 @@ namespace TetrisGame
 				{77, ::Tetris::Input::RIGHT }, //Right arrow
 				{32, ::Tetris::Input::CAST_DOWN}, //space
 				{122, ::Tetris::Input::ROTATE_BACK}, //z button
-				{120, ::Tetris::Input::ROTATE_FORTH } //x button
+				{120, ::Tetris::Input::ROTATE_FORTH }, //x button
+				{62, ::Tetris::Input::PROGRAM_EXIT} //F4 button
 			};
 			if (key2inp.find(keypress) == key2inp.end()) return ::Tetris::Input::NONE;
 			return key2inp.at(keypress);
