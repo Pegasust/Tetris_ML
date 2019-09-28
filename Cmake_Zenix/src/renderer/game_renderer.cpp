@@ -53,6 +53,42 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
 	return true;
 }
 
+bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod, RenderData& overriding_data)
+{
+	//VERY SIMPLISTIC
+	//clear_screen();
+	//RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
+	//	tetris_field_string(mod);
+	//RenderStrings scoreboard = tetris_scoreboard(mod);
+	//RenderStrings game_info = tetris_game_info(mod);
+	//RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
+
+	//std::string new_str;
+#define ITERATE(str_vec, empty_str) for(std::vector<std::string>::const_iterator  it = str_vec.begin(); it != str_vec.end(); ++it)\
+{																																\
+	empty_str += *it;																												\
+	empty_str += '\n';																											\
+}
+	//ITERATE(tetris_field, new_str);
+	//new_str += '\n';
+	//ITERATE(scoreboard, new_str);
+	//new_str += '\n';
+	//ITERATE(game_info, new_str);
+	//new_str += '\n';
+	//ITERATE(coming_pieces, new_str);
+
+	//new_data = new_str;
+	assign_render_string(mod, true, overriding_data);
+	//clear_screen();
+	//RenderStrings tetris_field = tetris_field_string(mod.game_field, mod.controlling_piece);
+	//RenderStrings scoreboard = tetris_scoreboard(mod);
+	//RenderStrings game_info = tetris_game_info(mod);
+	//RenderStrings upcoming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
+
+	//Not yet implemented the priority yet
+
+	return true;
+}
 bool Renderer::StdTxtRenderer::try_display(const RenderData& data)
 {
 	std::cout << data << std::endl;

@@ -38,7 +38,7 @@ namespace TetrisGame
 			return key2inp.at(keypress);
 		}
 		static constexpr uint64_t frametime_micros = (1000 * 1000 / target_framerate);
-		using KeyboardModule = Common::KeyboardListener<false, frametime_micros/3*2, std::chrono::microseconds>;
+		using KeyboardModule = Common::KeyboardListener<true, frametime_micros/3*2, std::chrono::microseconds>;
 		void start_game();
 	public:
 		Common::ZMath::UInt64RNG::RNGSeed rng;

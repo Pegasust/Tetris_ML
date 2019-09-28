@@ -10,6 +10,7 @@ game_clock.h
 game_clock.cpp
 keyboard_input.h
 keyboard_input.cpp
+keyboard_input.ipp
 )
 
 add_executable(keyboard_test

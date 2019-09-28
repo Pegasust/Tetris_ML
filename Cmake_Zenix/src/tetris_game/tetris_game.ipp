@@ -20,7 +20,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 					{
 						if (physics_updated)
 						{
-							Renderer::MainRenderer::try_update(game, videocore.display_data);
+							Renderer::MainRenderer::try_initialize(game, videocore.display_data);
 							physics_updated = false;
 							videocore.keep_displaying_data = true;
 							Verbosity::FrameLogger::visual_tm().update_frame_count();
@@ -30,7 +30,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		}
 		else
 		{
-			Renderer::MainRenderer::try_update(game, videocore.display_data);
+			Renderer::MainRenderer::try_initialize(game, videocore.display_data);
 			Verbosity::FrameLogger::visual_tm().update_frame_count();
 		}
 		//Initialize performance log
@@ -38,14 +38,17 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		while (!game.lost)
 		{
 			int key = KeyboardModule::get_key();
+//===============PROGRAM EXIT=================
 			if (TetrisGame::Tetris<threaded, target_framerate, rng_seed>::get_input(key)
 				== ::Tetris::Input::PROGRAM_EXIT)
 			{
 				videocore.stop_displaying();
 				game.lost = true;
 				r_upd_th.join();
+				KeyboardModule::exit_synchronously();
 				return;
 			}
+//=============END PROGRAM EXIT================
 			auto diff = game_clock.nano_time_diff();
 			unsigned char n_burned;
 			unsigned char y_burned[4];
@@ -59,7 +62,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 			}
 			else
 			{
-				Renderer::MainRenderer::try_update(game, videocore.display_data);
+				Renderer::MainRenderer::try_initialize(game, videocore.display_data);
 				Verbosity::FrameLogger::visual_tm().update_frame_count();
 			}
 			game_clock.reset_then();
@@ -80,7 +83,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::threaded_update(b
 	const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd)
 {
 	str_upd_done = false;
-	Renderer::MainRenderer::try_update(game, rd);
+	Renderer::MainRenderer::try_initialize(game, rd);
 	str_upd_done = true;
 }
 template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
