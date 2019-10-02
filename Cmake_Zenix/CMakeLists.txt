@@ -42,6 +42,9 @@ endif()
 if(WIN32)
 add_compile_options(-DWINDOWS_DEFINED)
 message(STATUS "WINDOWS_DEFINED is defined")
+elseif(UNIX)
+add_compile_options(-DUNIX_DEFINED)
+message(STATUC "UNIX_DEFINED is defined")
 endif()
 
 #processor count

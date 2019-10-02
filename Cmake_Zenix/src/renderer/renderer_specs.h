@@ -6,8 +6,8 @@
 //If multiple flags are set, the program will *HOPEFULLY* run every flag set
 //by the program
 
-#define USE_TXT_CONSOLE_RENDERER
-
+//#define USE_TXT_CONSOLE_RENDERER
+#define USE_REVISED_TXT_CONSOLE_RENDERER
 //#define USE_OPENCL_RENDERER //NOT IMPLEMENTED YET
 
 
@@ -17,7 +17,7 @@
 
 //Here is the region which the design is set.
 
-#ifdef USE_TXT_CONSOLE_RENDERER
+#if defined(USE_TXT_CONSOLE_RENDERER) || defined(USE_REVISED_TXT_CONSOLE_RENDERER)
 //Top left is {0, 0}, bot right is {x, y} (unsigned)
 namespace RendererExt
 {

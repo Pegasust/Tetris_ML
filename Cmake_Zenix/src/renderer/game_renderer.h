@@ -16,6 +16,7 @@ namespace Renderer
 	- public typedef: RenderData
 	- using MainRenderer = <RendererName>
 	- static void clear_screen() //As means to clear the current display
+	 -static bool try_initialize(const ::Tetris::GameModule&, RenderData&)
 	- static bool try_update(const ::Tetris::GameModule&, RenderData&)
 	- static bool try_display(const RenderData&)
 	*/
@@ -49,5 +50,23 @@ namespace Renderer
 		typedef std::unordered_map<RendererExt::Priority, StringGetFunction> get_func_map;
 	};
 	using MainRenderer = StdTxtRenderer;
+#endif
+
+#ifdef USE_REVISED_TXT_CONSOLE_RENDERER
+	class StdTxtRenderer
+	{
+	public:
+		//Consider transform this to std::string.
+		typedef std::array<char,static_cast<std::uint64_t>(
+			//The extra +1 is \n element and null-terminator
+			(RendererExt::TXT_RENDERER_WIDTH+1)*RendererExt::TXT_RENDERER_HEIGHT)>
+			RenderData;
+		static void clear_screen();
+		static bool try_initialize(Tetris::GameModule const& mod, RenderData& new_data);
+		static bool try_update(Tetris::GameModule const& mod, RenderData& overriding_data);
+		static bool try_display(RenderData const& data);
+	private:
+		static char body_type_2_char(Tetris::BodyType const& body);
+	};
 #endif
 }

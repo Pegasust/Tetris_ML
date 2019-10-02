@@ -1,5 +1,4 @@
 #pragma once
-//#include "keyboard_input.h"
 template<bool threaded, uint64_t time_out, typename ChronoType>
 int Common::KeyboardListener<threaded, time_out, ChronoType>::get_char()
 {
@@ -67,7 +66,7 @@ void Common::KeyboardListener<true, time_out, ChronoType>::exit_synchronously()
 template<uint64_t time_out, typename ChronoType>
 int Common::KeyboardListener<true, time_out, ChronoType>::get_char()
 {
-	static std::queue<Common::KeyID> input_buffer;
+	static InputBufferQueue input_buffer;
 	if (!initialized)
 	{
 		input_thr = std::thread([]()

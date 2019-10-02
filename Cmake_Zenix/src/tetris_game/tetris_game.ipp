@@ -12,6 +12,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		videocore.start_async_display(&videocore, game);
 		std::thread r_upd_th;
 		bool physics_updated = true;
+		Renderer::MainRenderer::try_initialize(game, videocore.display_data);
 		if (threaded)
 		{
 			r_upd_th = std::thread([&, this]()
@@ -20,7 +21,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 					{
 						if (physics_updated)
 						{
-							Renderer::MainRenderer::try_initialize(game, videocore.display_data);
+							Renderer::MainRenderer::try_update(game, videocore.display_data);
 							physics_updated = false;
 							videocore.keep_displaying_data = true;
 							Verbosity::FrameLogger::visual_tm().update_frame_count();
@@ -30,7 +31,6 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 		}
 		else
 		{
-			Renderer::MainRenderer::try_initialize(game, videocore.display_data);
 			Verbosity::FrameLogger::visual_tm().update_frame_count();
 		}
 		//Initialize performance log
@@ -62,7 +62,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
 			}
 			else
 			{
-				Renderer::MainRenderer::try_initialize(game, videocore.display_data);
+				Renderer::MainRenderer::try_update(game, videocore.display_data);
 				Verbosity::FrameLogger::visual_tm().update_frame_count();
 			}
 			game_clock.reset_then();
@@ -83,7 +83,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::threaded_update(b
 	const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd)
 {
 	str_upd_done = false;
-	Renderer::MainRenderer::try_initialize(game, rd);
+	Renderer::MainRenderer::try_update(game, rd);
 	str_upd_done = true;
 }
 template<bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
