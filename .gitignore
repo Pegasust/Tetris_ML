@@ -27,7 +27,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Dd]eprecated/
-out/
+# The out build folder
+**/out/
 
 
 # Visual Studio 2015/2017 cache/options directory
