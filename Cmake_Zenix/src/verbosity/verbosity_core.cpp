@@ -7,7 +7,7 @@ Verbosity::VerbosityWriter<true>::VerbosityWriter(const std::string& file_path) 
 }),
 output_stream(file_path, std::ios::in|std::ios::out|std::ios::app)
 {
-	std::experimental::filesystem::create_directory(RELATIVE_LOG_ROOT);
+	std_filesystem::create_directory(RELATIVE_LOG_ROOT);
 }
 
 template<>
@@ -16,7 +16,7 @@ Verbosity::VerbosityWriter<true>::VerbosityWriter(const std::string& file_path, 
 	dying_log(dying_log),
 	output_stream(file_path, std::ios::in | std::ios::out | std::ios::trunc)
 {
-	std::experimental::filesystem::create_directory(RELATIVE_LOG_ROOT);
+	std_filesystem::create_directory(RELATIVE_LOG_ROOT);
 }
 
 template<bool try_append_to_file>
@@ -32,12 +32,12 @@ Verbosity::VerbosityWriter<false>::VerbosityWriter(const std::string& file_path)
 		return std::string("");
 	})	
 {
-	std::experimental::filesystem::create_directory(RELATIVE_LOG_ROOT);
-	if (std::experimental::filesystem::exists(file_path))
+	std_filesystem::create_directory(RELATIVE_LOG_ROOT);
+	if (std_filesystem::exists(file_path))
 	{
 		unsigned int i = 0;
 		std::string new_path;
-		while (std::experimental::filesystem::exists(new_path = file_path + std::to_string(i++)))
+		while (std_filesystem::exists(new_path = file_path + std::to_string(i++)))
 		{
 
 		}
@@ -53,12 +53,12 @@ template<>
 Verbosity::VerbosityWriter<false>::VerbosityWriter(const std::string& file_path, const Log_On_Destruct f_log) :
 	dying_log(f_log)
 {
-	std::experimental::filesystem::create_directory(RELATIVE_LOG_ROOT);
-	if (std::experimental::filesystem::exists(file_path))
+	std_filesystem::create_directory(RELATIVE_LOG_ROOT);
+	if (std_filesystem::exists(file_path))
 	{
 		unsigned int i = 0;
 		std::string new_path;
-		while (std::experimental::filesystem::exists(new_path = file_path + std::to_string(i++)))
+		while (std_filesystem::exists(new_path = file_path + std::to_string(i++)))
 		{
 		}
 		output_stream = std::fstream(new_path, std::ios::in | std::ios::out| std::ios::trunc);

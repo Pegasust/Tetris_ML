@@ -1,6 +1,6 @@
 #pragma once
 #include <math.h>
-
+#include <stdint.h>
 
 namespace Common
 {
@@ -8,6 +8,13 @@ namespace ZMath
 {
 	int round_nearest(double x);
 	int round_nearest(float f);
+	constexpr int32_t compile_time_ceil(float num)
+	{
+		return (static_cast<float>(static_cast<int32_t>(num)) == num)
+			? static_cast<int32_t>(num)
+			: static_cast<int32_t>(num) + ((num > 0) ? 1 : 0);
+	}
+
 
 	inline double get_magnitude(double const & x, double const & y)
 	{

@@ -42,7 +42,7 @@ namespace Renderer
 		//Does not support shadowing
 		static RenderStrings tetris_field_string(Tetris::TetrisField const& game_field,
 			Tetris::TetrisBody const& controlling_piece);
-		static RenderStrings tetris_upcoming_pieces(std::queue<Tetris::BodyType> coming_pieces);
+		static RenderStrings tetris_upcoming_pieces(std::list<Tetris::BodyType> coming_pieces);
 		static RenderStrings tetris_upcoming_pieces(Tetris::GameModule const& mod);
 		static RenderStrings tetris_scoreboard(Tetris::GameModule const& mod);
 		static RenderStrings tetris_game_info(Tetris::GameModule const& mod);
@@ -67,6 +67,10 @@ namespace Renderer
 		static bool try_display(RenderData const& data);
 	private:
 		static char body_type_2_char(Tetris::BodyType const& body);
+		typedef std::vector<std::string> RenderStrings;
+		typedef RenderStrings(*StringGetFunction)(Tetris::GameModule const&);
+		typedef std::unordered_map<RendererExt::Priority, StringGetFunction> get_func_map;
 	};
+	using MainRenderer = StdTxtRenderer;
 #endif
 }

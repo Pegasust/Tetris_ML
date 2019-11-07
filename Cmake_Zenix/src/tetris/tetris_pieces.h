@@ -77,7 +77,7 @@ namespace Tetris
 			T_MIN = 8,
 			L_MIN = 12,
 			J_MIN = 16;
-		static constexpr int get_min_index(BodyType type) //default rotation
+		static constexpr int get_min_index(const BodyType& type) //default rotation
 		{
 
 #define B_MIN(type) type##_MIN;

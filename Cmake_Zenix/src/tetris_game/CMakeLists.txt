@@ -1,3 +1,5 @@
+# Playable implementation of Tetris Core Engine.
+
 add_library(tetris_game STATIC
 tetris_game.h
 tetris_game.ipp

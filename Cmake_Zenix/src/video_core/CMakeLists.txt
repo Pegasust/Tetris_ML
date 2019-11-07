@@ -1,3 +1,5 @@
+# Implementation of visual from renderer
+
 add_library(video_core STATIC
 video_core.h
 video_core.cpp

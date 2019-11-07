@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 		Tetris::GameModule game(rng_seed);
 		Renderer::MainRenderer::try_update(game, handler.display_data);
 		Common::GameClock::Instance game_clock;
-		handler.start_async_display(&handler);
+		handler.start_async_display(&handler, game);
 		while (!game.lost)
 		{
 			auto diff = game_clock.nano_time_diff();

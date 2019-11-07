@@ -1,3 +1,4 @@
+# Contains the types of renderer for Tetris Module
 add_library(renderer STATIC
 renderer_specs.h
 game_renderer.h

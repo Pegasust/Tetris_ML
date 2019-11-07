@@ -1,3 +1,5 @@
+# Tetris Engine Core Library
+
 message(STATUS "Accessing tetris dir")
 add_library(tetris STATIC 
 game_specs.h

@@ -2,12 +2,12 @@
 
 #include <fstream>
 #include <string>
-#include <experimental/filesystem>
+#include "../common/file_managing.hpp"
 #include <iostream>
 
 namespace Verbosity
 {
-	#define RELATIVE_LOG_ROOT  "./logs/"
+#define RELATIVE_LOG_ROOT  "./logs/"
 #define LOG_ROOT(x) (RELATIVE_LOG_ROOT x)
 	template<bool try_append_to_file = true> //If false, and name already exists, try to manipulate the file name.
 	class VerbosityWriter

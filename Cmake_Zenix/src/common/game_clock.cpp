@@ -1,15 +1,22 @@
 #include "game_clock.h"
 
-Common::GameClock::Instance::Instance() :
-	then(Clock::now())
-{
-}
-
 //std::common_type_t<std::chrono::nanoseconds, std::chrono::nanoseconds> Common::GameClock::Instance::nano_time_diff(std::chrono::time_point<Clock> const& now) const
 
 
 //std::common_type_t<std::chrono::nanoseconds, std::chrono::nanoseconds> Common::GameClock::Instance::nano_time_diff() const
 //
+
+Common::GameClock::Instance::Instance(bool initialize_time)
+{
+	if (initialize_time)
+	{
+		then = Clock::now();
+	}
+	else
+	{
+		then = std::chrono::time_point<Clock>();
+	}
+}
 
 void Common::GameClock::Instance::reset_then()
 {

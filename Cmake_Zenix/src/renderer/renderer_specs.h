@@ -6,8 +6,8 @@
 //If multiple flags are set, the program will *HOPEFULLY* run every flag set
 //by the program
 
-//#define USE_TXT_CONSOLE_RENDERER
-#define USE_REVISED_TXT_CONSOLE_RENDERER
+#define USE_TXT_CONSOLE_RENDERER
+//#define USE_REVISED_TXT_CONSOLE_RENDERER
 //#define USE_OPENCL_RENDERER //NOT IMPLEMENTED YET
 
 

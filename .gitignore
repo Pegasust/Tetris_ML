@@ -26,9 +26,10 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+# Deprecated/completed version of Tetris_ML but with Visual C++
 [Dd]eprecated/
 # The out build folder
-**/out/
+out/
 
 
 # Visual Studio 2015/2017 cache/options directory

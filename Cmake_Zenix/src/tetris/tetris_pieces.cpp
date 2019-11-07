@@ -35,10 +35,10 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 	},
 	//Z 1	
 		{
+			X, X, O, O,
 			O, X, X, O,
-			O, O, X, X,
 			O, O, O, O,
-			O, O, O, O
+			O, O, O, O,
 		},
 	//S 0	//5
 		{
@@ -98,10 +98,10 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 	},
 	//L 1
 	{
+		O, O, O, O,
 		O, O, O, X,
 		O, X, X, X,
 		O, O, O, O,
-		O, O, O, O
 	},
 	//L 2
 	{

@@ -2,7 +2,8 @@
 
 #include "tetris_pieces.h"
 #include "game_specs.h"
-#include <queue>
+#include "../common/assertion.hpp"
+#include <list>
 #include <ostream>
 namespace Tetris
 {
@@ -62,7 +63,7 @@ namespace Tetris
 		TetrisField game_field;
 		Common::ZMath::UInt64RNG current_seed;
 		TetrisBody controlling_piece;
-		std::queue<BodyType> coming_pieces;
+		std::list<BodyType> coming_pieces;
 		double score;
 		bool lost;
 
@@ -70,6 +71,7 @@ namespace Tetris
 		double highest_score;
 		unsigned long long n_rows_burned;
 		unsigned int tetris_scored;
+		unsigned char n_maxstage;
 	public:
 		//Returns the y value where the piece would fall to
 
@@ -82,23 +84,42 @@ namespace Tetris
 		//returns true if input yields result different from inputting NONE
 		//bool try_update(const Input& info, double const& seconds_since_last_update);
 
-		//Return if it's a useful input
-		bool fast_deprecated_try_update(Input const& input,
-			unsigned char& n_burned,
-			unsigned char& burn_y,
-			bool const& reassign_controlling_piece,
-			double const& seconds_since_last_update,
-			double const pre_static_threshold = 0.8
-		);
+		////Return if it's a useful input
+		//bool fast_deprecated_try_update(Input const& input,
+		//	unsigned char& n_burned,
+		//	unsigned char& burn_y,
+		//	bool const& reassign_controlling_piece,
+		//	double const& seconds_since_last_update,
+		//	double const pre_static_threshold = 0.8
+		//);
 
 		void update(Input const& input,
 			unsigned char burn_y[4],
 			unsigned char& n_burned,
 			bool const& reassign_controlling_piece,
 			double const& delta_seconds,
+			bool& staticize_piece,
 			double const pre_static_threshold = 0.8
-		);
+		);		
+		inline void update(Input const& input,
+			unsigned char burn_y[4],
+			unsigned char& n_burned,
+			bool const& reassign_controlling_piece,
+			double const& delta_seconds,
+			double const pre_static_threshold = 0.8
+		)
+		{
+			static bool ignored_staticize;
+			return update(input, burn_y, n_burned, reassign_controlling_piece,
+				delta_seconds, ignored_staticize, pre_static_threshold);
+		}
 
+		inline void reassign()
+		{
+			controlling_piece.reassign(coming_pieces.front());
+			coming_pieces.pop_front();
+			coming_pieces.push_back(Tetris::body_type_val(current_seed.get_value()));
+		}
 		GameModule(const unsigned long long& initial_seed);
 	private:
 		unsigned char calculate_scaled_burn_score(unsigned char const& burned) const;

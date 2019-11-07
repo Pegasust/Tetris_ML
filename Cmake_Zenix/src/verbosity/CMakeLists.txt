@@ -1,3 +1,5 @@
+# Library that helps with logging performance 
+
 add_library(verbosity STATIC
 framerate.cpp
 framerate.h

@@ -1,5 +1,5 @@
-#Basically stores base codes that is commonly used in the project
-#It should be cross platform too!
+# Basically stores base codes that is commonly used in the project
+# All functions should be cross platform too!
 message(STATUS "Accessing common")
 add_library(common STATIC
 zmath.h
@@ -11,6 +11,8 @@ game_clock.cpp
 keyboard_input.h
 keyboard_input.cpp
 keyboard_input.ipp
+file_managing.hpp
+assertion.hpp
 )
 
 add_executable(keyboard_test

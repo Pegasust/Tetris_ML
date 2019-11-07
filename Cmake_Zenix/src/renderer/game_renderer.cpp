@@ -1,5 +1,4 @@
 #include "game_renderer.h"
-#include "game_renderer.h"
 
 #ifdef USE_TXT_CONSOLE_RENDERER
 void Renderer::StdTxtRenderer::clear_screen()
@@ -27,12 +26,12 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
 	//RenderStrings game_info = tetris_game_info(mod);
 	//RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
 
-	std::string new_str;
 #define ITERATE(str_vec, empty_str) for(std::vector<std::string>::const_iterator  it = str_vec.begin(); it != str_vec.end(); ++it)\
 {																																\
 	empty_str += *it;																												\
 	empty_str += '\n';																											\
 }
+
 	//ITERATE(tetris_field, new_str);
 	//new_str += '\n';
 	//ITERATE(scoreboard, new_str);
@@ -41,6 +40,7 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
 	//new_str += '\n';
 	//ITERATE(coming_pieces, new_str);
 
+	std::string new_str;
 	//new_data = new_str;
 	assign_render_string(mod, true, new_str);
 	new_data = new_str;
@@ -261,7 +261,7 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
 	return rs;
 }
 
-Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(std::queue<Tetris::BodyType> coming_pieces)
+Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(std::list<Tetris::BodyType> coming_pieces)
 {
 	RenderStrings rs;
 	if (RendererExt::UPCOMING_PIECES::MODE == RendererExt::RenderMode::VERTICAL)
@@ -274,7 +274,7 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
 			char c = body_type_2_char(coming_pieces.front());
 			int cols_ind = Tetris::TetrisBody::
 				get_min_index(coming_pieces.front());
-			coming_pieces.pop();
+			coming_pieces.pop_front();
 			for (int j = 0; j < Tetris::T_COLLIDER_HEIGHT; j++)
 			{
 				std::string str(2, ' '); //offset: 2
@@ -363,4 +363,3 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_in
 	return rs;
 }
 #undef ITERATE
-#endif
