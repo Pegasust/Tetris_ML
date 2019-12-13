@@ -416,7 +416,7 @@ void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod
     }
 }
 
-void Renderer::StdTxtRenderer::assign_upcoming(std::list<Tetris::BodyType> coming_pieces,
+void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> coming_pieces,
                                                RenderData& out) {
 
     if (RendererExt::UPCOMING_PIECES::MODE == RendererExt::RenderMode::VERTICAL) {
@@ -438,10 +438,14 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::list<Tetris::BodyType> comin
         for (int i = 0; i < Tetris::GameModule::N_PIECE_AHEAD; i++) {
             // space between two pieces
             render_y += 1;
+
+            // TODO: BUGFIX: front() called on empty deque
+            // empty() returned true on one instance.
+            // (Probably called when it got popped).
             char c = body_type_2_char(coming_pieces.front());
             // Index of default rotation/state of coming_pieces type.
             int cols_default_i = Tetris::TetrisBody::get_min_index(coming_pieces.front());
-            coming_pieces.pop_front();
+            coming_pieces.pop();
             for (int j = 0; j < Tetris::T_COLLIDER_HEIGHT; j++) { // j : y-pos of coming_piece
                 render_i = RendererExt::xy2i<int>(render_x, render_y);
                 // Offset by 2 space characters
@@ -473,7 +477,12 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::list<Tetris::BodyType> comin
 
 void Renderer::StdTxtRenderer::assign_upcoming(Tetris::GameModule const& mod, RenderData& out) {
     // TODO: It threw a read access violation once on copying
-    // mod.coming_pieces.
+    // mod.coming_pieces. It was referring to 0xFFFF... on BodyType.
+    // Exception thrown: read access violation.
+    // xmemory::construct
+    // list::_Append_range_unchecked at construct shenanigan
+    // list::_Construct_range_unchecked at _attach_head
+    // list::constructor(&right)
     return assign_upcoming(mod.coming_pieces, out);
 }
 
@@ -549,18 +558,20 @@ void Renderer::StdTxtRenderer::assign_all(Tetris::GameModule const& mod, RenderD
     for (int i = 0; i < n_threads; i++) {
         auto func = funcs[i];
         th[i] = std::thread([&out, func, &mod]() { func(mod, out); });
-        th[i].join();
+        //// Open this out to make rendering synchronized
+        //th[i].join();
     }
-    //// Wait for threads to be done
-    // int remain = n_threads;
-    // while (remain > 0) {
-    //    for (int i = 0; i < n_threads; i++) {
-    //        if (th[i].joinable()) {
-    //            th[i].join();
-    //            remain--;
-    //        }
-    //    }
-    //}
+    // True parallel rendering (4 threads on CPU)
+    // Wait for threads to be done
+     int remain = n_threads;
+     while (remain > 0) {
+        for (int i = 0; i < n_threads; i++) {
+            if (th[i].joinable()) {
+                th[i].join();
+                remain--;
+            }
+        }
+    }
 #ifdef DEBUG_DEFINED
     //VERBOSITY_LOG("\nassign_all() output: ");
     //VERBOSITY_LOG(out.render_data);

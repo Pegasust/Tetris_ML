@@ -4,6 +4,7 @@
 #include "game_specs.h"
 #include "../common/assertion.hpp"
 #include <list>
+#include <queue>
 #include <ostream>
 namespace Tetris
 {
@@ -63,7 +64,7 @@ namespace Tetris
 		TetrisField game_field;
 		Common::ZMath::UInt64RNG current_seed;
 		TetrisBody controlling_piece;
-		std::list<BodyType> coming_pieces;
+		std::queue<BodyType> coming_pieces;
 		double score;
 		bool lost;
 
@@ -117,8 +118,8 @@ namespace Tetris
 		inline void reassign()
 		{
 			controlling_piece.reassign(coming_pieces.front());
-			coming_pieces.pop_front();
-			coming_pieces.push_back(Tetris::body_type_val(current_seed.get_value()));
+			coming_pieces.pop();
+			coming_pieces.push(Tetris::body_type_val(current_seed.get_value()));
 		}
 		GameModule(const unsigned long long& initial_seed);
 	private:

@@ -135,7 +135,7 @@ private:
     typedef std::unordered_map<RendererExt::Priority, StringGetFunction> get_func_map;
 
     static void assign_tetris_field(Tetris::GameModule const& mod, RenderData& out);
-    static void assign_upcoming(std::list<Tetris::BodyType> coming_pieces, RenderData& out);
+    static void assign_upcoming(std::queue<Tetris::BodyType> coming_pieces, RenderData& out);
     static void assign_upcoming(Tetris::GameModule const& mod, RenderData& out);
     static void assign_scoreboard(Tetris::GameModule const& mod, RenderData& out);
     static void assign_game_info(Tetris::GameModule const& mod, RenderData& out);

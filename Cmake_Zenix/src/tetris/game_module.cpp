@@ -239,7 +239,8 @@ void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4],
 	double const& delta_seconds, bool& staticize_piece
 	, double const pre_static_threshold)
 {
-	Common::ASSERT(!lost, "Attempted to call update when module is lost!");
+	using namespace Common;
+	ASSERT(!lost, "Attempted to call update when module is lost!");
 
 	double gravity_mult = 1.0;
 	handle_input(input, gravity_mult);
@@ -432,7 +433,7 @@ Tetris::GameModule::GameModule(const unsigned long long& initial_seed)
 {
 	for (unsigned char i = 0; i < N_PIECE_AHEAD; i++)
 	{
-		coming_pieces.push_back(body_type_val(current_seed.get_value()));
+		coming_pieces.push(body_type_val(current_seed.get_value()));
 	}
 }
 
