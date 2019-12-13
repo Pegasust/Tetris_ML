@@ -11,3 +11,4 @@ add_subdirectory(video_core)
 add_subdirectory(tetris_game)
 
 add_subdirectory(tetris_ml)
+add_subdirectory(NEAT)

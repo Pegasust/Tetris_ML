@@ -6,4 +6,5 @@ namespace Common
 	{
 		assert(expression && message);
 	}
+
 }

@@ -1,6 +1,8 @@
 # Basically stores base codes that is commonly used in the project
 # All functions should be cross platform too!
 message(STATUS "Accessing common")
+
+add_subdirectory(data_structs)
 add_library(common STATIC
 zmath.h
 zmath.cpp

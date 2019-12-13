@@ -28,3 +28,9 @@ Tetris::TetrisField& TetrisAPI::TetrisExtendedEngine::update(const Tetris::Input
 		controlling_piece, burn_y, n_burned);
 	return engine.game_field;
 }
+
+void TetrisAPI::TetrisExtendedEngine::reset(const unsigned long long& seed)
+{
+	new_game(seed, engine);
+	time_initialized = false;
+}

@@ -36,5 +36,13 @@ namespace Verbosity
 
 }
 #define GET_VERBOSITY_LOGGER Verbosity::VerbosityCore::get_rt_logger()
-#define VERBOSITY_LOG(string) Verbosity::VerbosityCore::get_rt_logger().output_stream<<string<<std::endl
+#ifdef DEBUG_DEFINED
+#define VERBOSITY_LOG(string)                                                                      \
+    do {                                                                                           \
+        Verbosity::VerbosityCore::get_rt_logger().output_stream << string << std::endl;\
+} \
+while (0)
+#else
+#define VERBOSITY_LOG(string) Verbosity::VerbosityCore::get_rt_logger().output_stream<<string<<"\n";
+#endif
 //#define PERFORMANCE_LOG(string) Verbosity::VerbosityCore::get_perf_logger().output_stream<<string<<std::endl

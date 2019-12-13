@@ -1,7 +1,7 @@
 #include "verbosity_core.h"
 
 template<>
-Verbosity::VerbosityWriter<true>::VerbosityWriter(const std::string& file_path) :dying_log([]()
+Verbosity::VerbosityWriter<true>::VerbosityWriter(const std::string& file_path):dying_log([]()
 {
 	return std::string("");
 }),

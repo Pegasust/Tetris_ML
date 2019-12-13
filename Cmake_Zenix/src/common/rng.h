@@ -99,9 +99,6 @@ namespace ZMath
 	};
 
 	//[0,1)
-	inline double get_random()
-	{
-		return small_prng(rand()).get_double();
-	}
+	double get_random();
 }
 }

@@ -39,3 +39,9 @@ bool Common::ZMath::UInt64RNG::get_bool(RNGSeed& seed, double& percentage)
 			(1.0 - d) <= percentage;
 	}
 }
+
+double Common::ZMath::get_random()
+{
+	static small_prng rng = small_prng(rand());
+	return rng.get_double();
+}
