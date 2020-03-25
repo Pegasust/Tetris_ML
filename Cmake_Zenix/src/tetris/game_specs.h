@@ -4,6 +4,7 @@
 //Round nearest yields game physics error like clipping through the borders
 //#define USE_ROUND_NEAREST //if not defined, the physics will use round down instead
 
+//#define KEYSTROKE_UNORDERED_MAP // Use std::unordered_map to translate keystroke to Input
 #define V_FALL_0 3.0
 #define V_FALL_MAX 100.8
 
@@ -15,6 +16,10 @@
 #error NOT IMPLEMENTED!
 #endif
 
+// 30 Hz is the least interval to be updated.
+static constexpr double MAX_UPDATE_INTERVAL_MS = 1000.0 / 30.0;
+// Value in seconds
+static constexpr double MAX_UPDATE_INTERVAL = MAX_UPDATE_INTERVAL_MS / 1000.0;
 
 namespace RoundingExt
 {

@@ -45,6 +45,10 @@ namespace TetrisAPI
 			double& delta_time //Difference in time since last update in seconds
 		);
 		
-		void reset(const unsigned long long& seed = rand());
+		void reset(const unsigned long long& seed);
+		inline void reset() {
+            int random = rand();
+            reset(random);
+		}
 	};
 }

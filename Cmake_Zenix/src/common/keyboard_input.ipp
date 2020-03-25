@@ -69,17 +69,23 @@ int Common::KeyboardListener<true, time_out, ChronoType>::get_char()
 	static InputBufferQueue input_buffer;
 	if (!initialized)
 	{
+		// Create a thread that keep on adding to the buffer queue.
 		input_thr = std::thread([]()
 			{
 				while (!exit)
 				{
-					if (time_out == 0)
-					{
+					if (time_out == 0) {
+                        // The thread just blocks itself until it gets
+						// an input. (It is unclear if the thread sleeps or not).
 						input_buffer.push(_getch());
 					}
 					else
 					{
-						std::this_thread::sleep_for(ChronoType(time_out));
+						// Just sleep until the next update comes
+                        static const auto sleep_dur = ChronoType(time_out);
+						std::this_thread::sleep_for(sleep_dur);
+						// After sleeping, record all of the keystrokes recorded
+						// by the OS.
 						while (_kbhit())
 						{
 							input_buffer.push(_getch());
@@ -89,6 +95,7 @@ int Common::KeyboardListener<true, time_out, ChronoType>::get_char()
 			});
 		initialized = true;
 	}
+	// Automatically returns NO INPUT if
 	if (input_buffer.empty())
 	{
 		return -1;

@@ -21,7 +21,8 @@ namespace GameClock
 			return Clock::now() - then;
 		}
 		void reset_then();
-
+        /*Resets the timer, retrieve the last "then"*/
+        std::chrono::time_point<Clock> reset();
 
 		constexpr long long numeric_diff_nano(std::chrono::time_point<Clock> const& now = Clock::now()) const
 		{

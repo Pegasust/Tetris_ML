@@ -10,4 +10,3 @@ int Common :: ZMath::round_nearest(float x)
 	x += 0.5f;
 	return floor(x);
 }
-

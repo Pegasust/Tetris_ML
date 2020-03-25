@@ -9,6 +9,7 @@
 #ifdef __cplusplus
 #include <iostream>
 #include <string>
+#include <string_view>
 #endif
 namespace Renderer {
 /**Renderers must be implemented with the following contents:
@@ -64,7 +65,7 @@ private:
     // Does not support shadowing
     static RenderStrings tetris_field_string(Tetris::TetrisField const& game_field,
                                              Tetris::TetrisBody const& controlling_piece);
-    static RenderStrings tetris_upcoming_pieces(std::list<Tetris::BodyType> coming_pieces);
+    static RenderStrings tetris_upcoming_pieces(Tetris::GameModule::ComingPieces coming_pieces);
     static RenderStrings tetris_upcoming_pieces(Tetris::GameModule const& mod);
     static RenderStrings tetris_scoreboard(Tetris::GameModule const& mod);
     static RenderStrings tetris_game_info(Tetris::GameModule const& mod);
@@ -138,6 +139,11 @@ private:
     static void assign_upcoming(std::queue<Tetris::BodyType> coming_pieces, RenderData& out);
     static void assign_upcoming(Tetris::GameModule const& mod, RenderData& out);
     static void assign_scoreboard(Tetris::GameModule const& mod, RenderData& out);
+    /**
+     * Assign game_info accordingly to declaration in
+     * RendererExt::GAME_INFO::... and to game module.
+     * Currently facing bottleneck due to std::to_string from double
+     */
     static void assign_game_info(Tetris::GameModule const& mod, RenderData& out);
     /// There are 4 render fields with 4 funcs: assign(tetris_field, upcoming, scoreboard, game_info)
     static constexpr int N_RENDER_FIELDS = 4;

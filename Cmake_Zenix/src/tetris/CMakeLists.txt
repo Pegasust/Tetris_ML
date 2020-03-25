@@ -7,6 +7,9 @@ tetris_pieces.h
 tetris_pieces.cpp
 game_module.h
 game_module.cpp
+game_input.h
+game_input.cpp
+game_input.ipp
 )
 
 create_target_directory_groups(tetris)

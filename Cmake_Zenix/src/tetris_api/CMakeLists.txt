@@ -10,6 +10,7 @@ tetris_api_renderer.cpp
 tetris_core.h
 tetris_core.cpp
 tetris_extended_engine.h
+tetris_extended_engine.cpp
 )
 
 create_target_directory_groups(tetris_api)

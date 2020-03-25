@@ -1,0 +1,24 @@
+# Game is tested for at least 3 minutes.
+
+# StdTxtRenderer
+avg_physics: 74229.093474 FPS (0.013472 ms)
+avg_visuals: 78.359041 FPS (12.761769 ms)
+
+# Initial Revised StdTxtRenderer
+avg_physics: 143832.150361 FPS (0.006953 ms)
+avg_visuals: 31.301385 FPS (31.947468 ms)
+
+# Render/window size tuning
+avg_physics: 120798.871814 FPS (0.008278 ms)
+avg_visuals: 59.363564 FPS (16.845350 ms)
+
+# x64-Release (With std::queue instead of std::list for mod.coming_pieces)
+avg_physics: 948681.203571 FPS (0.001054 ms)
+avg_visuals: 86.246211 FPS (11.594712 ms)
+
+# Latest x64 debug (get_input(key) optimization in TetrisGame + No wait threaded rendering
+avg_physics: 82009.961602 FPS (0.012194 ms)
+avg_visuals: 89.031742 FPS (11.231949 ms)
+avg_physics: 132180.276742 FPS (0.007565 ms)
+avg_visuals: 85.385409 FPS (11.711603 ms)
+

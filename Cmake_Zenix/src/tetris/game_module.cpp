@@ -1,79 +1,78 @@
 #include "game_module.h"
 
-double Tetris::GameModule::down_cast(TetrisBody const& body, TetrisField const& field) const
-{
-	//return down_cast(body.collider, body.current_position.x, field);
+double Tetris::GameModule::down_cast(TetrisBody const& body, TetrisField const& field) const {
+    // return down_cast(body.collider, body.current_position.x, field);
 
 #define DNE Tetris::T_COLLIDER_HEIGHT + 1
-	unsigned char lowest_y[4] = { DNE, DNE, DNE, DNE }; //The lowest y-value of each x
-	/*
-	Example:
-	-x--
-	-xx-
-	--x-
-	----
-	would have DNE, 1, 2, DNE
-	*/
+    unsigned char lowest_y[4] = {DNE, DNE, DNE, DNE}; // The lowest y-value of each x
+    /*
+    Example:
+    -x--
+    -xx-
+    --x-
+    ----
+    would have DNE, 1, 2, DNE
+    */
 #define TETRIMINO_WIDTH 4
-	for (int x = 0; x < TETRIMINO_WIDTH; x++)
-	{
-		for (int y = TETRIMINO_WIDTH - 1; y >= 0; y--)
-		{
-			unsigned char index = Tetris::TetrisBody::xy2i(x, y);
-			if (body.collider[index])
-			{
-				lowest_y[x] = y;
-				break;
-			}
-		}
-	}
-	double min_dist = std::numeric_limits<double>::max(); //doesn't rly matter unless the field is messed up
-	//down_cast using math
-	for (int i = 0; i < 4; i++) // For each column in game_field
-	{
-		if (lowest_y[i] == DNE) continue; //Pass through DNE values
+    for (int x = 0; x < TETRIMINO_WIDTH; x++) {
+        for (int y = TETRIMINO_WIDTH - 1; y >= 0; y--) {
+            unsigned char index = Tetris::TetrisBody::xy2i(x, y);
+            if (body.collider[index]) {
+                lowest_y[x] = y;
+                break;
+            }
+        }
+    }
+    double min_dist =
+        std::numeric_limits<double>::max(); // doesn't rly matter unless the field is messed up
+    // down_cast using math
+    for (int i = 0; i < 4; i++) // For each column in game_field
+    {
+        if (lowest_y[i] == DNE)
+            continue; // Pass through DNE values
 #ifdef USE_ROUND_NEAREST
-		int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) + Common::ZMath::round_nearest(body.current_position.x) + i;
-		int field_y = Common::ZMath::round_nearest(body.current_position.y) + lowest_y[i] + 1;
+        int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) +
+                      Common::ZMath::round_nearest(body.current_position.x) + i;
+        int field_y = Common::ZMath::round_nearest(body.current_position.y) + lowest_y[i] + 1;
 #else
-		int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) + (int)body.current_position.x + i;
-		int field_y = (int)body.current_position.y + lowest_y[i] + 1;
+        int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) + (int)body.current_position.x + i;
+        int field_y = (int)body.current_position.y + lowest_y[i] + 1;
 #endif
-		double dist = 0.0;
-		for (; field_y <= Tetris::TetrisField::FIELD_BOTTOM + 1 //Till bot
-			&& dist < min_dist // if dist is more than min_dist, just
-			// discard the for loop.
-			; field_y++)
-		{
-			if (field.collider[Tetris::TetrisField::xy2i(field_x, field_y)] != Tetris::BodyType::BLANK)
-			{
-				break;
-			}
-			dist += 1.0;
-		}
-		if (dist < min_dist) min_dist = dist;
-	}
-	return min_dist - (body.current_position.y - floor(body.current_position.y));
+        double dist = 0.0;
+        for (; field_y <= Tetris::TetrisField::FIELD_BOTTOM + 1 // Till bot
+               && dist < min_dist // if dist is more than min_dist, just
+             // discard the for loop.
+             ;
+             field_y++) {
+            if (field.collider[Tetris::TetrisField::xy2i(field_x, field_y)] !=
+                Tetris::BodyType::BLANK) {
+                break;
+            }
+            dist += 1.0;
+        }
+        if (dist < min_dist)
+            min_dist = dist;
+    }
+    return min_dist - (body.current_position.y - floor(body.current_position.y));
 #undef TETRIMINO_WIDTH
 #undef DNE
 }
 
-double Tetris::GameModule::down_cast(TetrisCollider const& col, double const& x_pos, TetrisField const& field) const
-{
-	double return_val = -1.0;
-	while (field.check_collider(col, { x_pos, return_val + 1.0 }))
-	{
-		return_val += 1.0;
-	}
-	return return_val;
+double Tetris::GameModule::down_cast(TetrisCollider const& col, double const& x_pos,
+                                     TetrisField const& field) const {
+    double return_val = -1.0;
+    while (field.check_collider(col, {x_pos, return_val + 1.0})) {
+        return_val += 1.0;
+    }
+    return return_val;
 }
 
-double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisField const& field) const
-{
-	return down_cast(body.collider, body.current_position.x, field);
+double Tetris::GameModule::down_cast_from_top(TetrisBody const& body,
+                                              TetrisField const& field) const {
+    return down_cast(body.collider, body.current_position.x, field);
 }
 
-//bool Tetris::GameModule::try_update(const Input& info, double const& seconds_since_last_update)
+// bool Tetris::GameModule::try_update(const Input& info, double const& seconds_since_last_update)
 //{
 //	Position2D new_position = controlling_piece.current_position;
 //	if (info == Input::CAST_DOWN)
@@ -96,7 +95,9 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	case LEFT:
 //		if (/*LGEngine::collider_fit(controlling_piece.collider,
 //			{new_position.x-1.0, new_position.y}, field)*/
-//			game_field.check_collider(controlling_piece.collider, { new_position.x - 1.0, new_position.y })
+//			game_field.check_collider(controlling_piece.collider, { new_position.x - 1.0,
+//new_position.y
+//})
 //			)
 //		{
 //			new_position.x = new_position.x - 1.0;
@@ -106,7 +107,9 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	case RIGHT:
 //		if (/*LGEngine::collider_fit(controlling_piece.collider,
 //			{ new_position.x + 1.0, new_position.y }, field)*/
-//			game_field.check_collider(controlling_piece.collider, { new_position.x + 1.0, new_position.y })
+//			game_field.check_collider(controlling_piece.collider, { new_position.x + 1.0,
+//new_position.y
+//})
 //			)
 //		{
 //			new_position.x = new_position.x + 1.0;
@@ -114,8 +117,8 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //		}
 //		break;
 //	case ROTATE:
-//		return_val = try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
-//		break;
+//		return_val = try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4,
+// game_field); 		break;
 //	}
 //
 //	double fall_displacement = v_fall_at(current_level) * seconds_since_last_update;
@@ -166,9 +169,9 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	}
 //}
 
-
-
-//bool Tetris::GameModule::fast_deprecated_try_update(Input const& input, unsigned char& n_burned, unsigned char& burn_y, bool const& reassign_controlling_piece, double const& seconds_since_last_update, double const pre_static_threshold)
+// bool Tetris::GameModule::fast_deprecated_try_update(Input const& input, unsigned char& n_burned,
+// unsigned char& burn_y, bool const& reassign_controlling_piece, double const&
+// seconds_since_last_update, double const pre_static_threshold)
 //{
 //	double gravity_mult = 1.0;
 //	bool useful_input = false;
@@ -176,9 +179,9 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	//Handle the fact that the tetrimino is falling down
 //	if (input != Input::CAST_DOWN)
 //	{
-//		double gravity_displacement = v_fall_at(current_level) * seconds_since_last_update * gravity_mult;
-//		double dist = down_cast(controlling_piece, game_field);
-//		if (gravity_displacement < (dist + pre_static_threshold)) //This one is not going to place it down
+//		double gravity_displacement = v_fall_at(current_level) * seconds_since_last_update *
+// gravity_mult; 		double dist = down_cast(controlling_piece, game_field); 		if
+// (gravity_displacement < (dist + pre_static_threshold)) //This one is not going to place it down
 //		{
 //			//score -= useless_move_decrement(current_level);
 //			n_burned = 0;
@@ -216,11 +219,12 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	}
 //	score += score_displacement(scaled_burned);
 //	if (highest_score < score) highest_score = score;
-//	if (n_burned < 4 && 
+//	if (n_burned < 4 &&
 //		!game_field.check_collider(
 //			Tetris::TetrisBody::colliders[
 //				Tetris::TetrisBody::get_min_index(
-//		coming_pieces.front())], { Tetris::TetrisBody::initial_x, Tetris::TetrisBody::initial_y })) //game over
+//		coming_pieces.front())], { Tetris::TetrisBody::initial_x, Tetris::TetrisBody::initial_y }))
+////game over
 //	{
 //		lost = true;
 //		return useful_input;
@@ -234,210 +238,176 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body, TetrisFiel
 //	return useful_input;
 //}
 
-void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4], 
-	unsigned char& n_burned, bool const& reassign_controlling_piece, 
-	double const& delta_seconds, bool& staticize_piece
-	, double const pre_static_threshold)
-{
-	using namespace Common;
-	ASSERT(!lost, "Attempted to call update when module is lost!");
+void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4],
+                                unsigned char& n_burned, bool const& reassign_controlling_piece,
+                                double const& delta_seconds, bool& staticize_piece,
+                                double const pre_static_threshold) {
+    using namespace Common;
+    ASSERT(!lost, "Attempted to call update when module is lost!");
+    double gravity_mult = 1.0;
+    handle_input(input, gravity_mult);
 
-	double gravity_mult = 1.0;
-	handle_input(input, gravity_mult);
-
-	if (input != Input::CAST_DOWN)
-	{
-		// The distance that is pulled down by gravity
-		double gravity_displacement = v_fall_at(current_level) * delta_seconds * gravity_mult;
-		// The distance from controlling piece to the bottom of game_field
-		// (from the bottom-most non-zero tile of controlling piece
-		// to the top of non-zero tile of game_field in the same column
-		// as the bottom-most non-zero tile)
-		double dist = down_cast(controlling_piece, game_field);
-		if (gravity_displacement < (dist + pre_static_threshold))
-		{
-			//if displacement from gravity is not enough to put the piece
-			//in such position to be staticized
-			n_burned = 0;
-			controlling_piece.current_position.y += gravity_displacement;
-			staticize_piece = false;
-			return;
-		}
-		//displacement from gravity should be sufficient for this piece
-		//to be staticized
-		staticize_piece = true;
-		//controlling_piece.current_position.y += gravity_displacement;
-		controlling_piece.current_position.y += dist;
-	}
-	game_field.update_collider(controlling_piece, burn_y, n_burned);
-	unsigned char scaled_burned = 0;
-	if (n_burned > 0)
-	{
-		n_rows_burned += n_burned;
-		if (n_burned == 4)
-		{
-			tetris_scored++;
-		}
-		//scoring and levelling up
-		scaled_burned = calculate_scaled_burn_score(n_burned);
-		if (scaled_burned < n_rows)
-		{
-			n_rows -= scaled_burned;
-		}
-		else
-		{
-			//level up
-			if (current_level == MAX_LEVEL)
-			{
-				n_maxstage++;
-			}
-			n_rows += calculate_scaled_burn_score(++current_level) - scaled_burned;
-			score += static_cast<double>(current_level + 1.0) / 100.0;
-		}
-	}
-	score += score_displacement(scaled_burned);
-	if (highest_score < score) highest_score = score;
-	lost = lose_check(n_burned, game_field, coming_pieces.front());
-	if (reassign_controlling_piece)
-	{
-		reassign();
-	}
+    if (input != Input::CAST_DOWN) {
+        // The distance that is pulled down by gravity
+        double gravity_vel = v_fall_at(current_level) * gravity_mult;
+//#ifdef DEBUG_DEFINED
+//        if (input != Input::NONE) {
+//
+//            VERBOSITY_LOG("Input: " + std::to_string(input));
+//            VERBOSITY_LOG("Gravity Velocity: " + std::to_string(gravity_vel));
+//        }
+//#endif
+        double gravity_displacement = delta_seconds * gravity_vel;
+//#ifdef DEBUG_DEFINED
+//        if (input != Input::NONE) {
+//            VERBOSITY_LOG("gravity_disp: " + std::to_string(gravity_displacement) + " = " +
+//                          std::to_string(delta_seconds*1000.0) + " * " + std::to_string(gravity_vel/1000.0));
+//        }
+//#endif
+        // The distance from controlling piece to the bottom of game_field
+        // (from the bottom-most non-zero tile of controlling piece
+        // to the top of non-zero tile of game_field in the same column
+        // as the bottom-most non-zero tile)
+        double dist = down_cast(controlling_piece, game_field);
+        if (gravity_displacement < (dist + pre_static_threshold)) {
+            // if displacement from gravity is not enough to put the piece
+            // in such position to be staticized
+            n_burned = 0;
+            controlling_piece.current_position.y += gravity_displacement;
+            staticize_piece = false;
+            return;
+        }
+        // displacement from gravity should be sufficient for this piece
+        // to be staticized
+        staticize_piece = true;
+        // controlling_piece.current_position.y += gravity_displacement;
+        controlling_piece.current_position.y += dist;
+    }
+    game_field.update_collider(controlling_piece, burn_y, n_burned);
+    unsigned char scaled_burned = 0;
+    if (n_burned > 0) {
+        n_rows_burned += n_burned;
+        if (n_burned == 4) {
+            tetris_scored++;
+        }
+        // scoring and levelling up
+        scaled_burned = calculate_scaled_burn_score(n_burned);
+        if (scaled_burned < n_rows) {
+            n_rows -= scaled_burned;
+        } else {
+            // level up
+            if (current_level == MAX_LEVEL) {
+                n_maxstage++;
+            }
+            n_rows += calculate_scaled_burn_score(++current_level) - scaled_burned;
+            score += static_cast<double>(current_level + 1.0) / 100.0;
+        }
+    }
+    score += score_displacement(scaled_burned);
+    if (highest_score < score)
+        highest_score = score;
+    lost = lose_check(n_burned, game_field, coming_pieces.front());
+    if (reassign_controlling_piece) {
+        reassign();
+    }
 }
 
-void Tetris::GameModule::handle_input(const Tetris::Input& input, bool& useful_input, double& gravity_mult)
-{
-	switch (input)
-	{
-	case CAST_DOWN:
-	{
-		double dist = down_cast(controlling_piece, game_field);
-		controlling_piece.current_position.y += dist;
-		useful_input = true;
-	}
-	break;
-	case LEFT:
-	{
-		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x - 1.0, controlling_piece.current_position.y }))
-		{
-			controlling_piece.current_position.x -= 1.0;
-			useful_input = true;
-		}
-		else
-		{
-			useful_input = false;
-		}
-	}
-	break;
-	case RIGHT:
-	{
-		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x + 1.0, controlling_piece.current_position.y }))
-		{
-			controlling_piece.current_position.x += 1.0;
-		}
-		else
-		{
-			useful_input = false;
-		}
-	}
-	break;
-	case ROTATE_FORTH:
-	{
-		useful_input = Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
-	}
-	break;
-	case ROTATE_BACK:
-	{
-		useful_input = Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot - 1) % 4, game_field);
-	}
-	case DOWN:
-	{
-		gravity_mult = dragdown_gravity_mult;
-		useful_input = true;
-	}
-	break;
-	case UP:
-	{
-		gravity_mult = dragup_gravity_mult;
-		useful_input = true;
-	}
-	break;
-	}
+void Tetris::GameModule::handle_input(const Tetris::Input& input, bool& useful_input,
+                                      double& gravity_mult) {
+    switch (input) {
+    case CAST_DOWN: {
+        double dist = down_cast(controlling_piece, game_field);
+        controlling_piece.current_position.y += dist;
+        useful_input = true;
+    } break;
+    case LEFT: {
+        if (game_field.check_collider(controlling_piece.collider,
+                                      {controlling_piece.current_position.x - 1.0,
+                                       controlling_piece.current_position.y})) {
+            controlling_piece.current_position.x -= 1.0;
+            useful_input = true;
+        } else {
+            useful_input = false;
+        }
+    } break;
+    case RIGHT: {
+        if (game_field.check_collider(controlling_piece.collider,
+                                      {controlling_piece.current_position.x + 1.0,
+                                       controlling_piece.current_position.y})) {
+            controlling_piece.current_position.x += 1.0;
+        } else {
+            useful_input = false;
+        }
+    } break;
+    case ROTATE_FORTH: {
+        useful_input = Tetris::try_rotate(controlling_piece,
+                                          (controlling_piece.current_rot + 1) % 4, game_field);
+    } break;
+    case ROTATE_BACK: {
+        useful_input = Tetris::try_rotate(controlling_piece,
+                                          (controlling_piece.current_rot - 1) % 4, game_field);
+    }
+    case DOWN: {
+        gravity_mult = dragdown_gravity_mult;
+        useful_input = true;
+    } break;
+    case UP: {
+        gravity_mult = dragup_gravity_mult;
+        useful_input = true;
+    } break;
+    }
 }
 
-void Tetris::GameModule::handle_input(const Tetris::Input& input, double& gravity_mult)
-{
-	switch (input)
-	{
-	case CAST_DOWN:
-	{
-		double dist = down_cast(controlling_piece, game_field);
-		controlling_piece.current_position.y += dist;
-	}
-	break;
-	case LEFT:
-	{
-		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x - 1.0, controlling_piece.current_position.y }))
-		{
-			controlling_piece.current_position.x -= 1.0;
-		}
-	}
-	break;
-	case RIGHT:
-	{
-		if (game_field.check_collider(controlling_piece.collider, { controlling_piece.current_position.x + 1.0, controlling_piece.current_position.y }))
-		{
-			controlling_piece.current_position.x += 1.0;
-		}
-	}
-	break;
-	case ROTATE_FORTH:
-	{
-		Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
-	}
-	break;
-	case ROTATE_BACK:
-	{
-		//For some weird reasons, if the following expression is a one-liner, the compiler
-		//will optimize the modulo 4 away
-		Rotation new_rot = controlling_piece.current_rot - 1;
-		new_rot = new_rot % 4;
-		Tetris::try_rotate(controlling_piece, new_rot, game_field);
-	}
-	break;
-	case DOWN:
-	{
-		gravity_mult = dragdown_gravity_mult;
-	}
-	break;
-	case UP:
-	{
-		gravity_mult = dragup_gravity_mult;
-	}
-	break;
-	}
+void Tetris::GameModule::handle_input(const Tetris::Input& input, double& gravity_mult) {
+    switch (input) {
+    case CAST_DOWN: {
+        double dist = down_cast(controlling_piece, game_field);
+        controlling_piece.current_position.y += dist;
+    } break;
+    case LEFT: {
+        if (game_field.check_collider(controlling_piece.collider,
+                                      {controlling_piece.current_position.x - 1.0,
+                                       controlling_piece.current_position.y})) {
+            controlling_piece.current_position.x -= 1.0;
+        }
+    } break;
+    case RIGHT: {
+        if (game_field.check_collider(controlling_piece.collider,
+                                      {controlling_piece.current_position.x + 1.0,
+                                       controlling_piece.current_position.y})) {
+            controlling_piece.current_position.x += 1.0;
+        }
+    } break;
+    case ROTATE_FORTH: {
+        Tetris::try_rotate(controlling_piece, (controlling_piece.current_rot + 1) % 4, game_field);
+    } break;
+    case ROTATE_BACK: {
+        // For some weird reasons, if the following expression is a one-liner, the compiler
+        // will optimize the modulo 4 away
+        Rotation new_rot = controlling_piece.current_rot - 1;
+        new_rot = new_rot % 4;
+        Tetris::try_rotate(controlling_piece, new_rot, game_field);
+    } break;
+    case DOWN: {
+        gravity_mult =
+            std::max(dragdown_gravity_mult, v_fall_at(current_level) / min_dragdown_gravity_mult);
+    } break;
+    case UP: {
+        gravity_mult = dragup_gravity_mult;
+    } break;
+    }
 }
 
 Tetris::GameModule::GameModule(const unsigned long long& initial_seed)
-	: current_level(MIN_LEVEL),
-	n_rows(n_rows_at(current_level)),
-	game_field(),
-	current_seed(initial_seed),
-	controlling_piece(body_type_val(initial_seed)),
-	coming_pieces(),
-	score(0.0),
-	lost(false),
-	highest_score(0.0),
-	n_rows_burned(0),
-	tetris_scored(0),
-	n_maxstage(0)
-{
-	for (unsigned char i = 0; i < N_PIECE_AHEAD; i++)
-	{
-		coming_pieces.push(body_type_val(current_seed.get_value()));
-	}
+    : current_level(MIN_LEVEL), n_rows(n_rows_at(current_level)), game_field(),
+      current_seed(initial_seed), controlling_piece(body_type_val(initial_seed)), coming_pieces(),
+      score(0.0), lost(false), highest_score(0.0), n_rows_burned(0), tetris_scored(0),
+      n_maxstage(0) {
+    for (unsigned char i = 0; i < N_PIECE_AHEAD; i++) {
+        coming_pieces.push(body_type_val(current_seed.get_value()));
+    }
 }
 
-unsigned char Tetris::GameModule::calculate_scaled_burn_score(unsigned char const& burned) const
-{
-	return static_cast<double>(burned) * 1.499 + static_cast<double>(current_level) / 15.0;
+unsigned char Tetris::GameModule::calculate_scaled_burn_score(unsigned char const& burned) const {
+    return static_cast<double>(burned) * 1.499 + static_cast<double>(current_level) / 15.0;
 }

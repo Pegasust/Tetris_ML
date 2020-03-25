@@ -1,5 +1,6 @@
 #pragma once
 #include "../renderer/game_renderer.h"
+#include "../verbosity/framerate.h"
 namespace VideoCore
 {
 	class VideoHandler
@@ -20,7 +21,14 @@ namespace VideoCore
 		//	const Renderer::MainRenderer::RenderData& display_data,
 		//	const bool& keep_displaying_data,
 		//	const bool& exit);
-		static void thread_main_ptr(const double& frametime_s,
+        /**
+		 * frametime_ms: The amount of time to wait before each update.
+		 * This can be understood as the max frametime in seconds.
+		 * Set this value a lot higher than what you expect, as
+		 * each iteration actually tries to synchronize with
+		 * with visual update.
+		 */
+		static void thread_main_ptr(const int& frametime_ms,
 			VideoHandler* handler_ptr);
 	};
 }

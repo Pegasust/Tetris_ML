@@ -38,7 +38,8 @@ namespace ZMath
 			return state[0];
 		}
 
-		//[0, 1)
+		// Returns a double value in range[0, 1)
+		// from a given integral (uint64_t, unless implemented otherwise).
 		inline static double to_double(RNGSeed x)
 		{
 			const union { RNGSeed i; double d; } u = { UINT64_C(0x3FF) << 52 | x >> 12 };

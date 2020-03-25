@@ -6,6 +6,14 @@
 // If multiple flags are set, the program will *HOPEFULLY* run every flag set
 // by the program
 
+
+
+constexpr int FRAMETIME_MILLIS =
+#ifdef DEBUG_DEFINED
+    static_cast<int>(1000.0 / 60.0);
+#else
+static_cast <int>(1000.0 / 240.0);
+#endif
 //#define USE_TXT_CONSOLE_RENDERER
 #define USE_REVISED_TXT_CONSOLE_RENDERER
 //#define USE_OPENCL_RENDERER //NOT IMPLEMENTED YET

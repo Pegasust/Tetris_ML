@@ -55,6 +55,18 @@ namespace TetrisAPI
 		controlling = TetrisBody(game.controlling_piece);		
 	}
 
+	constexpr void update(
+        // inputs
+        TetrisEngine& game, const Input& input, double const& delta_seconds,
+        // outputs
+        bool& controlling_staticized, TetrisBody& controlling, unsigned char burn_y[4],
+        unsigned char& n_burned) 
+	{
+        game.update(input, burn_y, n_burned, false, delta_seconds, controlling_staticized,
+                    DEFAULT_PRE_STATIC_THRESHOLD);
+        controlling = TetrisBody(game.controlling_piece);
+    }
+
 	constexpr void update
 	(
 		TetrisEngine& game,

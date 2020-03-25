@@ -57,6 +57,7 @@ message(STATUS "Cmake detected # of processor is ${N_PROCESSOR}")
 endif()
 
 add_subdirectory(src)
+add_subdirectory(third_party)
 #===== Packaging/libraries =====
 find_package (OpenCL REQUIRED)
 find_package (Threads REQUIRED) #for multithreading/pthread

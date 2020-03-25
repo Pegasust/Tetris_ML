@@ -33,9 +33,23 @@ namespace Verbosity
 		//	return perf_log;
 		//}
 	};
+    inline void next_available_filename(const std::string& fname, std::string& new_path) {
+        if (std_filesystem::exists(fname) || std_filesystem::exists(fname+".txt")) {
+            unsigned int i = 0;
+            while (std_filesystem::exists(
+				(new_path = fname + std::to_string(i++))
+				+".txt")) {
+            }
+        } else {
+            new_path = fname;
+        }
+        new_path += ".txt";
+    }
 
 }
+
 #define GET_VERBOSITY_LOGGER Verbosity::VerbosityCore::get_rt_logger()
+#define INITIALIZE_VERBOSITY_LOGGER GET_VERBOSITY_LOGGER
 #ifdef DEBUG_DEFINED
 #define VERBOSITY_LOG(string)                                                                      \
     do {                                                                                           \

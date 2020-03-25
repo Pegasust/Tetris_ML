@@ -1,8 +1,15 @@
+/**
+ * Updating this game in very small values will result in
+ * no apparent difference in the change in velocity.
+ */
+
 #pragma once
 
 #include "tetris_pieces.h"
 #include "game_specs.h"
 #include "../common/assertion.hpp"
+#include "verbosity/framerate.h"
+#include "game_input.h"
 #include <list>
 #include <queue>
 #include <ostream>
@@ -32,6 +39,7 @@ namespace Tetris
 	{
 		return v_slope * level + v_fall0;
 	}
+    constexpr double min_dragdown_gravity_mult = (1.0 / 30.0);
 
 	const unsigned long long n_rows0 = 7;
 	constexpr unsigned long long n_rows_at(const Level& level)
@@ -39,22 +47,11 @@ namespace Tetris
 		return n_rows0 + (level / 3);
 	}
 
-	enum Input
-	{
-		NONE,
-		DOWN,
-		UP,
-		LEFT,
-		RIGHT,
-		CAST_DOWN,
-		ROTATE_FORTH,
-		ROTATE_BACK,
-		PROGRAM_EXIT
-	};
 	using namespace Tetris;
 	class GameModule
 	{
 	public:
+        typedef std::queue<BodyType> ComingPieces;
 		Level current_level;
 		unsigned long long n_rows;//The amount of rows (scaled) needs to be burned until level up
 		static const unsigned char WIDTH = 10, HEIGHT = 20; //Field specifications
@@ -64,7 +61,7 @@ namespace Tetris
 		TetrisField game_field;
 		Common::ZMath::UInt64RNG current_seed;
 		TetrisBody controlling_piece;
-		std::queue<BodyType> coming_pieces;
+		ComingPieces coming_pieces;
 		double score;
 		bool lost;
 
