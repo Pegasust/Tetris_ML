@@ -1,5 +1,6 @@
 add_executable(string_manip_test
 string_manip_test.cpp
 )
+
 create_target_directory_groups(string_manip_test)
 target_link_libraries(string_manip_test common)

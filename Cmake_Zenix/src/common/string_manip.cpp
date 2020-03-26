@@ -1,5 +1,12 @@
 #include "string_manip.h"
 
+std::string Common::ryu_d2s(const double& d) {
+    static char arr[Common::RYU_BUFFER_SIZE];
+    d2s_buffered(d, arr);
+    std::string retval = std::string(arr);
+    return retval;
+}
+
 std::string Common::precise_to_string(double d) {
     std::ostringstream stream;
     stream << std::setprecision(std::numeric_limits<double>::max_digits10) << d;
@@ -157,4 +164,10 @@ double Common::crack_atof(const char* num, const char* const end) {
     }
 
     return sign * (int_part + frac_part) * exp_part;
+}
+
+std::vector<std::string> Common::split(const std::string& s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
 }

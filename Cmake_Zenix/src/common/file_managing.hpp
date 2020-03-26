@@ -1,4 +1,4 @@
-
+#pragma once
 
 #ifdef WINDOWS_DEFINED
 #include <filesystem>

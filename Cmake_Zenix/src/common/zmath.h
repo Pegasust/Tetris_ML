@@ -25,12 +25,16 @@ inline bool approx_equals(const double a, const double b) {
     }
     return relative_diff(a, b) < std::numeric_limits<double>::epsilon();
 }
-
+/* Compile-time ceiling for 32-bit values. This is useful for
+round-up static_cast.*/
 constexpr int32_t compile_time_ceil(float num) {
     return (static_cast<float>(static_cast<int32_t>(num)) == num)
                ? static_cast<int32_t>(num)
                : static_cast<int32_t>(num) + ((num > 0) ? 1 : 0);
 }
+/*
+Compile-time operation to convert 64-bit for double-floating point.
+*/
 constexpr double long_bits_2_double(const std::uint64_t& bits) {
     union {
         std::uint64_t b;
@@ -38,6 +42,9 @@ constexpr double long_bits_2_double(const std::uint64_t& bits) {
     } u = {bits};
     return u.d;
 }
+/*
+ * Returns magnitude of (0,0) from (x,y)
+*/
 inline double get_magnitude(double const& x, double const& y) {
     return sqrt(x * x + y * y);
 }

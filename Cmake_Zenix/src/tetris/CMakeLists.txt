@@ -15,3 +15,5 @@ game_input.ipp
 create_target_directory_groups(tetris)
 
 target_link_libraries(tetris common)
+
+add_subdirectory(tests)

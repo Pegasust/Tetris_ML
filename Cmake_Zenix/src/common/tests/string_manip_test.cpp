@@ -45,6 +45,7 @@ void precision_test(int& to_string, int& precise) {
     #ifdef INCLUDE_RYU_TEST
     std::uint64_t ryu_incorrects = 0;
     std::uint64_t ryu_approx_incorrects = 0;
+    char ryu_str[Common::RYU_BUFFER_SIZE];
     #endif
     do {
         ++i; // Since i wraps around 0 to max, first iteration is i == 0
@@ -57,13 +58,13 @@ void precision_test(int& to_string, int& precise) {
         std::string to_str = std::to_string(d);
         std::string precise = Common::precise_to_string(d);
         #ifdef INCLUDE_RYU_TEST
-        std::string ryu_str = Common::ryu_d2s(d);
+        Common::ryu_d2s_buffered(d, ryu_str);
         #endif
         // std::cout << i << "\tstd: " << to_str << "\tprecise: " << precise;
         double d_to_str = Common::crack_atof(to_str.data());
         double d_precise = Common::crack_atof(precise.data());
         #ifdef INCLUDE_RYU_TEST
-        double d_ryu = Common::ryu_s2d(ryu_str);
+        double d_ryu = Common::ryu_cstr2d(ryu_str);
         #endif
         Result result = check(i, d_to_str, d_precise);
         // std::cout << "\tresult: " << result.result << "\n";

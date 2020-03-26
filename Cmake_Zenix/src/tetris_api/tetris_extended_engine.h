@@ -14,6 +14,8 @@ namespace TetrisAPI
 	Delta time is calculated from the difference in time from last
 	game update to this call of game update (which includes time of
 	game physics update)
+	* This engine will also keeps track of the inputs flooded into
+	update() function.
 	*/
 	class TetrisExtendedEngine
 	{
@@ -21,6 +23,7 @@ namespace TetrisAPI
 		TetrisEngine engine;
 		Common::GameClock::Instance game_clock;
 		bool time_initialized;
+        Tetris::InputCollection input_collection;
 	public:
 		/*initialize with a random seed*/
 		TetrisExtendedEngine();
@@ -42,7 +45,7 @@ namespace TetrisAPI
 									 //in the last update
 			unsigned char& n_burned, //The total amount of number burned
 									 //from the last update
-			double& delta_time //Difference in time since last update in seconds
+			double& delta_time // (Output) Difference in time since last update in seconds
 		);
 		
 		void reset(const unsigned long long& seed);

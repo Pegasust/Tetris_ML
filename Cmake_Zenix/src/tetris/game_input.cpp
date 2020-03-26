@@ -1,27 +1,40 @@
 #include "game_input.h"
 
-Tetris::InputCollection::InputCollection() : collection(), empty(true) {}
+Tetris::InputCollection::InputCollection()
+    : collection() //, empty(true)
+{}
+
+Tetris::InputCollection::InputCollection(const std::string& serialized_collection) : collection() {
+    add_entries(serialized_collection);
+}
 
 void Tetris::InputCollection::add_entry(const GameInput& input, const double& delay) {
-    if (empty) {
-        collection.push_front({input, delay});
-        empty = false;
+    if (collection.empty()) {
+        collection.push_back({input, delay});
         return;
     }
+#ifdef OPTIMIZE_INPUT_DELAY
     // Optimize delay time
-    if (collection.front().input == input) {
-        collection.front().delay += delay;
+    if (collection.back().input == input) {
+        collection.back().delay += delay;
     } else {
+#endif
         // Add a new entry
-        collection.push_front({input, delay});
+        collection.push_back({input, delay});
+#ifdef OPTIMIZE_INPUT_DELAY
     }
+#endif
+}
+
+void Tetris::InputCollection::add_entry(const InputEntry& entry) {
+    collection.push_back(entry);
 }
 
 std::string Tetris::entry_string(const InputEntry& entry) {
 #ifdef HUMAN_READABLE_SERIALIZATION
-    std::string retval = std::to_string(entry.input);
+    std::string retval = std::to_string(static_cast<int>(entry.input));
     retval.append(" ");
-    retval.append(Common::precise_to_string(entry.delay));
+    retval.append(Common::ryu_d2s(entry.delay));
     return retval;
 #else
 #error(Unimplemented)
@@ -30,16 +43,56 @@ std::string Tetris::entry_string(const InputEntry& entry) {
 
 Tetris::InputEntry Tetris::deserialize_entry(const std::string& string) {
 #ifdef HUMAN_READABLE_SERIALIZATION
-
+    std::vector<std::string> tokens = Common::split(string, ' ');
+    GameInput input = static_cast<GameInput>(std::stoi(tokens[0]));
+    double delay = Common::ryu_s2d(tokens[1]);
+    return {input, delay};
 #else
 #error(Unimplemented)
 #endif
 }
 
-void Tetris::InputCollection::serialize_self(const std::string& string) {
+void Tetris::InputCollection::serialize_self(std::string& string) {
 #ifdef HUMAN_READABLE_SERIALIZATION
-
+    while (!collection.empty()) {
+        std::string entry_str = entry_string(collection.front());
+        collection.pop_front();
+        string.append(entry_str).append("\n");
+    }
 #else
 #error(Unimplemented)
 #endif
+}
+
+void Tetris::InputCollection::add_entries(const std::string& string) {
+#ifdef ASYNC_PARSE
+#error(Unimplemented)
+#else
+    std::vector<std::string> entry_strs = Common::split(string, '\n');
+    for (std::vector<std::string>::iterator iter = entry_strs.begin(); iter != entry_strs.end();
+         ++iter) {
+        if ((*iter).length() > 2) { // not white space.
+            add_entry(Tetris::deserialize_entry((*iter)));
+        }
+    }
+#endif
+}
+
+void Tetris::InputCollection::clear() {
+    collection.clear();
+}
+
+Tetris::InputEntry& Tetris::InputCollection::most_recent() {
+    return collection.back();
+}
+
+Tetris::InputEntry& Tetris::InputCollection::least_recent() {
+    return collection.front();
+}
+
+void Tetris::InputCollection::remove_most_recent() {
+    collection.pop_back();
+}
+void Tetris::InputCollection::remove_least_recent() {
+    collection.pop_front();
 }

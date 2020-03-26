@@ -91,6 +91,28 @@ namespace Tetris
 		//	double const pre_static_threshold = 0.8
 		//);
 
+        /*
+		 * Updates the state of the game.
+		 *
+		 * Args:
+			 * In:
+			 * reassign_controlling_piece: whether to reassign controlling_piece
+			 if the controlling_piece staticizes.
+			 * pre_static_threshold: the threshold that controlling_piece should
+			 pass before it is staticized. Example: colliding piece from field
+			 is at y = 5; controlling_piece should be at y=5.8 or more (if
+			 threshold = 0.8) so that controlling_piece is staticized.
+			 * delta_seconds: the number of seconds has passed since the last
+			 update.
+			 * Out:
+             * staticize_piece: whether the update staticized controlling_piece.
+			 * burn_y: the y-coordinates that were burned in this update
+			 (filled from index 0 to 3).
+			 * n_burned: the number of rows that were burned in this update
+			 (useful to check for burn_y)
+
+
+		*/
 		void update(Input const& input,
 			unsigned char burn_y[4],
 			unsigned char& n_burned,
