@@ -20,16 +20,19 @@ namespace TetrisAPI
 	class TetrisExtendedEngine
 	{
 	protected:
-		TetrisEngine engine;
 		Common::GameClock::Instance game_clock;
 		bool time_initialized;
         Tetris::InputCollection input_collection;
-	public:
+
+    public:
+        TetrisEngine engine;
 		/*initialize with a random seed*/
 		TetrisExtendedEngine();
 		/*initialize with a given seed*/
 		TetrisExtendedEngine(const unsigned long long& seed);
 		/*
+		Updates the game without reassigning the piece.
+		Remember to do engine.reassign after peeking at controlling piece.
 		Outputs:
 			burn_y[4]: the meaningful information is from 0 to n_burned -1.
 				elmeents from n_burned to 4 is preserved and might be inaccurate.
@@ -47,7 +50,12 @@ namespace TetrisAPI
 									 //from the last update
 			double& delta_time // (Output) Difference in time since last update in seconds
 		);
-		
+        /* Perform the least recent key recorded to this game. */
+		Tetris::TetrisField& recreate_once(bool& out_last_piece_staticized,
+                                           TetrisBody& out_controlling_piece,
+                                           unsigned char out_burn_y[4],
+                                           unsigned char& out_n_burned,
+			double& out_seconds_elapsed);
 		void reset(const unsigned long long& seed);
 		inline void reset() {
             int random = rand();

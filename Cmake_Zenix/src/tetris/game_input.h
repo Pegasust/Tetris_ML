@@ -63,6 +63,8 @@ struct InputEntry {
  */
 std::string entry_string(const InputEntry& entry);
 InputEntry deserialize_entry(const std::string& string);
+void deserialize_entry(const std::string& str, GameInput& out_entry, double& out_delay);
+;
 
 ///*
 // If capacity is -1, there is no capacity.
@@ -93,11 +95,13 @@ public:
     /*
      * The function takes in 2 args that are supposedly passed in to
      * the GameModule's update function. This method adds an entry to the
-     * collection.
+     * collection. This function also attempts to move InputEntry instead
+     * of copying and deallocating.
      */
     void add_entry(const GameInput& input, const double& delay);
     /*
-     * Adds an entry to the collection.
+     * Adds an entry to the collection. Does not have indications that
+     * this function attempts to move.
      */
     void add_entry(const InputEntry& entry);
     /* Add all entries from serialized input_collection.*/

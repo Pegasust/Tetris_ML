@@ -1,3 +1,8 @@
+/*
+ * The core that displays information to screen. This is the "render to screen"
+ * process. In order to render, display_data needs to be linked with a render
+ * buffer like the one from "../renderer/game_renderer.h"
+*/
 #pragma once
 #include "../renderer/game_renderer.h"
 #include "../verbosity/framerate.h"
@@ -16,6 +21,9 @@ namespace VideoCore
 		void stop_displaying();
 		VideoHandler();
 		void start_async_display(VideoHandler* h, const ::Tetris::GameModule& game);
+		inline void start_async_display(const ::Tetris::GameModule& game) {
+            start_async_display(this, game);
+		}
 	private:
 		//static void thread_main(const double& frametime_sec, 
 		//	const Renderer::MainRenderer::RenderData& display_data,

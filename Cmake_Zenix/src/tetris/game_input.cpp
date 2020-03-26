@@ -41,15 +41,21 @@ std::string Tetris::entry_string(const InputEntry& entry) {
 #endif
 }
 
-Tetris::InputEntry Tetris::deserialize_entry(const std::string& string) {
+void Tetris::deserialize_entry(const std::string& str, GameInput& out_input, double& out_delay) {
 #ifdef HUMAN_READABLE_SERIALIZATION
-    std::vector<std::string> tokens = Common::split(string, ' ');
-    GameInput input = static_cast<GameInput>(std::stoi(tokens[0]));
-    double delay = Common::ryu_s2d(tokens[1]);
-    return {input, delay};
+    std::vector<std::string> tokens = Common::split(str, ' ');
+    out_input = static_cast<GameInput>(std::stoi(tokens[0]));
+    out_delay = Common::ryu_s2d(tokens[1]);
 #else
 #error(Unimplemented)
 #endif
+}
+
+Tetris::InputEntry Tetris::deserialize_entry(const std::string& string) {
+    GameInput input;
+    double delay;
+    deserialize_entry(string, input, delay);
+    return {input, delay};
 }
 
 void Tetris::InputCollection::serialize_self(std::string& string) {
@@ -72,7 +78,10 @@ void Tetris::InputCollection::add_entries(const std::string& string) {
     for (std::vector<std::string>::iterator iter = entry_strs.begin(); iter != entry_strs.end();
          ++iter) {
         if ((*iter).length() > 2) { // not white space.
-            add_entry(Tetris::deserialize_entry((*iter)));
+            GameInput input;
+            double delay;
+            Tetris::deserialize_entry((*iter),input,delay);
+            add_entry(input, delay);
         }
     }
 #endif

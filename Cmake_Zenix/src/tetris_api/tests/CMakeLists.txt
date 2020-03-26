@@ -1,0 +1,6 @@
+add_executable(input_collect_test
+input_collect_test.cpp
+)
+
+create_target_directory_groups(input_collect_test)
+target_link_libraries(input_collect_test tetris_api video_core)

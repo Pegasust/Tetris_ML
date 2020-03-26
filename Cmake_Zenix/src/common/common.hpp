@@ -17,6 +17,8 @@
  recording all keystrokes from the OS (lazy).
  If get_key is called at the time the OS records no keystrokes, return -1
  */
+
+
 #include "rng.h"
 /*
  * Common::ZMath::get_random(): returns random [0,1), shared by many functions and
@@ -41,6 +43,8 @@
 #include "zmath.h"
 
 namespace Common {
+using SynchronousKeyboard = Common::KeyboardListener<false, 0, std::chrono::seconds>;
+using BufferedKeyboard = Common::KeyboardListener<true, 1000/60, std::chrono::milliseconds>;
 //template<typename NumberType, typename InType>
 //constexpr NumberType array_size(InType arr[]) {
 //    return static_cast<NumberType>(sizeof(arr) / sizeof(InType));
