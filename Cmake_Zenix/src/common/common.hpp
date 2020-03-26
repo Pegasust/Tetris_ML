@@ -44,7 +44,7 @@
 
 namespace Common {
 using SynchronousKeyboard = Common::KeyboardListener<false, 0, std::chrono::seconds>;
-using BufferedKeyboard = Common::KeyboardListener<true, 1000/60, std::chrono::milliseconds>;
+using BufferedKeyboard = Common::KeyboardListener<true, 1000/240, std::chrono::milliseconds>;
 //template<typename NumberType, typename InType>
 //constexpr NumberType array_size(InType arr[]) {
 //    return static_cast<NumberType>(sizeof(arr) / sizeof(InType));

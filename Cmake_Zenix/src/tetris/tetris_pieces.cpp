@@ -559,3 +559,7 @@ void Tetris::TetrisField::assign_border(FieldCollider& col)
 //
 //
 //constexpr void Tetris::TetrisField::i2xy(const unsigned char & i, unsigned char& x, unsigned char& y)
+
+bool Tetris::Vector2D::operator==(const Vector2D& rhs) const {
+    return x == rhs.x && y == rhs.y;
+}

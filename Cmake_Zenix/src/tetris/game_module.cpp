@@ -7,12 +7,13 @@ double Tetris::GameModule::down_cast(TetrisBody const& body, TetrisField const& 
     unsigned char lowest_y[4] = {DNE, DNE, DNE, DNE}; // The lowest y-value of each x
     /*
     Example:
-    -x--
-    -xx-
-    --x-
-    ----
+    -x--  0
+    -xx-  1
+    --x-  2
+    ----  3
     would have DNE, 1, 2, DNE
     */
+    // Find lowest_y
 #define TETRIMINO_WIDTH 4
     for (int x = 0; x < TETRIMINO_WIDTH; x++) {
         for (int y = TETRIMINO_WIDTH - 1; y >= 0; y--) {
@@ -23,37 +24,59 @@ double Tetris::GameModule::down_cast(TetrisBody const& body, TetrisField const& 
             }
         }
     }
-    double min_dist =
-        std::numeric_limits<double>::max(); // doesn't rly matter unless the field is messed up
+    int min_dist =
+        std::numeric_limits<int>::max(); // doesn't rly matter unless the field is messed up
     // down_cast using math
-    for (int i = 0; i < 4; i++) // For each column in game_field
+    for (int i = 0; i < 4; i++) // For each column in current body
     {
-        if (lowest_y[i] == DNE)
+        if (lowest_y[i] == DNE) {
             continue; // Pass through DNE values
-#ifdef USE_ROUND_NEAREST
+        }
+        //#ifdef USE_ROUND_NEAREST
+        //        int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) +
+        //                      Common::ZMath::round_nearest(body.current_position.x) + i;
+        //        int field_y = Common::ZMath::round_nearest(body.current_position.y) + lowest_y[i]
+        //        + 1;
+        //#else
+        //        int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) + (int)body.current_position.x
+        //        + i; int field_y = (int)body.current_position.y + lowest_y[i] + 1;
+        //#endif
         int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) +
-                      Common::ZMath::round_nearest(body.current_position.x) + i;
-        int field_y = Common::ZMath::round_nearest(body.current_position.y) + lowest_y[i] + 1;
-#else
-        int field_x = (Tetris::TetrisField::FIELD_LEFT - 1) + (int)body.current_position.x + i;
-        int field_y = (int)body.current_position.y + lowest_y[i] + 1;
-#endif
-        double dist = 0.0;
-        for (; field_y <= Tetris::TetrisField::FIELD_BOTTOM + 1 // Till bot
-               && dist < min_dist // if dist is more than min_dist, just
-             // discard the for loop.
+                      RoundingExt::position_round<int>(body.current_position.x) + i;
+        // 1 block under lowest y
+        int field_y = RoundingExt::position_round<int>(body.current_position.y) + lowest_y[i] + 1;
+        int dist = 0;
+        for (; field_y <= Tetris::TetrisField::FIELD_BOTTOM // Till bot
+               && dist < min_dist                           // if dist is more than min_dist, just
+             // discard the cast down for this x-value.
              ;
              field_y++) {
             if (field.collider[Tetris::TetrisField::xy2i(field_x, field_y)] !=
                 Tetris::BodyType::BLANK) {
+                // Collision happened
                 break;
             }
-            dist += 1.0;
+            dist += 1;
         }
-        if (dist < min_dist)
+        if (dist < min_dist) {
             min_dist = dist;
+        }
     }
-    return min_dist - (body.current_position.y - floor(body.current_position.y));
+    // min_dist is the minimum blocks of space between the checking body and
+    // the field (all of min_dist blocks between those are blanks)
+    // Ex:
+    /* min_dist = 2
+    - x - - -
+    - x x - -
+    - - x - -
+    - - - - -
+    - - - - -
+    z - z - z
+    z z z z z
+    */
+    return static_cast<double>(min_dist) - (body.current_position.y - floor(body.current_position.y));
+    //return static_cast<double>(min_dist) +
+    //       (ceil(body.current_position.y) - body.current_position.y);
 #undef TETRIMINO_WIDTH
 #undef DNE
 }
@@ -96,7 +119,7 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body,
 //		if (/*LGEngine::collider_fit(controlling_piece.collider,
 //			{new_position.x-1.0, new_position.y}, field)*/
 //			game_field.check_collider(controlling_piece.collider, { new_position.x - 1.0,
-//new_position.y
+// new_position.y
 //})
 //			)
 //		{
@@ -108,7 +131,7 @@ double Tetris::GameModule::down_cast_from_top(TetrisBody const& body,
 //		if (/*LGEngine::collider_fit(controlling_piece.collider,
 //			{ new_position.x + 1.0, new_position.y }, field)*/
 //			game_field.check_collider(controlling_piece.collider, { new_position.x + 1.0,
-//new_position.y
+// new_position.y
 //})
 //			)
 //		{
@@ -250,20 +273,22 @@ void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4],
     if (input != Input::CAST_DOWN) {
         // The distance that is pulled down by gravity
         double gravity_vel = v_fall_at(current_level) * gravity_mult;
-//#ifdef DEBUG_DEFINED
-//        if (input != Input::NONE) {
-//
-//            VERBOSITY_LOG("Input: " + std::to_string(input));
-//            VERBOSITY_LOG("Gravity Velocity: " + std::to_string(gravity_vel));
-//        }
-//#endif
+        //#ifdef DEBUG_DEFINED
+        //        if (input != Input::NONE) {
+        //
+        //            VERBOSITY_LOG("Input: " + std::to_string(input));
+        //            VERBOSITY_LOG("Gravity Velocity: " + std::to_string(gravity_vel));
+        //        }
+        //#endif
         double gravity_displacement = delta_seconds * gravity_vel;
-//#ifdef DEBUG_DEFINED
-//        if (input != Input::NONE) {
-//            VERBOSITY_LOG("gravity_disp: " + std::to_string(gravity_displacement) + " = " +
-//                          std::to_string(delta_seconds*1000.0) + " * " + std::to_string(gravity_vel/1000.0));
-//        }
-//#endif
+        //#ifdef DEBUG_DEFINED
+        //        if (input != Input::NONE) {
+        //            VERBOSITY_LOG("gravity_disp: " + std::to_string(gravity_displacement) + " = "
+        //            +
+        //                          std::to_string(delta_seconds*1000.0) + " * " +
+        //                          std::to_string(gravity_vel/1000.0));
+        //        }
+        //#endif
         // The distance from controlling piece to the bottom of game_field
         // (from the bottom-most non-zero tile of controlling piece
         // to the top of non-zero tile of game_field in the same column

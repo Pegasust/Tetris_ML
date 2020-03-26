@@ -14,7 +14,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         game_clock = Common::GameClock::Instance();
         // This thread draw renderer buffer to end-user client.
         videocore.start_async_display(&videocore, game);
-        std::thread r_upd_th;
+        std::thread r_upd_th; // Render update thread
         bool physics_updated = true;
         if (!renderer_initialized) {
             Renderer::MainRenderer::try_initialize(game, videocore.display_data);
@@ -59,7 +59,7 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
             auto diff = game_clock.nano_time_diff();
             // Transform time_diff to seconds
             double time_diff = std::min(MAX_UPDATE_INTERVAL,
-                static_cast<double>(diff.count()) / (1000.0 * 1000.0 * 1000.0));
+                static_cast<double>(diff.count()) / static_cast<double>(std::chrono::nanoseconds::period::den));
             
             // double time_diff = game_clock.fp_diff_seconds(timepoint);
             auto last_update = game_clock.reset();

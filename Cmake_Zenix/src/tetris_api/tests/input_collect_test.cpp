@@ -2,6 +2,8 @@
 #include "../../video_core/video_core.h"
 #include "../tetris_extended_engine.h"
 
+//#define RENDER_RECREATION
+//#define STEP_RECREATION
 constexpr ::Tetris::Input key2input(const Common::KeyID& key) {
     switch (key) {
     case -1:
@@ -33,6 +35,7 @@ int main() {
     handler.start_async_display(extended_engine.engine);
     Renderer::MainRenderer::try_initialize(extended_engine.engine, handler.display_data);
     // saved meta-data
+    unsigned long int keys_registered = 0;
     double time_elapsed = 0.0;
     std::vector<double> staticized_seconds;
     std::vector<::Tetris::Position2D> staticized_positions;
@@ -55,34 +58,35 @@ int main() {
         ::Tetris::TetrisField field =
             extended_engine.update(input, piece_staticized, controlling_body, y_coord_burned,
                                    n_burned, update_took_seconds);
-        time_elapsed += update_took_seconds;
         if (piece_staticized) {
+            TetrisAPI::reassign_piece(extended_engine.engine);
             staticized_seconds.push_back(time_elapsed);
             staticized_positions.push_back(controlling_body.current_position);
         }
+        time_elapsed += update_took_seconds;
         Renderer::MainRenderer::try_update(extended_engine.engine, handler.display_data);
         handler.keep_displaying_data = true;
         if (extended_engine.engine.lost) {
             break;
         }
         // Not lost.
-        if (piece_staticized) {
-            TetrisAPI::reassign_piece(extended_engine.engine);
-        }
     }
     handler.stop_displaying();
+    unsigned long long rows_burned_human = extended_engine.engine.n_rows_burned;
     std::cout << "time_elapsed: " << time_elapsed << std::endl;
     std::cout << "staticized_times: " << staticized_seconds.size() << std::endl;
     std::cout << "rows_burned: " << extended_engine.engine.n_rows_burned << std::endl;
+    keys_registered = extended_engine.input_collection.collection.size();
+    std::cout << "calculated_rows_burned: " << rows_burned_human << std::endl;
+    std::cout << "Keystrokes registered: " << keys_registered << std::endl;
     std::cout << "Press any key to perform recreation." << std::endl;
     unsigned long int rows_burned = extended_engine.engine.n_rows_burned;
     Common::SynchronousKeyboard::get_key();
 
-
     extended_engine.reset(initial_seed);
     // VideoCore::VideoHandler handler;
     handler.start_async_display(extended_engine.engine);
-    Renderer::MainRenderer::try_initialize(extended_engine.engine, handler.display_data);
+    // Renderer::MainRenderer::try_initialize(extended_engine.engine, handler.display_data);
     // saved meta-data
     double time_elapsed_re = 0.0;
     std::vector<double> staticized_seconds_re;
@@ -107,33 +111,38 @@ int main() {
             piece_staticized, controlling_body_re, y_coord_burned, n_burned, update_took_seconds);
         time_elapsed_re += update_took_seconds;
         if (piece_staticized) {
+            TetrisAPI::reassign_piece(extended_engine.engine);
             staticized_seconds_re.push_back(time_elapsed_re);
             staticized_positions_re.push_back(controlling_body_re.current_position);
         }
-        Renderer::MainRenderer::try_update(extended_engine.engine, handler.display_data);
-        handler.keep_displaying_data = true;
         if (extended_engine.engine.lost) {
             break;
         }
-        // Not lost.
-        if (piece_staticized) {
-            TetrisAPI::reassign_piece(extended_engine.engine);
-        }
+// Not lost.
+#ifdef RENDER_RECREATION
+        Renderer::MainRenderer::try_update(extended_engine.engine, handler.display_data);
+        handler.keep_displaying_data = true;
+#endif
     }
     handler.stop_displaying();
-    std::cout << "=== recreation result:" << std::endl;
+    std::cout << "=== Recreation result:" << std::endl;
     std::cout << "time_elapsed: " << time_elapsed_re << std::endl;
     std::cout << "staticized_times: " << staticized_seconds_re.size() << std::endl;
     std::cout << "rows_burned: " << extended_engine.engine.n_rows_burned << std::endl;
+    std::cout << "Keystrokes registered: " << keys_registered << std::endl;
     std::cout << std::endl;
     std::cout << "=== Human player result:" << std::endl;
     std::cout << "time_elapsed: " << time_elapsed << std::endl;
     std::cout << "staticized_times: " << staticized_seconds.size() << std::endl;
-    std::cout << "rows_burned: " << extended_engine.engine.n_rows_burned << std::endl;
+    std::cout << "rows_burned: " << rows_burned_human << std::endl;
     ASSERT(time_elapsed == time_elapsed_re, "time elapsed mismatch");
-    ASSERT(staticized_seconds_re == staticized_seconds, "staticized seconds mismatch");
-    //ASSERT(staticized_positions == staticized_positions_re, "staticized positions mismatch");
-
+    ASSERT(staticized_positions == staticized_positions_re, "staticized positions mismatch");
+    ASSERT(staticized_seconds_re.size() == staticized_seconds.size(),
+           "staticized seconds mismatch");
+    for (int i = 0; i < staticized_seconds.size(); i++) {
+        std::cout << "staticized_sec_human: " << staticized_seconds.at(i);
+        std::cout << "\tstaticized_sec_rec: " << staticized_seconds_re.at(i) << std::endl;
+    }
+    Common::BufferedKeyboard::exit_synchronously();
     return 0;
-
 }

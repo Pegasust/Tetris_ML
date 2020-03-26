@@ -18,15 +18,18 @@ namespace Tetris
 	static const Rotation R_DOWN = 2;
 	//270 deg
 	static const Rotation R_LEFT = 3;
+	// Empty width
 	const unsigned char FIELD_WIDTH = 10;
 	const unsigned char FIELD_HEIGHT = 20;
 	const unsigned char T_COLLIDER_WID = 4;
 	const unsigned char T_COLLIDER_HEIGHT = 4;
 	const unsigned char T_COLLIDER_LEN = T_COLLIDER_HEIGHT* T_COLLIDER_WID;
 	typedef bool TetrisCollider[T_COLLIDER_LEN];
-	struct Vector2D
+	class Vector2D
 	{
+    public:
 		double x, y;
+        bool operator==(const Vector2D& rhs) const;
 	};
 	typedef Vector2D Position2D;
 	typedef Vector2D Velocity2D;
@@ -131,7 +134,7 @@ namespace Tetris
 		static constexpr unsigned char WIDTH = Tetris::FIELD_WIDTH + 2;
 		static constexpr unsigned char HEIGHT = Tetris::FIELD_HEIGHT + 1;
 		static constexpr unsigned char LENGTH = WIDTH * HEIGHT;
-
+		// The bottom index of the field (where barrier is).
 		static constexpr unsigned char FIELD_BOTTOM = Tetris::FIELD_HEIGHT - 1;
 		static constexpr unsigned char FIELD_TOP = 0;
 		static constexpr unsigned char FIELD_LEFT = 1;

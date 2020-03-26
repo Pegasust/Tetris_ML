@@ -17,7 +17,8 @@
 #endif
 
 // 30 Hz is the least interval to be updated.
-static constexpr double MAX_UPDATE_INTERVAL_MS = 1000.0 / 30.0;
+static constexpr int UPDATE_FREQUENCY = 30;
+static constexpr double MAX_UPDATE_INTERVAL_MS = 1000.0 / static_cast<double>(UPDATE_FREQUENCY);
 // Value in seconds
 static constexpr double MAX_UPDATE_INTERVAL = MAX_UPDATE_INTERVAL_MS / 1000.0;
 

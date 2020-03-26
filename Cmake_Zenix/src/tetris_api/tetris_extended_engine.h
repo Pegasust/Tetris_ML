@@ -22,10 +22,10 @@ namespace TetrisAPI
 	protected:
 		Common::GameClock::Instance game_clock;
 		bool time_initialized;
-        Tetris::InputCollection input_collection;
 
     public:
         TetrisEngine engine;
+        Tetris::InputCollection input_collection;
 		/*initialize with a random seed*/
 		TetrisExtendedEngine();
 		/*initialize with a given seed*/
