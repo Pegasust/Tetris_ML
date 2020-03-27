@@ -18,6 +18,7 @@ assertion.hpp
 string_manip.cpp
 string_manip.h
 common.hpp
+path_consts.hpp
 )
 
 add_executable(keyboard_test

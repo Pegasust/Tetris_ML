@@ -8,11 +8,11 @@
 #include <cstdint>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <iterator>
 #include "zmath.h"
 
 namespace Common {
@@ -52,6 +52,27 @@ inline double ryu_cstr2d(char* str) {
     s2d(str, &retval);
     return retval;
 }
+template <typename IntegralType>
+std::string decimal2hex_str(const IntegralType& num) {
+    std::stringstream sstream;
+    sstream << std::hex << num;
+    return sstream.str();
+}
+
+template <typename IntegralType>
+IntegralType hex_str2decimal(const char* const string) {
+    IntegralType retval;
+    std::stringstream sstream;
+    sstream << std::hex << string;
+    sstream >> retval;
+    return retval;
+}
+
+template <typename IntegralType>
+IntegralType hex_str2decimal(const std::string& string) {
+    return hex_str2decimal<IntegralType>(string.c_str());
+}
+
 // crack_atof gotten from http://coliru.stacked-crooked.com/a/2e28f0d71f47ca5e
 // Turned out, crack_atof is too low in precision and has too many
 // abstraction through double operator*.
@@ -83,12 +104,12 @@ double crack_atof(const char* num);
 double crack_atof(const char* num, const char* const end);
 // end crack_atof
 
-//https://stackoverflow.com/questions/236129/how-do-i-iterate-over-the-words-of-a-string
+// https://stackoverflow.com/questions/236129/how-do-i-iterate-over-the-words-of-a-string
 
 /*
  * Splits string s into tokens and add it to result.
  * This method can only work with single delimiter.
-*/
+ */
 template <typename Out>
 void split(const std::string& s, char delim, Out result) {
     std::istringstream iss(s);
@@ -103,4 +124,6 @@ void split(const std::string& s, char delim, Out result) {
  */
 std::vector<std::string> split(const std::string& s, char delim);
 
+//#define STR_APPEND(str1, str2) str1 str2
+#define STR_CONCAT(str1, str2) str1 str2
 } // namespace Common

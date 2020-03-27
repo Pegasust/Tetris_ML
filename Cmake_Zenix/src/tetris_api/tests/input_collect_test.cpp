@@ -2,7 +2,7 @@
 #include "../../video_core/video_core.h"
 #include "../tetris_extended_engine.h"
 
-//#define RENDER_RECREATION
+#define RENDER_RECREATION
 //#define STEP_RECREATION
 constexpr ::Tetris::Input key2input(const Common::KeyID& key) {
     switch (key) {
@@ -40,7 +40,7 @@ int main() {
     std::vector<double> staticized_seconds;
     std::vector<::Tetris::Position2D> staticized_positions;
     ::Tetris::TetrisBody controlling_body(::Tetris::BLANK);
-    std::cout << "Complete initialization" << std::endl;
+    std::cout << "Complete initialization. Seed: "<<initial_seed << std::endl;
     // start physics update (human player)
     while (true) {
         Common::KeyID key = Common::BufferedKeyboard::get_key();
@@ -58,12 +58,12 @@ int main() {
         ::Tetris::TetrisField field =
             extended_engine.update(input, piece_staticized, controlling_body, y_coord_burned,
                                    n_burned, update_took_seconds);
+        time_elapsed += update_took_seconds;
         if (piece_staticized) {
             TetrisAPI::reassign_piece(extended_engine.engine);
             staticized_seconds.push_back(time_elapsed);
             staticized_positions.push_back(controlling_body.current_position);
         }
-        time_elapsed += update_took_seconds;
         Renderer::MainRenderer::try_update(extended_engine.engine, handler.display_data);
         handler.keep_displaying_data = true;
         if (extended_engine.engine.lost) {
@@ -83,7 +83,8 @@ int main() {
     unsigned long int rows_burned = extended_engine.engine.n_rows_burned;
     Common::SynchronousKeyboard::get_key();
 
-    extended_engine.reset(initial_seed);
+    // extended_engine.reset(initial_seed);
+    auto seed = extended_engine.reset_for_recreation();
     // VideoCore::VideoHandler handler;
     handler.start_async_display(extended_engine.engine);
     // Renderer::MainRenderer::try_initialize(extended_engine.engine, handler.display_data);
@@ -139,10 +140,15 @@ int main() {
     ASSERT(staticized_positions == staticized_positions_re, "staticized positions mismatch");
     ASSERT(staticized_seconds_re.size() == staticized_seconds.size(),
            "staticized seconds mismatch");
-    for (int i = 0; i < staticized_seconds.size(); i++) {
-        std::cout << "staticized_sec_human: " << staticized_seconds.at(i);
-        std::cout << "\tstaticized_sec_rec: " << staticized_seconds_re.at(i) << std::endl;
+    if (staticized_seconds != staticized_seconds_re) {
+        for (int i = 0; i < staticized_seconds.size(); i++) {
+            std::cout << "staticized_sec_human: " << staticized_seconds.at(i);
+            std::cout << "\tstaticized_sec_rec: " << staticized_seconds_re.at(i) << std::endl;
+        }
     }
     Common::BufferedKeyboard::exit_synchronously();
+    ASSERT(initial_seed == seed, "seed mismatch.");
+    std::cout << "seed was: " << seed << std::endl;
+
     return 0;
 }

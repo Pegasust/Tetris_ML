@@ -45,9 +45,36 @@ int hardcoded_input_collection_test() {
     return 0;
 }
 
+int hardcoded_input_collection_retain_test() {
+    Tetris::InputEntry entries[] = {{Tetris::NONE, 0.3341},      {Tetris::LEFT, 0.1435},
+                                    {Tetris::CAST_DOWN, 1.5535}, {Tetris::NONE, 1.55},
+                                    {Tetris::RIGHT, 0.33},       {Tetris::RIGHT, 0.33}};
+    Tetris::InputCollection input_collection;
+    for (int i = 0; i < Common::array_size(entries); i++) {
+        input_collection.add_entry(entries[i].input, entries[i].delay);
+    }
+    std::string serialized_collection;
+    input_collection.serialize_self_retain(serialized_collection);
+    std::cout << "Serialized collection: \n" << serialized_collection << std::endl;
+    input_collection.clear();
+    input_collection.add_entries(serialized_collection);
+    for (int i = 0; i < Common::array_size(entries); i++) {
+        std::cout << "Current i = " << i << std::endl;
+        std::cout << "least_recent: " << Tetris::entry_string(input_collection.least_recent())
+                  << std::endl;
+        ASSERT(input_collection.least_recent().delay == entries[i].delay &&
+                   input_collection.least_recent().input == entries[i].input,
+               "Entry mismatch.");
+        input_collection.remove_least_recent();
+    }
+    return 0;
+}
+
 int main() {
     hardcoded_input_entry_serialize_test();
     hardcoded_input_entry_deserialize_test();
     hardcoded_input_collection_test();
+    std::cout << "Retain test" << std::endl;
+    hardcoded_input_collection_retain_test();
     return 0;
 }

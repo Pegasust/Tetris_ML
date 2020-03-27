@@ -307,6 +307,8 @@ void Tetris::GameModule::update(Input const& input, unsigned char burn_y[4],
         staticize_piece = true;
         // controlling_piece.current_position.y += gravity_displacement;
         controlling_piece.current_position.y += dist;
+    } else {
+        staticize_piece = true;
     }
     game_field.update_collider(controlling_piece, burn_y, n_burned);
     unsigned char scaled_burned = 0;

@@ -117,6 +117,18 @@ public:
      * Serialized entries are flushed out of memory.
      */
     void serialize_self(std::string& string);
+
+    /*
+     * Make string that can be deserialized.
+     * string should be "empty" string as it will be appended through
+     * the process.
+     *
+     * The resulting string will be appended with line-separated
+     * entries with trailing newline but no leading newline.
+     *
+     * Serialized entries are retained
+     */
+    void serialize_self_retain(std::string& string) const;
     void clear();
     InputEntry& most_recent();
     InputEntry& least_recent();

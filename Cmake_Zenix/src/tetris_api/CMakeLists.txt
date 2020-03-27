@@ -15,6 +15,6 @@ tetris_extended_engine.cpp
 
 create_target_directory_groups(tetris_api)
 
-target_link_libraries(tetris_api tetris)
+target_link_libraries(tetris_api tetris replay)
 
 add_subdirectory(tests)

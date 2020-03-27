@@ -6,6 +6,7 @@
 */
 #include "tetris_core.h"
 #include "../common/game_clock.h"
+#include "../replay/serialize_format.h"
 #include <limits>
 namespace TetrisAPI
 {
@@ -24,12 +25,16 @@ namespace TetrisAPI
 		bool time_initialized;
 
     public:
+        Common::ZMath::UInt64RNG::RNGSeed initial_seed;
         TetrisEngine engine;
         Tetris::InputCollection input_collection;
 		/*initialize with a random seed*/
 		TetrisExtendedEngine();
 		/*initialize with a given seed*/
-		TetrisExtendedEngine(const unsigned long long& seed);
+		TetrisExtendedEngine(unsigned long long seed);
+
+        /* Initialize with deserialized replay string */
+        static TetrisExtendedEngine from_replay(const std::string& replay);
 		/*
 		Updates the game without reassigning the piece.
 		Remember to do engine.reassign after peeking at controlling piece.
@@ -55,11 +60,17 @@ namespace TetrisAPI
                                            TetrisBody& out_controlling_piece,
                                            unsigned char out_burn_y[4],
                                            unsigned char& out_n_burned,
-			double& out_seconds_elapsed);
-		void reset(const unsigned long long& seed);
-		inline void reset() {
+                                           double& out_seconds_elapsed);
+		void reset(unsigned long long seed);
+		inline int reset() {
             int random = rand();
             reset(random);
+            return random;
 		}
+        /* Resets the game to recreate accordingly to input collection. 
+		 * initial_seed is preserved.
+		 */
+        Common::ZMath::UInt64RNG::RNGSeed reset_for_recreation();
+        // bool serialize_current_game(const std::string& username = "Zenix");
 	};
 }

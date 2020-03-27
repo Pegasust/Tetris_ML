@@ -70,6 +70,18 @@ void Tetris::InputCollection::serialize_self(std::string& string) {
 #endif
 }
 
+
+void Tetris::InputCollection::serialize_self_retain(std::string& string) const {
+#ifdef HUMAN_READABLE_SERIALIZATION
+    for (auto entry = collection.cbegin(); entry != collection.cend(); ++entry) {
+        std::string entry_str = entry_string((*entry));
+        string.append(entry_str).append("\n");
+    }
+#else
+#error(Unimplemented)
+#endif
+}
+
 void Tetris::InputCollection::add_entries(const std::string& string) {
 #ifdef ASYNC_PARSE
 #error(Unimplemented)

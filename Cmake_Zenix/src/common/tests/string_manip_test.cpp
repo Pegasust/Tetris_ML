@@ -4,9 +4,10 @@
 #include <limits>
 #include <vector>
 #include <stdint.h>
+#include "common/assertion.hpp"
 #include "common/keyboard_input.h"
+#include "common/path_consts.hpp"
 #include "common/string_manip.h"
-
 
 #define INCLUDE_RYU_TEST
 union FloatAsBits {
@@ -42,11 +43,11 @@ void precision_test(int& to_string, int& precise) {
     std::uint64_t to_str_incorrects = 0;
     std::uint64_t precise_incorrects = 0;
     std::uint64_t precise_str_comp = 0; // number of str comparison fails
-    #ifdef INCLUDE_RYU_TEST
+#ifdef INCLUDE_RYU_TEST
     std::uint64_t ryu_incorrects = 0;
     std::uint64_t ryu_approx_incorrects = 0;
     char ryu_str[Common::RYU_BUFFER_SIZE];
-    #endif
+#endif
     do {
         ++i; // Since i wraps around 0 to max, first iteration is i == 0
         FloatAsBits fp = {i};
@@ -57,23 +58,23 @@ void precision_test(int& to_string, int& precise) {
         }
         std::string to_str = std::to_string(d);
         std::string precise = Common::precise_to_string(d);
-        #ifdef INCLUDE_RYU_TEST
+#ifdef INCLUDE_RYU_TEST
         Common::ryu_d2s_buffered(d, ryu_str);
-        #endif
+#endif
         // std::cout << i << "\tstd: " << to_str << "\tprecise: " << precise;
         double d_to_str = Common::crack_atof(to_str.data());
         double d_precise = Common::crack_atof(precise.data());
-        #ifdef INCLUDE_RYU_TEST
+#ifdef INCLUDE_RYU_TEST
         double d_ryu = Common::ryu_cstr2d(ryu_str);
-        #endif
+#endif
         Result result = check(i, d_to_str, d_precise);
         // std::cout << "\tresult: " << result.result << "\n";
         if ((i % PRINT_EVERY) == 0) {
             std::cout << "to_str: " << to_str_incorrects << "\tprecise: " << precise_incorrects
                       << "\tprecise_str: " << precise_str_comp << "\t"
-                #ifdef INCLUDE_RYU_TEST
+#ifdef INCLUDE_RYU_TEST
                       << "\tryu: " << ryu_incorrects << "\tryu_approx: " << ryu_approx_incorrects
-                #endif
+#endif
                       << "(" << i << ")" << std::endl;
         }
         if (result.result & 1) {
@@ -98,7 +99,7 @@ void precision_test(int& to_string, int& precise) {
         if (d_ryu != d) {
             ryu_incorrects++;
         }
-        #endif
+#endif
         // if (result.result != 3) {
         //    incorrects.push_back(result);
         //}
@@ -108,9 +109,9 @@ void precision_test(int& to_string, int& precise) {
     std::cout << "Program exited." << std::endl;
     std::cout << "to_str: " << to_str_incorrects << "\tprecise: " << precise_incorrects
               << "\tprecise_str: " << precise_str_comp << "\t"
-        #ifdef INCLUDE_RYU_TEST
+#ifdef INCLUDE_RYU_TEST
               << "\tryu: " << ryu_incorrects << "\tryu_approx: " << ryu_approx_incorrects
-        #endif
+#endif
               << "(" << i << ")" << std::endl;
     to_string = to_str_incorrects;
     precise = precise_incorrects;
@@ -170,6 +171,27 @@ void ryu_test() {
     }
 }
 
+void assert_format_move_filename(const char* expected, const char* const player,
+                             const Common::ZMath::UInt64RNG::RNGSeed& game_seed,
+                             const char* const suffix = "") {
+    std::string result = Common::PathConsts::format_move_filename(player, game_seed, suffix);
+    std::cout << "format_move_filename gives: " << result << std::endl;
+    ASSERT(std::string(expected) ==
+               result,
+           "format mismatch!");
+}
+void format_move_filename_test() {
+#define ASSERT_FILENAME(...) assert_format_move_filename(__VA_ARGS__);
+    ASSERT_FILENAME("username_deadbeef_", "username", 0xdeadbeef);
+    ASSERT_FILENAME("username_12_human_player", "username", 0x12, "human_player");
+#undef ASSERT_FILENAME
+}
+
+void hex_str2decimal_test() {
+    std::uint64_t result = Common::hex_str2decimal<std::uint64_t>("ff");
+    ASSERT(result == Common::hex_str2decimal<std::uint64_t>("0xff"), "result doesn't match for 0x and not");
+    ASSERT(result == 0xff, "hex string parsed wrongly");
+}
 int main() {
 
     // for (auto i = incorrects.begin(); i != incorrects.end(); ++i) {
@@ -179,9 +201,11 @@ int main() {
     //    std::cout << std::endl;
     //}
     // precise_str();
-    int t, p;
-    precision_test(t, p);
-    //ryu_test();
+    //int t, p;
+    //precision_test(t, p);
+    // ryu_test();
+    format_move_filename_test();
+    hex_str2decimal_test();
     Common::KeyboardListener<false, 0, std::chrono::microseconds>::get_key();
 
     return 0;

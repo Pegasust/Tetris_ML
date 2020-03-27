@@ -1,0 +1,5 @@
+add_executable(serialize_format_test
+serialize_format_test.cpp)
+
+create_target_directory_groups(serialize_format_test)
+target_link_libraries(serialize_format_test replay tetris_api video_core)
