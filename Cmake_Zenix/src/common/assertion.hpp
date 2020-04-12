@@ -7,7 +7,7 @@ namespace Common
 #ifndef ASSERT
 #define ASSERT(expr, msg) assert(expr && msg)
 #else
-// There can be evaluation of message and expression.
+// There can still be evaluation of message and expression. (Not wanted)
 constexpr void ASSERT(const int& expression, const char* message) {
     assert(expression && message);
 }

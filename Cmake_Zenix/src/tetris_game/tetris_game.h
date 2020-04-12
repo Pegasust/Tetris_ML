@@ -9,9 +9,11 @@
 #include "../common/keyboard_input.h"
 #include "../common/rng.h"
 #include "../common/zmath.h"
+#include "../common/common.hpp"
 #include "../tetris/game_module.h"
 #include "../verbosity/framerate.h"
 #include "../video_core/video_core.h"
+#include "../tetris_api/tetris_extended_engine.h"
 
 namespace TetrisGame {
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
@@ -67,11 +69,12 @@ public:
     Common::ZMath::UInt64RNG::RNGSeed rng;
     bool exit;
     VideoCore::VideoHandler videocore;
-    Common::GameClock::Instance game_clock;
+    // Common::GameClock::Instance game_clock;
     Tetris();
     void start();
 
 private:
+    using GameEngine = TetrisAPI::TetrisExtendedEngine;
     static void threaded_update(bool& str_upd_done, const ::Tetris::GameModule& game,
                                 Renderer::MainRenderer::RenderData& rd);
 };

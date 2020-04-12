@@ -34,12 +34,13 @@ Tetris::TetrisField& TetrisAPI::TetrisExtendedEngine::update(
     } else {
         delta_time = std::min(game_clock.fp_diff_seconds_micro(), MAX_UPDATE_INTERVAL);
     }
-    game_clock.reset_then();
+    last_update = std::move(game_clock.reset());
     TetrisAPI::update(engine, input, delta_time, update_staticized_last_piece, controlling_piece,
                       burn_y, n_burned);
     input_collection.add_entry(input, delta_time);
     return engine.game_field;
 }
+
 
 void TetrisAPI::TetrisExtendedEngine::reset(unsigned long long seed) {
     Common::ZMath::UInt64RNG::RNGSeed copied_seed = seed;
@@ -57,6 +58,14 @@ Tetris::TetrisField& TetrisAPI::TetrisExtendedEngine::recreate_once(
                       out_last_piece_staticized, out_controlling_piece, out_burn_y, out_n_burned);
     out_seconds_elapsed = least_recent_entry.delay;
     return engine.game_field;
+}
+
+size_t TetrisAPI::TetrisExtendedEngine::reset(const std::string& replay) {
+    TetrisReplay::RandomSeed seed;
+    std::string serialized_inputs;
+    TetrisReplay::deserialize_replay(seed, serialized_inputs, replay);
+    reset(seed);
+    return input_collection.overwrite_entries(serialized_inputs);
 }
 
 Common::ZMath::UInt64RNG::RNGSeed TetrisAPI::TetrisExtendedEngine::reset_for_recreation() {

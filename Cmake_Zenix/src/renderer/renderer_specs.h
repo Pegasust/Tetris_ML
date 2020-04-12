@@ -21,6 +21,7 @@ static_cast <int>(1000.0 / 240.0);
 // Here is the region which the design is set.
 
 #if defined(USE_TXT_CONSOLE_RENDERER) || defined(USE_REVISED_TXT_CONSOLE_RENDERER)
+
 // Top left is {0, 0}, bot right is {x, y} (unsigned)
 namespace RendererExt {
 constexpr float TXT_RENDERER_WIDTH = (Tetris::TetrisField::WIDTH * 8);

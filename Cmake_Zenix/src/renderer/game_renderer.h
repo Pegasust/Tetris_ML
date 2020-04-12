@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "verbosity/verbosity_core.h"
 #include "renderer_specs.h"
+#include "common/common.hpp"
 #ifdef __cplusplus
 #include <iostream>
 #include <string>

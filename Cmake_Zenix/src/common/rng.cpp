@@ -45,3 +45,7 @@ double Common::ZMath::get_random()
 	static small_prng rng = small_prng(rand());
 	return rng.get_double();
 }
+
+double Common::ZMath::random_cramped() {
+    return get_random() - get_random();
+}

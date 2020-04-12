@@ -17,6 +17,9 @@
 
 namespace Common {
 constexpr int RYU_BUFFER_SIZE = 20;
+// The max length that a strcpy operation would handle before it attempts to timeout.
+// This prevents memory overflow/corruption.
+constexpr int MAX_STR_CPY = 4096;
 /*
  * Converts a double value to a very precise string
  * that contains all of possible digits. Although
@@ -27,12 +30,15 @@ constexpr int RYU_BUFFER_SIZE = 20;
  */
 std::string precise_to_string(double d);
 
-// Allocates a static char[RYU_BUFFER_SIZE] upon first call.
+/* Allocates a static char[RYU_BUFFER_SIZE] upon first call.
+ * Not thread-safe.
+*/
 std::string ryu_d2s(const double& d);
 // Prefer this method over non-buffered one
 // because this doesn't allocate new char buffers
-inline void ryu_d2s_buffered(const double& d, char* s) {
+inline const char* ryu_d2s_buffered(const double& d, char* s) {
     d2s_buffered(d, s);
+    return s;
 }
 
 // Returns a char buffer. Does allocate more memory
@@ -53,10 +59,14 @@ inline double ryu_cstr2d(char* str) {
     return retval;
 }
 template <typename IntegralType>
-std::string decimal2hex_str(const IntegralType& num) {
+std::stringstream decimal2hex_sstream(const IntegralType& num) {
     std::stringstream sstream;
     sstream << std::hex << num;
-    return sstream.str();
+    return sstream;
+}
+template <typename IntegralType>
+std::string decimal2hex_str(const IntegralType& num) {
+    return decimal2hex_sstream<IntegralType>(num).str();
 }
 
 template <typename IntegralType>
@@ -123,7 +133,12 @@ void split(const std::string& s, char delim, Out result) {
  * This method can only work with single delimiter.
  */
 std::vector<std::string> split(const std::string& s, char delim);
-
+#ifdef WINDOWS_DEFINED
+#define STR_N_CPY(dest_ptr, start_ptr, max_len) strcpy_s(dest_ptr,max_len,start_ptr)
+#else
+#define STR_N_CPY(dest_ptr, start_ptr, max_len) strcpy(dest_ptr, max_len)
+#endif
+#define STR_CPY(dest_ptr, start_ptr) STR_N_CPY(dest_ptr, start_ptr, Common::MAX_STR_CPY)
 //#define STR_APPEND(str1, str2) str1 str2
 #define STR_CONCAT(str1, str2) str1 str2
 } // namespace Common

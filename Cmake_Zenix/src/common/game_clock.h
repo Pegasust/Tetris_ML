@@ -1,5 +1,7 @@
 #pragma once
 #include <chrono>
+#include "assertion.hpp"
+
 namespace Common {
 namespace GameClock {
 typedef std::chrono::high_resolution_clock Clock;

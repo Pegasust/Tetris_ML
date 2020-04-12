@@ -89,7 +89,9 @@ int simulate_game(TetrisAPI::TetrisExtendedEngine& out_extended_engine) {
     std::cout << "Complete initialization. Seed: " << initial_seed << std::endl;
     std::cout << "Press any key to start." << std::endl;
     Common::SynchronousKeyboard::get_key();
-    handler.resume_displaying(); // Race condition :D
+    // Race condition :D The empty screen
+    // maybe printed out 
+    handler.resume_displaying(); 
     // start physics update (human player)
     while (true) {
         Common::KeyID key = Common::BufferedKeyboard::get_key();

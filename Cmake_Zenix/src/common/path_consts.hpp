@@ -2,7 +2,6 @@
 #include "file_managing.hpp"
 #include "rng.h"
 #include "string_manip.h"
-
 namespace Common {
 namespace PathConsts {
 #define PATH_CONCAT(root, file) STR_CONCAT(root, file)
@@ -36,4 +35,5 @@ inline std::string format_move_filename(const char* const player,
         std::string(suffix));
 }
 } // namespace PathConsts
+namespace Paths = PathConsts;
 } // namespace Common

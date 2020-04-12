@@ -49,8 +49,12 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
                                              char buffer[TetrisReplay::DESERIALIZE_BUFFER],
                                              int& out_buffer_length,
                                              std::istream& serialized_stream) {
+// ISTREAM_DELIM_NOT_FOUND returns true if serialized_stream did parse full block
+// of buffer, but did not get to a delimiter because buffer is full.
+// If serialized_stream fails (eof, stream corruption/injection), this returns false.
 #define ISTREAM_DELIM_NOT_FOUND                                                                    \
     serialized_stream.fail() && buffer[0] != '\0' && !(serialized_stream.bad())
+// Clear the specified error_bit (should be in the form of std::ios_base::__bit like failbit)
 #define ISTREAM_UNSET_BIT(error_bit)                                                               \
     auto state = serialized_stream.rdstate();                                                      \
     state &= ~error_bit;                                                                           \
@@ -93,15 +97,16 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
             if (i != 1) {
                 i -= 1;
                 // check for buffer
-                if (buffer[i - 1] != buffer[i]) {
+                if (buffer[i - 1] != buffer[i]) { // if no sign of ignore, continue
                     continue;
                 }
             } else {
-                i -= 1;   // Unset odd bit
-                continue; // Don't ignore it
+                i -= 1;   // Unset odd bit so that it gets back on 2x search.
+                continue; // Don't ignore out any word.
             }
         }
-        // the ignoring sequence is signalled
+        // the ignoring sequence is signalled (2 chars in a sequence)
+        // Null terminate the start of the "dirty" part (dirty = ignore)
         buffer[i - 1] = '\0'; // Anything before this is clean. Remember this.
         out_buffer_length = i - 1;
         switch (buffer[i]) {
@@ -142,12 +147,16 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
             return;
         } break;
         case BOUND_IGNORE: {
+            // Sub buffer exists after the null terminator of buffer
+            // until the end of allocated memory of buffer.
             char* sub_buffer1 = buffer + i;
             int sub_buffer_size1 = DESERIALIZE_BUFFER - i - 1;
+            // Whether sub buffer is reallocated out of buffer.
             bool reallocated = false;
 
-            bool previously_found = false;
-            bool bound_resolved = false;
+            bool previously_found = false; // whether we previously found an ignore char
+            bool bound_resolved = false; // whether the ignore bound is resolved and we
+            // should copy any thing past the bound but before the line end to buffer.
             while (true) {
                 for (int j = 0; j < sub_buffer_size1 - 1; j++) {
                     if (!bound_resolved) {
@@ -166,13 +175,15 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
                     // current position of sub_buffer1 to buffer (from null-terminator)
                     POTENTIAL_BUG_POINT_MSG("buffer might not have enough room for sub_buffer1");
                     CAN_BE_OPTIMIZED_MSG("Is assigning out of null necessary?");
-                    buffer[i] = ' ';
+                    buffer[i] = ' '; // Assign the previously null-terminator out of null.
+                    // The buffer that is the right of the right most ignore character.
                     char* right_sub_buffer1 = (sub_buffer1 + j);
                     auto right_buffer_size = strlen(right_sub_buffer1);
                     out_buffer_length += right_buffer_size;
                     bool enough_size = out_buffer_length <= DESERIALIZE_BUFFER;
                     out_success = enough_size && !ISTREAM_DELIM_NOT_FOUND;
                     ASSERT(enough_size, "Otoke... buffer doesn't have enough size to store.");
+                    // Destination is to overwrite the last-placed null terminator.
                     char* dest = (buffer + i);
                     strcpy(dest, right_sub_buffer1);
                     i = out_buffer_length;
@@ -189,7 +200,6 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
                     }
                     break;
                 }
-
                 if (ISTREAM_DELIM_NOT_FOUND) { // Doesn't matter if it finds new line or
                                                // not.
                     ISTREAM_UNSET_BIT(std::ios_base::failbit);
@@ -198,7 +208,8 @@ void TetrisReplay::__private__::parse_ignore(bool& out_success,
                     // problematic, don't try to parse more!
                     break;
                 }
-                // Allocate more buffer to read quicker.
+                // Allocate more buffer to read quicker. This makes sub_buffer a
+                // separate block of memory.
                 if (!reallocated && sub_buffer_size1 < ALLOCATE_MORE_THRESHOLD) {
                     reallocated = true;
                     POTENTIAL_BUG_POINT_MSG("Remember to flush sub_buffer1!");

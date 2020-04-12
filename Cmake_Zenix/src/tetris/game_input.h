@@ -76,12 +76,15 @@ class InputCollection {
 private:
     // A queue that needs to know its recently added element
     using Collection = std::deque<InputEntry>;
+    inline bool str_entry_whitespace(const std::string& str) {
+        return str.length() <= 2;
+    }
     // bool empty;
     // int count;
 
 public:
     /* Resorts to collection functions should they are not implemented.
-    */
+     */
     Collection collection;
     InputCollection();
     /*
@@ -106,6 +109,28 @@ public:
     void add_entry(const InputEntry& entry);
     /* Add all entries from serialized input_collection.*/
     void add_entries(const std::string& serialized_collection);
+
+    /* Overwrites entries from serialized input_collection. This does not
+     * flush the forwarding elements, nor does it shrink size. This
+     * does grow in size to append all entries.
+     * Returns the amount of entries overwritten.
+     UNTESTED
+     */
+    size_t overwrite_entries_no_shrink(const std::string& serialized_collection);
+    /* Overwrites entries from serialized input_collection. This can flush
+     * unused. This will shrink in size if user specifiy it to. This
+     * does grow in size to append all entries.
+     * Returns the amount of entries overwritten.
+     UNTESTED
+     */
+    template <bool shrink = true>
+    size_t overwrite_entries(const std::string& serialized_collection) {
+        size_t retval = overwrite_entries_no_shrink(serialized_collection);
+        if (shrink) {
+            collection.resize(retval);
+        }
+        return retval;
+    }
     /*
      * Make string that can be deserialized.
      * string should be "empty" string as it will be appended through
@@ -130,9 +155,21 @@ public:
      */
     void serialize_self_retain(std::string& string) const;
     void clear();
+    /*
+     * Returns the most recent entry without removing it.
+     */
     InputEntry& most_recent();
+    /*
+     * Returns the least recent entry without removing it.
+     */
     InputEntry& least_recent();
+    /*
+     * Removes the most recent entry of the collection.
+     */
     void remove_most_recent();
+    /*
+     * Removes the most recent entry of the collection.
+     */
     void remove_least_recent();
 };
 } // namespace Tetris

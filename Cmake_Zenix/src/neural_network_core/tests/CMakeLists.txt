@@ -1,0 +1,6 @@
+add_executable(neural_network_test
+neural_network_test.cpp)
+
+create_target_directory_groups(neural_network_test)
+
+target_link_libraries(neural_network_test neural_network_core)

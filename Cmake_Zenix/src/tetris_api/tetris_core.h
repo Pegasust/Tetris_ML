@@ -47,6 +47,21 @@ inline void update(
     controlling = TetrisBody(game.controlling_piece);
 }
 
+/**
+* controlling is the controlling piece falling down. The value
+is assigned after the update. (Cloned/copied).
+* game is the game state. Value is reassigned after the call
+* input is the input that we want the game to update
+* burn_y is the array of y positions that is burned in this update
+* n_burned is the number of rows burned in this update [0,4]
+* delta_seconds is the amount of time in seconds passed since the
+last update.
+* pre_static_threshold is the amount of tiles to wait until the piece
+is staticized to the game_field. (only tested for [0, 1))
+[0, inf) is possible but is untested.
+* controlling_staticized is the boolean that represents whether
+controlling is staticized in this update.
+*/
 inline void update(
     // inputs
     TetrisEngine& game, const Input& input, double const& delta_seconds,

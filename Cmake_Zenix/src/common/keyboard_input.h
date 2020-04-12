@@ -10,12 +10,14 @@
 #include <thread>
 #include <queue>
 #include "zmath.h"
-
+#include "game_clock.h"
+#include <string>
+#include <iostream>
 namespace Common {
 using KeyID = int;
 using InputBufferQueue = std::queue<Common::KeyID>;
 
-template <bool threaded, uint64_t time_out, typename ChronoType>
+template <bool threaded, uint64_t time_out, typename ChronoType = std::chrono::seconds>
 class KeyboardListener {
 public:
     /*
@@ -25,6 +27,10 @@ public:
     static inline int get_key() {
         return get_char();
     }
+    /* This should wait for ChronoType(time_out) amount of time. If nothing is entered,
+     * return default_value. Currently doesn't support waiting & timeout.
+     */
+    static std::string get_cin_line(const std::string& default_value);
 
 protected:
     static int get_char();

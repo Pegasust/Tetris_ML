@@ -47,32 +47,82 @@ void serialize_replay(std::string& out_serialize_string,
     serialize_replay(out_serialize_string, initial_seed, serialized_input);
 }
 
+// private namespace that should not be accessed directly.
+// access deserialize_replay from outside instead.
 namespace __private__ {
 /*
  * Takes in input stream from serialized_stream. This does not close the stream.
+
+ * Params:
+ *  out_initial_seed: the initial seed of the game
+ *  out_input_collection_serialized: the string serialized of input_collection.
+        Use Tetris::InputCollection's string construction or add_entries to get
+        deserialized input_collection.
+ *  [in] serialized_stream: the stream in which serialized stream is stored.
  */
 void deserialize_replay(RandomSeed& out_initial_seed,
                         std::string& out_input_collection_serialized,
                         std::istream& serialized_stream);
 /*
  * Get one line out of serialized_stream. Attempt to sanitize input out of IGNORES.
+ * Params:
+ *  In:
+ *      std::istream& serialzied_stream: The stream in which the replay is serialized
+ *          to.
+ *  Out:
+ *      bool& out_success: Whether this function succeeded in parsing from
+ *          serialized_stream with no apparent error.
+ *      char out_buffer[]: The parsed c-string from serialized_stream
+ *      int& out_buffer_length: the length of the parsed c-string.
  */
 void parse_ignore(bool& out_success, char out_buffer[TetrisReplay::DESERIALIZE_BUFFER],
                   int& out_buffer_length, std::istream& serialized_stream);
 } // namespace __private__
 
+/*
+ * Takes in input stream from serialized_stream. This does not close the stream.
+
+ * Params:
+ *  out_initial_seed: the initial seed of the game
+ *  out_input_collection_serialized: the string serialized of input_collection.
+        Use Tetris::InputCollection's string construction or add_entries to get
+        deserialized input_collection.
+ *  [in] serialized_stream: the stream in which serialized stream is stored.
+ */
 inline void deserialize_replay(RandomSeed& out_initial_seed,
                                std::string& out_input_collection_serialized,
                                std::istream& serialized_stream) {
     __private__::deserialize_replay(out_initial_seed, out_input_collection_serialized,
                                     serialized_stream);
 }
+/*
+ * Takes in input stream from serialized_stream. This does not close the stream.
+
+ * Params:
+ *  out_initial_seed: the initial seed of the game
+ *  out_input_collection_serialized: the string serialized of input_collection.
+        Use Tetris::InputCollection's string construction or add_entries to get
+        deserialized input_collection.
+ *  [in] string: the string in which serialized replay is stored.
+ */
 inline void deserialize_replay(RandomSeed& out_initial_seed,
                                std::string& out_input_collection_serialized,
                                const std::string& string) {
     deserialize_replay(out_initial_seed, out_input_collection_serialized,
                                     std::istringstream(string));
 }
+/*
+ * Takes in input stream from serialized_stream. This does not close the stream.
+
+ * Params:
+ *  out_initial_seed: the initial seed of the game
+ *  out_input_collection_serialized: the string serialized of input_collection.
+        Use Tetris::InputCollection's string construction or add_entries to get
+        deserialized input_collection.
+ *  [in] serialzied_stream: the input file stream in which the serialized
+        replay is stored.
+ *  [in] close_stream (=true): whether the close the stream upon completion.
+ */
 template <bool close_stream = true>
 void deserialize_replay(RandomSeed& out_initial_seed,
                         std::string& out_input_collection_serialized,

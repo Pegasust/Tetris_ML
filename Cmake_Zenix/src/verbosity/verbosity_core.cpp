@@ -3,7 +3,7 @@
 template<>
 Verbosity::VerbosityWriter<true>::VerbosityWriter(const std::string& file_path):dying_log([]()
 {
-	return std::string("");
+	return std::string("Program exiting");
 }),
 output_stream(file_path, std::ios::in|std::ios::out|std::ios::app)
 {

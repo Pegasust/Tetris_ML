@@ -40,7 +40,7 @@ int main() {
     std::vector<double> staticized_seconds;
     std::vector<::Tetris::Position2D> staticized_positions;
     ::Tetris::TetrisBody controlling_body(::Tetris::BLANK);
-    std::cout << "Complete initialization. Seed: "<<initial_seed << std::endl;
+    std::cout << "Complete initialization. Seed: " << initial_seed << std::endl;
     // start physics update (human player)
     while (true) {
         Common::KeyID key = Common::BufferedKeyboard::get_key();
@@ -82,11 +82,17 @@ int main() {
     std::cout << "Press any key to perform recreation." << std::endl;
     unsigned long int rows_burned = extended_engine.engine.n_rows_burned;
     Common::SynchronousKeyboard::get_key();
+    // Serialize test
+    std::string replay_str;
+    TetrisReplay::serialize_replay(replay_str, extended_engine.initial_seed,
+                                   extended_engine.input_collection);
 
     // extended_engine.reset(initial_seed);
-    auto seed = extended_engine.reset_for_recreation();
-    // VideoCore::VideoHandler handler;
-    handler.start_async_display(extended_engine.engine);
+    // auto seed = extended_engine.reset_for_recreation();
+    auto seed = extended_engine.initial_seed;
+    extended_engine.reset(replay_str);
+        // VideoCore::VideoHandler handler;
+        handler.start_async_display(extended_engine.engine);
     // Renderer::MainRenderer::try_initialize(extended_engine.engine, handler.display_data);
     // saved meta-data
     double time_elapsed_re = 0.0;

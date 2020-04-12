@@ -20,6 +20,7 @@ void Common::GameClock::Instance::reset_then() {
 }
 
 std::chrono::time_point<Common::GameClock::Clock> Common::GameClock::Instance::reset() {
+    CAN_BE_OPTIMIZED_MSG("Can this return value be copy reference?");
     auto retval = std::move(then);
     then = Clock::now();
     return retval;

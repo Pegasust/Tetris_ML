@@ -70,7 +70,6 @@ void Tetris::InputCollection::serialize_self(std::string& string) {
 #endif
 }
 
-
 void Tetris::InputCollection::serialize_self_retain(std::string& string) const {
 #ifdef HUMAN_READABLE_SERIALIZATION
     for (auto entry = collection.cbegin(); entry != collection.cend(); ++entry) {
@@ -89,14 +88,40 @@ void Tetris::InputCollection::add_entries(const std::string& string) {
     std::vector<std::string> entry_strs = Common::split(string, '\n');
     for (std::vector<std::string>::iterator iter = entry_strs.begin(); iter != entry_strs.end();
          ++iter) {
-        if ((*iter).length() > 2) { // not white space.
-            GameInput input;
-            double delay;
-            Tetris::deserialize_entry((*iter),input,delay);
-            add_entry(input, delay);
+        if (str_entry_whitespace(*iter)) {
+            continue;
         }
+        GameInput input;
+        double delay;
+        Tetris::deserialize_entry((*iter), input, delay);
+        add_entry(input, delay);
     }
 #endif
+}
+
+size_t Tetris::InputCollection::overwrite_entries_no_shrink(const std::string& string) {
+    std::vector<std::string> entry_strs = Common::split(string, '\n');
+    size_t retval;
+    size_t min_size = std::min(entry_strs.size(), collection.size());
+    // Overwrite until the size of min_size
+    for (retval = 0; retval < min_size; retval++) {
+        if (str_entry_whitespace(entry_strs[retval])) {
+            continue;
+        }
+        // overwrite collection
+        collection[retval] = Tetris::deserialize_entry(entry_strs[retval]);
+    }
+    // Add more entries if there exists left-over string entries.
+    for (; retval < entry_strs.size(); retval++) {
+        if (str_entry_whitespace(entry_strs[retval])) {
+            continue;
+        }
+        GameInput input;
+        double delay;
+        Tetris::deserialize_entry(entry_strs[retval], input, delay);
+        add_entry(input, delay);
+    }
+    return retval;
 }
 
 void Tetris::InputCollection::clear() {

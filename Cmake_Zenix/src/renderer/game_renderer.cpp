@@ -206,7 +206,7 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
         for (int i = 0; i < Tetris::GameModule::N_PIECE_AHEAD; i++) {
             char c = body_type_2_char(coming_pieces.front());
             int cols_ind = Tetris::TetrisBody::get_min_index(coming_pieces.front());
-            //coming_pieces.pop_front();
+            // coming_pieces.pop_front();
             coming_pieces.pop();
             for (int j = 0; j < Tetris::T_COLLIDER_HEIGHT; j++) {
                 std::string str(2, ' '); // offset: 2
@@ -380,6 +380,7 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
 void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod, RenderData& out) {
     const int N_LINES = Tetris::TetrisField::HEIGHT;
     const int WIDTH = Tetris::TetrisField::WIDTH;
+    // Making shadow
     int controlling_x0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.x);
     int controlling_y0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.y);
     auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field) +
@@ -536,13 +537,16 @@ void Renderer::StdTxtRenderer::assign_scoreboard(Tetris::GameModule const& mod, 
 }
 
 void Renderer::StdTxtRenderer::assign_game_info(Tetris::GameModule const& mod, RenderData& out) {
+    static char conversion_buffer[Common::RYU_BUFFER_SIZE];
+    // static char string_buffer[64];
+    // string_buffer[63] = '\0';
     if (RendererExt::GAME_INFO::MODE == RendererExt::RenderMode::VERTICAL) {
         static const std::string s1 = std::string("Seed");
         static const std::string s2 = std::string("Fall Velocity");
         static const std::string s3 = std::string("Controlling Prop.");
-        static constexpr size_t MAX_DOUBLE_CHAR_BUFFER = 38;
-        static const int RENDER_WIDTH =
-            std::max(s3.length(), MAX_DOUBLE_CHAR_BUFFER);
+        static constexpr size_t MAX_DOUBLE_CHAR_BUFFER =
+            (16 + 2 + 17); // FFFFFFFFFFFFFFFF(largest_double_str)
+        static const int RENDER_WIDTH = std::max(s3.length(), MAX_DOUBLE_CHAR_BUFFER);
         int y_offset = 0;
         int render_x, render_y;
         RendererExt::Math<int>::general_get(RendererExt::GAME_INFO::POSITION, render_x, render_y,
@@ -553,14 +557,25 @@ void Renderer::StdTxtRenderer::assign_game_info(Tetris::GameModule const& mod, R
 #define PUSH_BACK(str)                                                                             \
     out.render_data.replace(RendererExt::xy2i<int>(render_x, render_y + (y_offset++)), str.size(), \
                             (str));
+#define PUSH_BACK_C(cstr)                                                                          \
+    out.render_data.replace(RendererExt::xy2i<int>(render_x, render_y + (y_offset++)),             \
+                            strlen(cstr), cstr)
 #ifdef DEBUG_DEFINED
         PUSH_BACK(s1);
-        PUSH_BACK((std::to_string(mod.current_seed.seed) + "(" +
-                   std::to_string(Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed)) +
-                   ")"));
+        std::string result = std::move(Common::decimal2hex_str(mod.current_seed.seed));
+        size_t blanks = (sizeof(mod.current_seed.seed) * 8 / 4) - result.size();
+        result.append(blanks, ' ');
+        result.append("(").append(Common::ryu_d2s_buffered(
+            Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed), conversion_buffer));
+        result.append(")");
+        PUSH_BACK(result);
+        // PUSH_BACK_C(string_buffer);
+        // PUSH_BACK((Common::decimal2hex_str(mod.current_seed.seed) + "(" +
+        //          std::to_string(Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed)) +
+        //          ")"));
 #endif
         PUSH_BACK(s2);
-        PUSH_BACK(std::to_string(Tetris::v_fall_at(mod.current_level)));
+        PUSH_BACK_C(Common::ryu_d2s_buffered(Tetris::v_fall_at(mod.current_level), conversion_buffer));
         PUSH_BACK(s3);
         PUSH_BACK(("{" + std::to_string(mod.controlling_piece.current_position.x) + ", " +
                    std::to_string(mod.controlling_piece.current_position.y) + ", " +

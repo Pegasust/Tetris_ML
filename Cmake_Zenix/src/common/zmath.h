@@ -1,9 +1,9 @@
 #pragma once
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <math.h>
 #include <stdint.h>
-#include <algorithm>
 
 #include "../../third_party/ryu/ryu.h"
 #include "../../third_party/ryu/ryu_parse.h"
@@ -43,10 +43,30 @@ constexpr double long_bits_2_double(const std::uint64_t& bits) {
     return u.d;
 }
 /*
- * Returns magnitude of (0,0) from (x,y)
+ * Returns the output of the sigmoid(x/activation_curve).
+ * This function returns (0, 1) for all double x, double activation_curve.
+*/
+template <typename FP_Type>
+FP_Type sigmoid(FP_Type x, FP_Type activation_curve) {
+#define _FP_TYPE_(x) static_cast<FP_Type>(x)
+    // 1/(1+e^(-x/a))
+    return _FP_TYPE_(1) / (_FP_TYPE_(1) / exp(-x / activation_curve));
+#undef _FP_TYPE_
+}
+
+/*
+ Returns the output of sigmoid(x/activation_curve) but casts to
+ integral type.
+ */
+template <typename Int_Type, typename FP_Type>
+Int_Type sigmoid_d2i(FP_Type x, FP_Type activation_curve) {
+
+}
+    /*
+* Returns magnitude of (0,0) from (x,y)
 */
 inline double get_magnitude(double const& x, double const& y) {
-    return sqrt(x * x + y * y);
+return sqrt(x * x + y * y);
 }
 template <typename T>
 struct vector2 {

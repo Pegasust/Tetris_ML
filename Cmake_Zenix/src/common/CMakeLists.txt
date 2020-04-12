@@ -2,7 +2,7 @@
 # All functions should be cross platform too!
 message(STATUS "Accessing common")
 
-add_subdirectory(data_structs)
+# add_subdirectory(data_structs)
 add_library(common STATIC
 zmath.h
 zmath.cpp

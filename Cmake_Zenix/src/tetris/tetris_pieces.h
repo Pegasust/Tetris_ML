@@ -127,6 +127,8 @@ namespace Tetris
 		static void rotate(TetrisCollider& collider, const Rotation& rot, const BodyType& type);
 		TetrisBody(const BodyType& type, const Position2D& initial_pos, const Rotation& initial_rot);
 		TetrisBody(const BodyType& type);
+        inline TetrisBody():TetrisBody(BodyType::BLANK){
+        };
 	};
 	class TetrisField
 	{
