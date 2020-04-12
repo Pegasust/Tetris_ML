@@ -5,7 +5,14 @@ add_executable(preprocessor_path_join_test
 preprocessor_path_join_test.cpp
 )
 
+add_executable(zmath_test
+zmath_test.cpp
+)
+
 create_target_directory_groups(string_manip_test)
 create_target_directory_groups(preprocessor_path_join_test)
+create_target_directory_groups(zmath_test)
+
 target_link_libraries(string_manip_test common)
 target_link_libraries(preprocessor_path_join_test common)
+target_link_libraries(zmath_test common test_utils)

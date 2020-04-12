@@ -1,6 +1,8 @@
 message(STATUS "Accessing src folder")
 include_directories(.)
 
+add_subdirectory(test_utils)
+
 add_subdirectory(initial_tests)
 add_subdirectory(common)
 add_subdirectory(verbosity)

@@ -36,16 +36,16 @@ public:
     // Each edge holds the input and output vertex, as well as the weight of the edge.
     class Edge {
     public:
-        // The input vertex
-        Vertex* in;
-        // The output vertex
-        Vertex* out;
+        // The input vertex (the starting point)
+        const Vertex* in;
+        // The output vertex (the point where the arrow points to)
+        const Vertex* out;
         // The weight of this edge
         FP_Type weight;
         // Whether this link is recurrent.
         // IS THIS NEEDED? We can get info from last_output from Vertex.
         bool is_recurrent;
-        Edge(Vertex* in, Vertex* out, FP_Type weight, bool recurrent = false)
+        Edge(const Vertex* in, const Vertex* out, FP_Type weight, bool recurrent = false)
             : in(in), out(out), weight(weight), is_recurrent(recurrent) {
 #ifndef NEURAL_NDEBUG
             std::cout << "New Edge created" << std::endl;
@@ -86,26 +86,69 @@ public:
               inwards_arrows(), outwards_arrows() {
 #ifndef NEURAL_NDEBUG
             std::cout << "New Vertex created" << std::endl;
-#endif 
+#endif
         }
         // Adds to str2append the string representation of this edge.
         // NOT THREAD-SAFE!
         void append_str(std::string& str2append) const;
     };
-
+    
+    
 public:
     using VertexList = std::vector<Vertex>;
     using Neuron = Vertex;
     using Link = Edge;
-
-private:
-    /*The neural nodes of this graph. It should be oredered from input, bias, hidden, output*/
-    VertexList vertices;
-    // This value can be determined at the moment of generating from phenotype.
-    int graph_depth;
 // Gets the literal field at @param index in vertices.
 #define _V_LIST_FIELD_(list_element, field_name) list_element.##field_name
 #define _GET_FIELD_AT_INDEX_(field_name, index) _V_LIST_FIELD_(this->vertices[index], ##field_name)
+    /*
+     * The structure that contains instruction for creating one edge on a created
+     * VertexList that supports indexing.
+     */
+    template <typename index_type = int>
+    class EdgeCreate {
+        // The index of the input vertex in the given VertexList
+        index_type in_idx;
+        // The index of the output vertex in the given VertexList
+        index_type out_idx;
+        // The weight of the edge being created
+        FP_Type weight;
+        // Whether this link is recurrent.
+        // Not sure if this is needed.
+        bool is_recurrent;
+    public:
+        EdgeCreate(index_type in_idx, index_type out_idx, FP_Type weight, bool recurrent = false)
+            : in_idx(in_idx), out_idx(out_idx), weight(weight), is_recurrent(recurrent){};
+        
+        /*
+         * Apply this instruction on the given VertexList. This creates a new Edge, which
+         * is then pushed back on @param all_edges and assigns the vertices with this 
+         * new Edge accordingly.
+
+         * Pre-condition: @param all_edges must be reserved with enough size for this
+         * push_back, otherwise, it would break. Consider using Graph's function
+         * connect_vertices for a "safer" method.
+        */
+        void apply_vertex_list(VertexList& v_list, std::vector<Edge>& all_edges) const;
+    };
+
+    /*
+    ======================= CLASS GRAPH BEGINS ======================
+    */
+
+private:
+    /*=======================================================================
+    ============================== VARIABLES ================================
+    */
+
+    /*The neural nodes of this graph. It should be oredered from input, bias, hidden, output.
+    It is vital that this field does not get modified directly, as it will break the program
+    due to this holding the memory block! Swapping two vertices locations require the edges
+    to swap its ins and outs too.
+    */
+    VertexList vertices;
+    // This value can be determined at the moment of generating from phenotype.
+    int graph_depth;
     // Calculates the output of Vertex at @param vert_idx and outputs it to @param output
     // This function finds the sum of all weighted input vertices (last_output * weight),
     // then returns the sigmoid with dependent on the link's activation_response.
@@ -126,9 +169,28 @@ public:
         }
     };
     /*
-     * Rearranges @param vertices to follow the order: INPUT, BIAS, HIDDEN, OUTPUT.
+     * Make connections and links, then apply those to @param vertices based on
+     * instructions from @param instructions
      */
+    template <typename index_type = int>
+    static void connect_vertices(VertexList& vertices, 
+        const std::vector<EdgeCreate<index_type>>& instructions,
+        std::vector<Edge>& all_edges);
+
+    template<typename index_type = int>
+    inline void connect_self_vertices(const std::vector<EdgeCreate<index_type>>& instrs,
+        std::vector<Edge>& all_edges) {
+        connect_vertices(this->vertices, instrs, all_edges);
+    }
+    /*
+    * Rearranges @param vertices to follow the order: INPUT, BIAS, HIDDEN, OUTPUT.
+    * Since this requires swapping edges of numerous vertices, this function can
+    * take a long time for large graphs.
+    */
     static void rearrange(VertexList& vertices);
+    inline void rearrange_self() {
+        rearrange(vertices);
+    }
     /*
      * Rearranges @param vertices to follow the order: INPUT, BIAS, HIDDEN, OUTPUT
      * given the count for each type in @param type_count. type_count should be
@@ -154,13 +216,26 @@ public:
     void calculate_outputs(const std::vector<FP_Type>& inputs, std::vector<FP_Type>& outputs);
     // NOT THREAD-SAFE!
     void append_str(std::string& str2append) const;
+    /* Swaps the location of vertex of index @param idx0 with @param idx1. This function
+    also changes the inwards_arrows and outwards_arrows of each vertex.
+    */
+    template<typename index_type = int, bool swap_arrows = true>
+    static void swap_vertex_index_position(VertexList& vertices, index_type idx0, index_type idx1);
+
+private:
+    // Swaps all <out> of inwards_arrows and <in> of outwards_arrow of vertices at @param getter
+    // with vertex of vertices at @param swapped_index
+    template<typename index_type = int>
+    static void swap_arrows_vertex_index(VertexList& vertices, index_type getter, index_type swapped_index);
 };
 using GraphF = Graph<float>;
 using GraphD = Graph<double>;
-// Simple wrapper around anytype that contains public method in signature:
-// void append_str(std::string&) const
+
 template <typename T>
+// Simple wrapper around any type that contains public method in signature:
+// void append_str(std::string&) const
 std::string to_string(const T&);
+
 } // namespace NeuralNetwork
 
 #include "neural_graph.ipp"

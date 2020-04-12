@@ -47,10 +47,10 @@ constexpr double long_bits_2_double(const std::uint64_t& bits) {
  * This function returns (0, 1) for all double x, double activation_curve.
 */
 template <typename FP_Type>
-FP_Type sigmoid(FP_Type x, FP_Type activation_curve) {
+FP_Type sigmoid(FP_Type x, FP_Type activation_curve=1.0) {
 #define _FP_TYPE_(x) static_cast<FP_Type>(x)
     // 1/(1+e^(-x/a))
-    return _FP_TYPE_(1) / (_FP_TYPE_(1) / exp(-x / activation_curve));
+    return _FP_TYPE_(1) / (_FP_TYPE_(1) + exp(-x / activation_curve));
 #undef _FP_TYPE_
 }
 
@@ -111,3 +111,5 @@ struct vector2 {
 };
 } // namespace ZMath
 } // namespace Common
+
+namespace CZMath = Common::ZMath;
