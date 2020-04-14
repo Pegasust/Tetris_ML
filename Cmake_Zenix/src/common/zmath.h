@@ -62,7 +62,7 @@ template <typename Int_Type, typename FP_Type>
 Int_Type sigmoid_d2i(FP_Type x, FP_Type activation_curve) {
 
 }
-    /*
+/*
 * Returns magnitude of (0,0) from (x,y)
 */
 inline double get_magnitude(double const& x, double const& y) {

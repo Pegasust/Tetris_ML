@@ -3,6 +3,8 @@
 #include <cassert>
 
 namespace Common {
+#define SILENT_MSG
+
 #ifndef ASSERT
 #define ASSERT(expr, msg) assert(expr&& msg)
 #else
@@ -11,6 +13,7 @@ constexpr void ASSERT(const int& expression, const char* message) {
     assert(expression && message);
 }
 #endif
+
 // Getting line number hack.
 #define __STRINGIZE_(line) #line
 // The hack that gets line # as string.
@@ -23,7 +26,7 @@ constexpr void ASSERT(const int& expression, const char* message) {
 #ifndef VERBOSITY_LOG
 #define VERBOSITY_LOG(msg) ASSERT(true, msg)
 #endif
-#ifndef _IOSTREAM_
+#if !defined _IOSTREAM_ || defined SILENT_MSG
 #define __PRINT_OUT_MESSAGE__(msg) ASSERT(true,msg)
 #else
 #define __PRINT_OUT_MESSAGE__(msg) std::cout<<msg<<std::endl;
@@ -36,6 +39,11 @@ constexpr void ASSERT(const int& expression, const char* message) {
 #endif
 #endif
 
+constexpr void check(const int& expression, char msg[]) {
+    if (!expression) {
+        __PRINT_OUT_MESSAGE__(msg);
+    }
+}
 #ifndef UNIMPLEMENTED_FEATURE
 #define UNIMPLEMENTED_FEATURE_MSG(msg) ASSERT(false, msg)
 #define UMIMPLEMENTED_FEATURE UNIMPLEMENTED_FEATURE_MSG("Unimplemented feature.")
