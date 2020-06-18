@@ -1,6 +1,16 @@
 # Tetris_ML
 Tetris project that highly ties with ML for this game
 
-I am imagining a project that uses OpenCL for accelerated learning with implementation of NEAT or ANN for machine learning program.
+# TODOs:
 
-Dec. 13, 2019: I am now more interested in optimizing parallel computing and real-time computing (the user-game aspect) than in implementing AI.
+- Implement NEAT, feature-selection NEAT
+
+- Use NEAT in my TetrisML model
+
+- Reimplement random linear-regression with 0 hidden layers neural network that I implemented in senior high school year.
+
+- OpenCl parallelization
+
+- ARMx86 (Raspberry Pi) compatibility
+
+- Actual screen pixel renderers (OpenGL/Vulkan)
