@@ -1,6 +1,10 @@
 add_executable(neural_network_test
-neural_network_test.cpp)
+neural_network_test.cpp
+open_cl_compute_test.hpp
+volatile_neural_graph.hpp
+)
 
 create_target_directory_groups(neural_network_test)
 
-target_link_libraries(neural_network_test neural_network_core test_utils)
+target_link_libraries(neural_network_test 
+neural_network_core test_utils OpenCL::OpenCL)

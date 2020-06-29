@@ -42,8 +42,7 @@ bool Common::ZMath::UInt64RNG::get_bool(RNGSeed& seed, double& percentage)
 
 double Common::ZMath::get_random()
 {
-	static small_prng rng = small_prng(rand());
-	return rng.get_double();
+	return rng_instance.get_double();
 }
 
 double Common::ZMath::random_cramped() {

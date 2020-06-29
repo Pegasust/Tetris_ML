@@ -2,6 +2,8 @@
 #include "../../common/assertion.hpp"
 #include "../../test_utils/test_utils.hpp"
 #include "../neural_network_core.hpp"
+#include "open_cl_compute_test.hpp"
+#include "volatile_neural_graph.hpp"
 
 bool graph_initial_test() {
     // http:// nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf pg9:
@@ -415,10 +417,9 @@ bool graph_safe_ctor_recurrent_self_loop_test() {
     // self-loop
     node5_out = 0;
     node4_out = 0;
-    std::vector<GraphD::EdgeCreate> self_loop_edges {
-        {0, 3, 0.7}, {2, 3, 0.5}, {1, 4, 0.2}, {4, 3, 0.4}, {0, 4, 0.6}, 
-    {3, 4, 0.6}, {4, 4, 0.3}, {3, 3, 0.9}
-    };
+    std::vector<GraphD::EdgeCreate> self_loop_edges{{0, 3, 0.7}, {2, 3, 0.5}, {1, 4, 0.2},
+                                                    {4, 3, 0.4}, {0, 4, 0.6}, {3, 4, 0.6},
+                                                    {4, 4, 0.3}, {3, 3, 0.9}};
     GraphD self_loop_graph(vertices, self_loop_edges);
     for (int i = 0; i < iterations; i++) {
         output.clear();
@@ -432,7 +433,39 @@ bool graph_safe_ctor_recurrent_self_loop_test() {
     }
     return true;
 }
-int main() {
+bool graph_synchronize_test() {
+    std::vector<GraphD::VertexCreate> vertices{
+        GraphD::VertexCreate(NeuronType::INPUT), GraphD::VertexCreate(NeuronType::INPUT),
+        GraphD::VertexCreate(NeuronType::INPUT), GraphD::VertexCreate(NeuronType::OUTPUT),
+        GraphD::VertexCreate(NeuronType::HIDDEN)};
+    const std::vector<double> inputs{1.4, 5.8, 12.2};
+    const int iterations = 5;
+    double node5_out = 0;
+    double node4_out = 0;
+
+    // recurrent:
+    std::vector<GraphD::EdgeCreate> recurrent_edges{{0, 3, 0.7}, {2, 3, 0.5}, {1, 4, 0.2},
+                                                    {4, 3, 0.4}, {0, 4, 0.6}, {3, 4, 0.6}};
+    GraphD recurrent_graph(vertices, recurrent_edges);
+    std::vector<double*> graph_inputs;
+    recurrent_graph.input_addresses(graph_inputs);
+    std::vector<double*> output;
+    recurrent_graph.output_addresses(output);
+    *graph_inputs[0] = inputs[0];
+    *graph_inputs[1] = inputs[1];
+    *graph_inputs[2] = inputs[2];
+    for (int i = 0; i < iterations; i++) {
+        std::cout << "\nIteration: " << i << std::endl;
+        recurrent_graph.update();
+        node5_out = CZMath::sigmoid(node4_out * 0.6 + inputs[0] * 0.6 + inputs[1] * 0.2);
+        node4_out = CZMath::sigmoid((node5_out * 0.4) + (inputs[0] * 0.7) + (inputs[2] * 0.5));
+        TEST_EQ(node4_out, *output[0]);
+    }
+    
+    return true;
+}
+
+int neural_network_test() {
     TEST_INITIALIZE;
     DO_TEST(graph_initial_test);
     DO_TEST(vertex_list_refs_test);
@@ -443,6 +476,15 @@ int main() {
     DO_TEST(graph_self_loop_test);
     DO_TEST(graph_safe_ctor_test);
     DO_TEST(graph_safe_ctor_recurrent_self_loop_test);
+    DO_TEST(graph_synchronize_test);
     TEST_RESULTS;
+    return 1;
+}
+int main() {
+    neural_network_test();
+    std::cout << "\n\n\n\n\n\nOpenCL test" << std::endl;
+    open_cl_compute_test();
+    std::cout << "\n\n\n\n\n\nVolatile_Neural_Graph test" << std::endl;
+    volatile_neural_graph_test();
     return 1;
 }

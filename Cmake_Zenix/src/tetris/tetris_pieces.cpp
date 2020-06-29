@@ -22,8 +22,8 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 	//I 1
 	{
 		O, O, O, O,
-		X, X, X, X,
 		O, O, O, O,
+		X, X, X, X,
 		O, O, O, O
 	},
 	//Z 0 //3
@@ -34,61 +34,68 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 		O, O, O, O
 	},
 	//Z 1	
-		{
-			X, X, O, O,
-			O, X, X, O,
-			O, O, O, O,
-			O, O, O, O,
-		},
+	{
+		O, O, O, O,
+		O, X, X, O,
+		O, O, X, X,
+		O, O, O, O,
+	},
 	//S 0	//5
-		{
-			O, X, O, O,
-			O, X, X, O,
-			O, O, X, O,
-			O, O, O, O
-		},
-	//S 1
-		{
-			O, O, X, X,
-			O, X, X, O,
-			O, O, O, O,
-			O, O, O, O
-		},
+	{
+		O, X, O, O,
+		O, X, X, O,
+		O, O, X, O,
+		O, O, O, O
+	},
+	//S 1  // Right
+	//{
+	//	O, O, X, X,
+	//	O, X, X, O,
+	//	O, O, O, O,
+	//	O, O, O, O
+	//},	
+	// S 1  // Left
+	{
+		O, O, O, O,
+		O, X, X, O,
+		X, X, O, O,
+		O, O, O, O
+	},
 	//O		//7
-		{
-			O, X, X, O,
-			O, X, X, O,
-			O, O, O, O,
-			O, O, O, O
-		},
+	{
+		O, X, X, O,
+		O, X, X, O,
+		O, O, O, O,
+		O, O, O, O
+	},
 	//T 0	//8
-		{
-			O, O, X, O,
-			O, X, X, O,
-			O, O, X, O,
-			O, O, O, O
-		},
+	{
+		O, O, X, O,
+		O, X, X, O,
+		O, O, X, O,
+		O, O, O, O
+	},
 	//T 1
-		{
-			O, O, X, O,
-			O, X, X, X,
-			O, O, O, O,
-			O, O, O, O
-		},
+	{
+		O, O, X, O,
+		O, X, X, X,
+		O, O, O, O,
+		O, O, O, O
+	},
 	//T 2
-		{
-			O, O, X, O,
-			O, O, X, X,
-			O, O, X, O,
-			O, O, O, O,
-		},
-		//T 3
-			{
-				O, O, O, O,
-				O, X, X, X,
-				O, O, X, O,
-				O, O, O, O
-			},
+	{
+		O, O, X, O,
+		O, O, X, X,
+		O, O, X, O,
+		O, O, O, O,
+	},
+	//T 3
+	{
+		O, O, O, O,
+		O, X, X, X,
+		O, O, X, O,
+		O, O, O, O
+	},
 	//L 0	//12
 	{
 		O, X, X, O,
@@ -98,9 +105,9 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 	},
 	//L 1
 	{
-		O, O, O, O,
 		O, O, O, X,
 		O, X, X, X,
+		O, O, O, O,
 		O, O, O, O,
 	},
 	//L 2
@@ -118,36 +125,37 @@ const Tetris::TetrisCollider Tetris::TetrisBody::colliders[] =
 		O, O, O, O
 	},
 	//J 0	//16
-		{
-			O, X, X, O,
-			O, X, O, O,
-			O, X, O, O,
-			O, O, O, O
-		},
+	{
+		O, X, X, O,
+		O, X, O, O,
+		O, X, O, O,
+		O, O, O, O
+	},
 	//J 1
-		{
-			O, O, O, O,
-			X, X, X, O,
-			O, O, X, O,
-			O, O, O, O
-		},
+	{
+		O, O, O, O,
+		X, X, X, O,
+		O, O, X, O,
+		O, O, O, O
+	},
 	//J 2
-		{
-			O, X, O, O,
-			O, X, O, O,
-			X, X, O, O,
-			O, O, O, O
-		},
+	{
+		O, X, O, O,
+		O, X, O, O,
+		X, X, O, O,
+		O, O, O, O
+	},
 	//J 3
-		{
-			X, O, O, O,
-			X, X, X, O,
-			O, O, O, O,
-			O, O, O, O
-		}
+	{
+		X, O, O, O,
+		X, X, X, O,
+		O, O, O, O,
+		O, O, O, O
+	}
 	#undef X
 	#undef O
 };
+
 
 template<typename T>
 Tetris::BodyType Tetris::body_type_val<T>(T input)
@@ -159,7 +167,8 @@ template<>
 Tetris::BodyType Tetris::body_type_val(Common::ZMath::UInt64RNG::RNGSeed input)
 {
 	//TODO: can definitely make this a less biased algorithm
-	return (Tetris::BodyType) ((input % 7) + 1);
+	// return static_cast<Tetris::BodyType>(((input % 7) + 1));
+    return body_type_val(input, Common::ZMath::UInt64RNG::xorshift64);
 }
 
 Tetris::TetrisBody::TetrisBody(const BodyType& type, const Position2D& initial_pos, const Rotation& initial_rot) :

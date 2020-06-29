@@ -28,7 +28,7 @@ keyboard_test.cpp
 create_target_directory_groups(common)
 create_target_directory_groups(keyboard_test)
 
-target_link_libraries(common ryu)
+target_link_libraries(common ryu OpenCL::OpenCL)
 
 target_link_libraries(keyboard_test common)
 #if (UNIX)

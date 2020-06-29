@@ -4,6 +4,7 @@
  */
 
 #pragma once
+#include <cstring>
 #include <cmath>
 #include <cstdint>
 #include <iomanip>
@@ -19,7 +20,7 @@ namespace Common {
 constexpr int RYU_BUFFER_SIZE = 20;
 // The max length that a strcpy operation would handle before it attempts to timeout.
 // This prevents memory overflow/corruption.
-constexpr int MAX_STR_CPY = 4096;
+constexpr int MAX_STR_CPY = 2048;
 /*
  * Converts a double value to a very precise string
  * that contains all of possible digits. Although
@@ -136,7 +137,7 @@ std::vector<std::string> split(const std::string& s, char delim);
 #ifdef WINDOWS_DEFINED
 #define STR_N_CPY(dest_ptr, start_ptr, max_len) strcpy_s(dest_ptr,max_len,start_ptr)
 #else
-#define STR_N_CPY(dest_ptr, start_ptr, max_len) strcpy(dest_ptr, max_len)
+#define STR_N_CPY(dest_ptr, start_ptr, max_len) strcpy(dest_ptr, start_ptr)
 #endif
 #define STR_CPY(dest_ptr, start_ptr) STR_N_CPY(dest_ptr, start_ptr, Common::MAX_STR_CPY)
 //#define STR_APPEND(str1, str2) str1 str2

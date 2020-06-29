@@ -3,7 +3,8 @@
 #include <limits>
 #include <mutex>
 #include <stdint.h>
-
+#include "zmath.h"
+#include "game_clock.h"
 namespace Common {
 namespace ZMath {
 // old structure, enclosed in class with statics to hide functions
@@ -78,6 +79,37 @@ public:
         d = e + a;
         return d;
     }
+    // Returns [0, range)
+    // This does not take into account that the least significant
+    // bit is intrinsicly "weak" (0 will appear less than others).
+    // If range is 0, returns 0.
+    template <typename Uint_Type = uint64_t>
+    Uint_Type get_range(const Uint_Type range) {
+        if (range == 0) {
+            return 0;
+        }
+        uint64_t x;
+        Uint_Type modder = fill_right_msb(range);
+        do {
+            x = (*this)();
+            x &= modder;
+        } while (x >= range);
+        return x;
+    }
+    template <typename Int_Type>
+    Int_Type get_int() {
+        return get_range(std::numeric_limits<Int_Type>::max());
+    }
+    // Returns [low, high)
+    // This does not take into account that the least significant
+    // bit is intrinsicly "weak" (0 will appear less than others).
+    // If range is 0, returns 0.
+    template <typename Int_Type = int64_t>
+    Int_Type get_range(const Int_Type low, const Int_Type high) {
+        Int_Type length = high - low;
+        return get_range(length) + low;
+    }
+
     //[0,1)
     inline double get_double() {
         uint64_t x = (*this)();
@@ -87,7 +119,7 @@ public:
         } u = {UINT64_C(0x3FF) << 52 | x >> 12};
         return u.d - 1.0;
     }
-    inline bool get_bool(const double& percentage = 0.5) {
+    inline bool get_bool(const double percentage = 0.5) {
         if (percentage >= 1.0)
             return true;
         else {
@@ -100,7 +132,7 @@ public:
         return get_double() - get_double();
     }
 };
-
+static small_prng rng_instance(GameClock::Clock::now().time_since_epoch().count());
 //[0,1)
 double get_random();
 //(-1,1)

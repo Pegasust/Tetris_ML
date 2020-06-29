@@ -14,7 +14,7 @@
 #include "../verbosity/framerate.h"
 #include "../video_core/video_core.h"
 #include "../tetris_api/tetris_extended_engine.h"
-
+// #define KEYSTROKE_UNORDERED_MAP  // Disabled because of low performance.
 namespace TetrisGame {
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 class Tetris {

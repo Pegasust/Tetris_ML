@@ -13,8 +13,12 @@ namespace VideoCore
 	public:
 		Renderer::MainRenderer::RenderData display_data;
 		std::thread video_thread;
-		bool keep_displaying_data;
-		bool exit;
+		// This value can be set to another from another thread,
+		// make sure not to skip steps.
+        volatile bool keep_displaying_data;
+        // This value can be set to another from another thread,
+        // make sure not to skip steps.
+		volatile bool exit;
 		
 		void pause_displaying();
 		void resume_displaying();

@@ -19,7 +19,7 @@ Scroll to bottom for example usage.
 */
 #pragma once
 #ifdef TEST_
-#error
+#error(TEST_ already defined, cannot use test_utils.hpp)
 #else
 #include <iostream> // Dependency.
 #include <vector>
@@ -36,6 +36,9 @@ Scroll to bottom for example usage.
 #define TEST_EQ(lhs, rhs)\
 TEST_MSG(lhs == rhs, #lhs "(" <<lhs<< ") does not equal " #rhs "(" <<rhs<<") at line " << __LINE__)
 
+// Test whether lhs != rhs returns true.
+#define TEST_NE(lhs, rhs)\
+TEST_MSG(!(lhs == rhs), #lhs "(" << lhs << ") does not not equal(!(lhs==rhs)) " #rhs "(" << rhs << ") at line " << __LINE__)
 #define TEST_INITIALIZE bool __test_passed_42__ = false; std::vector<bool> __results_42__;
 #define DO_TEST(test_func)                                                                         \
     std::cout << "\n\n\n\n\n" << #test_func << ":" << std::endl;                                   \

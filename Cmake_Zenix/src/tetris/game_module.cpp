@@ -436,5 +436,6 @@ Tetris::GameModule::GameModule(const unsigned long long& initial_seed)
 }
 
 unsigned char Tetris::GameModule::calculate_scaled_burn_score(unsigned char const& burned) const {
-    return static_cast<double>(burned) * 1.499 + static_cast<double>(current_level) / 15.0;
+
+    return static_cast<double>(burned << (burned-1)) + (static_cast<double>(current_level+15) / 15.0);
 }

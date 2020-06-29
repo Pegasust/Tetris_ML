@@ -45,6 +45,17 @@ namespace Tetris
 		J,
 		BORDER
 	};
+	template<typename Rng_Seed, typename Next_Seed_Func>
+	BodyType body_type_val(Rng_Seed seed, Next_Seed_Func get_next) {
+        Rng_Seed last_3_bits = seed & 7;
+        while (last_3_bits == 0) {
+            // reroll until not 0
+            seed = get_next(&seed);
+            last_3_bits = seed & 7;
+        }
+        // Guaranteed to return a value [1,8)
+        return static_cast<Tetris::BodyType>(last_3_bits);
+	}
 	template<typename T>
 	BodyType body_type_val(T input);
 
@@ -70,7 +81,7 @@ namespace Tetris
 			y = i / (unsigned char)4;
 			x = i - (y * (unsigned char)4);
 		}
-		static const TetrisCollider colliders[];
+		static const TetrisCollider colliders[]; // To be defined in .cpp
 		static const int
 			BLANK_MIN = 0,
 			I_MIN = 1,

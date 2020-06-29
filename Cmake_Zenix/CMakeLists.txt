@@ -56,14 +56,16 @@ add_compile_options(-DCMAKE_N_PROCESSOR_DETECTED=${N_PROCESSOR})
 message(STATUS "Cmake detected # of processor is ${N_PROCESSOR}")
 endif()
 
-add_subdirectory(src)
-add_subdirectory(third_party)
 #===== Packaging/libraries =====
 find_package (OpenCL REQUIRED)
 find_package (Threads REQUIRED) #for multithreading/pthread
 if(WIN32)
 option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 endif()
+
+#===== Source code =====
+add_subdirectory(third_party)
+add_subdirectory(src)
 
 # Add source to this project's executable.
 add_executable (Cmake_Zenix "Cmake_Zenix.cpp" "Cmake_Zenix.h")

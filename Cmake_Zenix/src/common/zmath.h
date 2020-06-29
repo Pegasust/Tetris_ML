@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdint.h>
 
+#include "assertion.hpp"
 #include "../../third_party/ryu/ryu.h"
 #include "../../third_party/ryu/ryu_parse.h"
 
@@ -13,6 +14,16 @@ namespace ZMath {
 int round_nearest(double x);
 int round_nearest(float f);
 
+// Fill all bits to the right of msb
+// 0b100 -> 0b111; 0b111 -> 0b111,...
+template<typename Int_Type = int>
+Int_Type fill_right_msb(Int_Type val) {
+    constexpr std::size_t bit_size = sizeof(Int_Type) * 8;
+    for (std::size_t i = 1; i != bit_size; i <<= 1) {
+        val |= (val >> i);
+    }
+    return val;
+}
 // www.boost.org/doc/libs/1_72_0/libs/math/doc/html/math_toolkit/float_comparison.html
 inline double relative_diff(const double a, const double b) {
     return std::fabs(a - b) / std::max(std::fabs(a), std::fabs(b));
@@ -60,7 +71,9 @@ FP_Type sigmoid(FP_Type x, FP_Type activation_curve=1.0) {
  */
 template <typename Int_Type, typename FP_Type>
 Int_Type sigmoid_d2i(FP_Type x, FP_Type activation_curve) {
-
+    UNIMPLEMENTED_FEATURE_MSG("Maybe instead of calculating and casting/rounding, "
+                              "we can give a decent approximate on which x value will "
+                              "it returns 1 or 0.")
 }
 /*
 * Returns magnitude of (0,0) from (x,y)

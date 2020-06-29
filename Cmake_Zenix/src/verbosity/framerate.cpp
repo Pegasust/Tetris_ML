@@ -73,6 +73,7 @@ std::string Verbosity::FrameLogger::dying_msg() {
     std::string s = "avg physics: " + physics_tm().to_string();
     s += "\navg visual: " + visual_tm().to_string();
     s += "\navg draw: " + draw_tm().to_string();
+    std::cout << s << std::endl;
     return s;
 }
 

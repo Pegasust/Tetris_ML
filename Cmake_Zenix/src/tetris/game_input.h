@@ -73,10 +73,10 @@ void deserialize_entry(const std::string& str, GameInput& out_entry, double& out
 // template<int capacity>
 
 class InputCollection {
-private:
+protected:
     // A queue that needs to know its recently added element
     using Collection = std::deque<InputEntry>;
-    inline bool str_entry_whitespace(const std::string& str) {
+    static inline bool str_entry_whitespace(const std::string& str) {
         return str.length() <= 2;
     }
     // bool empty;
@@ -114,14 +114,12 @@ public:
      * flush the forwarding elements, nor does it shrink size. This
      * does grow in size to append all entries.
      * Returns the amount of entries overwritten.
-     UNTESTED
      */
     size_t overwrite_entries_no_shrink(const std::string& serialized_collection);
     /* Overwrites entries from serialized input_collection. This can flush
      * unused. This will shrink in size if user specifiy it to. This
      * does grow in size to append all entries.
      * Returns the amount of entries overwritten.
-     UNTESTED
      */
     template <bool shrink = true>
     size_t overwrite_entries(const std::string& serialized_collection) {

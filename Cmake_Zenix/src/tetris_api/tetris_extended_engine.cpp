@@ -3,7 +3,8 @@
 TetrisAPI::TetrisExtendedEngine::TetrisExtendedEngine()
     : TetrisAPI::TetrisExtendedEngine::TetrisExtendedEngine(rand()) {}
 
-TetrisAPI::TetrisExtendedEngine::TetrisExtendedEngine(unsigned long long seed)
+TetrisAPI::TetrisExtendedEngine::TetrisExtendedEngine(unsigned long long seed,
+    unsigned int input_reserve)
     : initial_seed(seed), engine(seed), game_clock(false), time_initialized(false),
       input_collection() {}
 

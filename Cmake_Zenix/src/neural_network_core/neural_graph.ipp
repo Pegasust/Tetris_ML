@@ -1,6 +1,5 @@
-#include "neural_network_core.hpp"
 #pragma once
-#include "neural_network_core.hpp"
+#include "neural_graph.hpp"
 
 using namespace NeuralNetwork;
 template <typename FP_Type, typename NeuronType, typename index_type>
@@ -189,14 +188,21 @@ inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::swap_vertex_i
     std::swap(vertices[idx0], vertices[idx1]);
 }
 template <typename FP_Type, typename NeuronType, typename index_type>
-template <bool extract_output, bool parse_from_input>
+template <bool extract_output, bool parse_from_input, typename Start_Idx_Func>
 void Graph<FP_Type, NeuronType, index_type>::calculate_outputs(const std::vector<FP_Type>& inputs,
-                                                               std::vector<FP_Type>& outputs) {
+                                                               std::vector<FP_Type>& outputs,
+                                                               Start_Idx_Func start_idx_of) {
     // For input vertices, just copy @param inputs to these nodes sequentially.
-    int vert_idx = 0; // vertex index in this->vertices.
+    int vert_idx; // vertex index in this->vertices.
 
     if (parse_from_input && inputs.size() > 0) {
-        while (_GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::INPUT) {
+        vert_idx = start_idx_of(NeuronType::INPUT, this->vertices);
+        ASSERT(vert_idx != -1, "The given start_idx_of function could not find INPUT. "
+                               "Either the start_idx_of func is broken or structure does "
+                               "not have INPUT vertex.");
+        ASSERT(_GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::INPUT,
+               "start_idx_of function returns a non -1 index that is not INPUT?");
+        do {
             // assign output to current vertex in this->vertices
             _GET_FIELD_AT_INDEX_(last_output, vert_idx) = inputs[vert_idx];
 #ifndef NEURAL_NDEBUG
@@ -204,33 +210,44 @@ void Graph<FP_Type, NeuronType, index_type>::calculate_outputs(const std::vector
                       << Common::ryu_d2s(_GET_FIELD_AT_INDEX_(last_output, vert_idx)) << std::endl;
 #endif
             ++vert_idx;
+        } while (_GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::INPUT);
+    }
+    // assert that bias' output is 1.0
+    vert_idx = start_idx_of(NeuronType::BIAS, this->vertices);
+    if (vert_idx != -1) {
+        while (_GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::BIAS) {
+            // Assign output to const 1. The actual "bias" that we need to
+            // tune is the Edge/Link's weight.
+            CAN_BE_OPTIMIZED_MSG("We can just set this once and not do this again");
+            _GET_FIELD_AT_INDEX_(last_output, vert_idx) = static_cast<FP_Type>(1);
+            ++vert_idx;
         }
     }
-    while (_GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::BIAS) {
-        // Assign output to const 1. The actual "bias" that we need to
-        // tune is the Edge/Link's weight.
-        CAN_BE_OPTIMIZED_MSG("We can just set this once and not do this again");
-        _GET_FIELD_AT_INDEX_(last_output, vert_idx) = 1;
-        ++vert_idx;
-    }
     // In the case of HIDDEN and OUTPUT:
-    for (; vert_idx < vertices.size(); vert_idx++) {
+    // Calculate HIDDEN first, then OUTPUT.
+    const NeuronType calculating_type[] = {NeuronType::HIDDEN, NeuronType::OUTPUT};
+    for (index_type type = 0; type < Common::array_size(calculating_type); type++) {
+        for (vert_idx = start_idx_of(calculating_type[type], this->vertices);
+             vert_idx < _V_LIST_FIELD_(this->vertices, size()) &&
+             _GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == calculating_type[type];
+             vert_idx++) {
 #ifndef NEURAL_NDEBUG
-        std::cout << "Calculating HIDDEN/OUTPUT Node index " << vert_idx << std::endl;
+            std::cout << "Calculating HIDDEN/OUTPUT Node index " << vert_idx << std::endl;
 #endif
-        // calculate the output of this vertex and put it to last_output
-        // of this vertex.
-        calculate_output(vert_idx, _GET_FIELD_AT_INDEX_(last_output, vert_idx));
+            // calculate the output of this vertex and put it to last_output
+            // of this vertex.
+            calculate_output(vert_idx, _GET_FIELD_AT_INDEX_(last_output, vert_idx));
 #ifndef NEURAL_NDEBUG
-        std::cout << "Index " << vert_idx
-                  << " Outputs: " << Common::ryu_d2s(_GET_FIELD_AT_INDEX_(last_output, vert_idx))
-                  << std::endl;
+            std::cout << "Index " << vert_idx << " Outputs: "
+                      << Common::ryu_d2s(_GET_FIELD_AT_INDEX_(last_output, vert_idx)) << std::endl;
 #endif
-        // if we want to extract output and the current vertex is the output node,
-        // append this output to @param outputs.
-        if (extract_output && _GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::OUTPUT) {
-            // append last_output of this output vertex to @param output.
-            outputs.push_back(_GET_FIELD_AT_INDEX_(last_output, vert_idx));
+            // if we want to extract output and the current vertex is the output node,
+            // append this output to @param outputs.
+            if (extract_output &&
+                _GET_FIELD_AT_INDEX_(neuron_type, vert_idx) == NeuronType::OUTPUT) {
+                // append last_output of this output vertex to @param output.
+                outputs.push_back(_GET_FIELD_AT_INDEX_(last_output, vert_idx));
+            }
         }
     }
 }
@@ -286,13 +303,13 @@ template <typename FP_Type, typename NeuronType, typename index_type>
 inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::add_to_v_list(
     const VertexCreate& vc, VertexList& v_list) {
     v_list.emplace_back(vc.neuron_type, vc.activation_response, vc.initial_output);
-    //Vertex v(vc.neuron_type, vc.activation_response, vc.initial_output);
-    //v_list.push_back(std::move(v));
+    // Vertex v(vc.neuron_type, vc.activation_response, vc.initial_output);
+    // v_list.push_back(std::move(v));
 }
 template <typename FP_Type, typename NeuronType, typename index_type>
 inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::init(
     const std::vector<VertexCreate>& vertices, const std::vector<EdgeCreate>& instructions,
-    std::vector<index_type> vertex_type_count, int graph_depth) {
+    std::vector<index_type>& vertex_type_count, int graph_depth) {
     this->graph_depth = graph_depth;
     for (index_type i = 0; i < size(); i++) {
         add_to_v_list(vertices[i], this->vertices);
@@ -325,18 +342,57 @@ inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::add_vertices(
     //    vertices.emplace_back()
     //}
     index_type i = 0;
-    for (Neuron_Type type = 0; type <= Neuron_Type::OUTPUT; type++) {
+    for (Neuron_Type type = 0; type < Neuron_Type::UNDEFINED; type++) {
         for (index_type count = 0;
              count < type_count[type], i < data_response_initial_output.size(); count++, i += 2) {
             vertices.emplace_back(data_response_initial_output[i],
                                   data_response_initial_output[i + 1],
-                                  static_cast<NeuronType>(type));
+                                  static_cast<Neuron_Type>(type));
         }
     }
     for (; i < data_response_initial_output.size(); i += 2) {
         // type is now in its undefined state because of type++ at the end.
         vertices.emplace_back(data_response_initial_output[i], data_response_initial_output[i + 1],
-                              static_cast<NeuronType>(type));
+                              static_cast<Neuron_Type>(type));
+    }
+}
+template <typename FP_Type, typename Neuron_Type, typename index_type>
+template <index_type array_size, bool use_given_data, typename vect>
+inline void NeuralNetwork::Graph<FP_Type, Neuron_Type, index_type>::add_vertices(
+    const vect data_response_initial_output, const std::array<index_type, array_size>& type_count,
+    const FP_Type default_activation_response, const FP_Type default_initial_output) {
+    FP_Type act_resp, ini_outp;
+    if (!use_given_data) {
+        act_resp = default_activation_response;
+        ini_outp = default_initial_output;
+    }
+    index_type i = 0;
+    for (Neuron_Type type = 0; type < Neuron_Type::UNDEFINED; type++) {
+        // By iterating through from 0 to undefined, we are guaranteed to push all
+        // types contiguously and ordered.
+        for (index_type count = 0; count < type_count[type]; count++, i++) {
+            if (use_given_data) {
+                if (i < data_response_initial_output.size()) {
+                    // update these values so they match data_response_initial_value.
+                    act_resp = data_response_initial_output[i];
+                    ini_outp = data_response_initial_output[i += 1];
+                } else if (i == data_response_initial_output.size() ||
+                           i == data_response_initial_output.size() + 1) {
+                    // use default value if data_response_initial_output is not defined
+                    // sufficiently for all types.
+                    act_resp = default_activation_response;
+                    ini_outp = default_initial_output;
+                }
+            }
+            vertices.emplace_back(act_resp, ini_outp, type);
+        }
+    }
+    if (use_given_data) {
+        // Add undefined states that are declared from data_response_initial_output.
+        for (; i < data_response_initial_output.size(); i++) {
+            vertices.emplace_back(data_response_initial_output[i],
+                                  data_response_initial_output[i += 1], Neuron_Type::UNDEFINED);
+        }
     }
 }
 template <typename FP_Type, typename NeuronType, typename index_type>
@@ -347,11 +403,14 @@ inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::EdgeCreate::a
 
 template <typename FP_Type, typename NeuronType, typename index_type>
 void Graph<FP_Type, NeuronType, index_type>::connect_vertices(
-    VertexList& vertices, const std::vector<EdgeCreate>& instructions,
-    std::vector<Edge>& all_edges) {
-    all_edges.reserve(instructions.size());
+    VertexList& vertices, const std::vector<EdgeCreate>& instructions, std::vector<Edge>& all_edges,
+    const index_type instrs_offset) {
+    if (instrs_offset >= instructions.size()) {
+        return;
+    }
+    all_edges.reserve(all_edges.size() + instructions.size() - instrs_offset);
     CAN_BE_OPTIMIZED_MSG("Can possibly be made paralellized.");
-    for (int i = 0; i < instructions.size(); i++) {
+    for (index_type i = instrs_offset; i < instructions.size(); i++) {
         instructions[i].apply_vertex_list(vertices, all_edges);
     }
 }
@@ -362,7 +421,7 @@ inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::connect_verti
     all_edges.reserve(instructions.size());
     CAN_BE_OPTIMIZED_MSG("Can possibly be made paralellized.");
     for (int i = 0; i < instructions.size(); i++) {
-        instructions[i].apply_vertex_list(vertices, all_edges,lookup);
+        instructions[i].apply_vertex_list(vertices, all_edges, lookup);
     }
 }
 template <typename FP_Type, typename NeuronType, typename index_type>
@@ -383,7 +442,16 @@ void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::rearrange(
         rearrange_knew_counts(vertices, count, lookup);
     }
 }
-
+// template <typename FP_Type, typename Neuron_Type, typename Index_Type>
+// Index_Type NeuralNetwork::Graph<FP_Type, Neuron_Type, Index_Type>::start_idx_of(
+//    const Neuron_Type type, const VertexList& vertices) {
+//    for (Index_Type i = 0; i < _V_LIST_FIELD_(vertices, size()); i++) {
+//        if (_V_LIST_FIELD_(vertices[i],neuron_type) == type) {
+//            return i;
+//        }
+//    }
+//    return -1;
+//}
 template <typename FP_Type, typename NeuronType, typename index_type>
 void Graph<FP_Type, NeuronType, index_type>::append_str(std::string& str2append) const {
 #ifdef RELEASE_DEFINED

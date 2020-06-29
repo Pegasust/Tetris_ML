@@ -13,21 +13,25 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
     std::cout << "Username: " << username << std::endl;
     VERBOSITY_LOG("Username: " + username);
     // VERBOSITY_LOG("Successfully create a new log");
-    bool renderer_initialized = false;
+    volatile bool renderer_initialized = false;
+    TetrisAPI::TetrisExtendedEngine game(this->rng);
     do {
-
-        TetrisAPI::TetrisExtendedEngine game(this->rng);
+        if (game.lost()) {
+            VERBOSITY_LOG("\nResetting the game instance.");
+            game.reset(this->rng);
+        }
         videocore.pause_displaying();
         std::cout << "RNG: " << Common::decimal2hex_str(this->rng) << std::endl;
         VERBOSITY_LOG("RNG: " + Common::decimal2hex_str(this->rng));
         std::cout << "Press any button to start playing" << std::endl;
         Common::KeyID key = Common::SynchronousKeyboard::get_key();
+        VERBOSITY_LOG("User pressed " << key);
         videocore.resume_displaying();
         // game_clock = Common::GameClock::Instance();
         // This thread draw renderer buffer to end-user client.
         videocore.start_async_display(&videocore, game.engine);
         std::thread r_upd_th; // Render update thread
-        bool physics_updated = true;
+        volatile bool physics_updated = true;
         if (!renderer_initialized) {
             Renderer::MainRenderer::try_initialize(game.engine, videocore.display_data);
             renderer_initialized = true;
@@ -65,19 +69,9 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
                 return;
             }
 #endif
-            // auto timepoint = Common::GameClock::Clock::now();
             unsigned char n_burned;
             unsigned char y_burned[4];
-            // auto diff = game_clock.nano_time_diff();
-            // Transform time_diff to seconds
             double time_diff;
-            //=std::min(MAX_UPDATE_INTERVAL,
-            // static_cast<double>(diff.count()) /
-            // static_cast<double>(std::chrono::nanoseconds::period::den));
-
-            // double time_diff = game_clock.fp_diff_seconds(timepoint);
-            // auto last_update = game_clock.reset();
-            // game.update(input, y_burned, n_burned, true, time_diff);
             bool piece_staticized;
             ::Tetris::TetrisBody controlling_body;
             game.update(input, piece_staticized, controlling_body, y_burned, n_burned, time_diff);
@@ -98,8 +92,10 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         }
         // On game lost
         VERBOSITY_LOG("Game lost.");
+        VERBOSITY_LOG("Total moves recorded: " << game.input_collection.collection.size());
         this->rng = game.current_seed().get_value();
         videocore.stop_displaying();
+        // Find the next path to save this replay
         std::string dummy_path = Common::PathConsts::RELATIVE_MOVE_ROOT;
         VERBOSITY_LOG(
             "Attempting to create move directory if not existed. Dir: " _PP_RELATIVE_MOVE_ROOT_);
@@ -109,10 +105,14 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         std::string path;
         Common::Paths::next_available_filename(dummy_path, path);
         VERBOSITY_LOG("Saving replay path at " + path);
+        // Create this new file
         std::fstream replay_file = Common::Paths::create_file(path);
         CAN_BE_OPTIMIZED_MSG("Getting string here might take up quite some memory if not flushed");
+        // Serialize this replay into string
         std::string serialize_str;
-        TetrisReplay::serialize_replay(serialize_str, game.initial_seed, game.input_collection);
+        // Do not retain the moves because user is lost.
+        TetrisReplay::serialize_replay<false>(serialize_str, game.initial_seed,
+                                              game.input_collection);
         replay_file << serialize_str;
         VERBOSITY_LOG("Finished writing to file.");
         VERBOSITY_LOG("Closing file.");

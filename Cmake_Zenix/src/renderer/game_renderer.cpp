@@ -438,6 +438,7 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> comi
         // TODO: Constant field. Can be optimized by doing once in try_initialize.
         // Make first line to display UPCOMING
         int render_i = RendererExt::xy2i<int>(render_x, render_y);
+        // Get the string length of "UPCOMING" without null terminator.
         static constexpr int RENDER_WIDTH = (sizeof("UPCOMING") / sizeof(char)) - 1;
 
         LAZY_DO_ONCE(out.render_data.replace(render_i, RENDER_WIDTH, "UPCOMING");)

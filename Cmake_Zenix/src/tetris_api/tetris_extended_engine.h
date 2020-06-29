@@ -30,8 +30,11 @@ public:
     Common::GameClock::Clock::time_point last_update;
     /*initialize with a random seed*/
     TetrisExtendedEngine();
-    /*initialize with a given seed*/
-    TetrisExtendedEngine(unsigned long long seed);
+    /*initialize with a given seed.
+    input_reserve is only reserve for future usage and serves no purpose
+    with MSVC build.
+    */
+    TetrisExtendedEngine(unsigned long long seed, unsigned int input_reserve = (1<<16));
     inline bool& lost() {
         return engine.lost;
     }
