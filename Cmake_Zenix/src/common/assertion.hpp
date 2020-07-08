@@ -3,7 +3,9 @@
 #include <cassert>
 
 namespace Common {
-#define SILENT_MSG
+// Do not actually crash the program if assertion fails in debug, and silent (do not do
+// any check) if in release.
+#define SILENT_MSG 
 
 #ifndef ASSERT
 #define ASSERT(expr, msg) assert(expr&& msg)

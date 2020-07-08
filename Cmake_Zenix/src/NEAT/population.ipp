@@ -6,11 +6,11 @@ FP_Type NEAT::Species<FP_Type, Neuron_Type, Index_Type>::assign_shared_fitness(
     ASSERT(this->organisms.size() > 0, "Attempting to adjust shared fitness on empty spcies");
     FP_Type fitness_coef = 1.0;
     if (this->gens_total_age < params.gens_young_threshold) {
-        // young
+        // boost fitness coef if young
         fitness_coef *= params.young_fitness_coef;
     }
     if (this->gens_total_age > params.gens_old_threshold) {
-        // old
+        // boost fitness coef if old
         fitness_coef *= params.old_fitness_coef;
     }
     if (this->gens_no_improve > params.gens_no_improve_threshold) {

@@ -5,6 +5,7 @@
  * It is basically the decision-maker and the sensor-receiver of the algorithm
  */
 #include <vector>
+#include <limits>
 #include "../neural_network_core/neural_network_core.hpp"
 #include "innovation.hpp"
 #include "neural_info.hpp"
@@ -106,6 +107,7 @@ public:
         Index_Type total = from_input + from_bias + from_hidden + from_output;
         return total;
     }
+
     // PhenotypeTemplate(const NewNeurons& neurons, const NewLinks& links)
     //PhenotypeTemplate(TypeEndArray& type_end, const bool synchronize = false)
     //    : graph(), io_sync(synchronize), type_end(type_end), inputs_out(), outputs_out(),
@@ -119,20 +121,34 @@ public:
     //        graph.output_addresses(outputs_out);
     //    }
     //}
-    //// Notice, the two given two indices are from graph_node, and not the Akashic records.
-    //// This method would require the genotype to build a sort of lookup map to pass in
-    //// the correct indices. Also, might want to store this, just in case the neural network
-    //// sneakily expands in side and messes up with
-    //template <bool add_to_graph = true>
-    //NewLink add_link(const Index_Type graph_node_from_idx, const Index_Type graph_node_to_idx,
-    //                 const FP_Type weight = static_cast<FP_Type>(0)) {
-    //    NewLink edge_create(graph_node_from_idx, graph_node_to_idx, weight);
-    //    if (add_to_graph) {
-    //        edge_create.apply_vertex_list(graph.)
-    //    }
-    //    return edge_create;
-    //}
 
+    // Returns the index of the newly created edge/link of graph.
+    // Notice, the two given two indices are from graph_node, and not the Akashic records.
+    // This method would require the genotype to build a sort of lookup map to pass in
+    // the correct indices. Also, just in case the neural network sneakily expands in size
+    // and messes up with iterators/objects, we have an index lookup to preserve offset.
+    inline Index_Type add_link(const Index_Type graph_idx_from, const Index_Type graph_idx_to,
+                     const FP_Type weight = static_cast<FP_Type>(0)) {
+        return this->graph.make_edge(graph_idx_from, graph_idx_to, weight);
+    }
+    // Returns index of the newly created vertex/neuron of the graph.
+    inline Index_Type add_neuron(const Neuron_Type neuron_type = Neuron_Type::HIDDEN,
+        const FP_Type actvn_resp = static_cast<FP_Type>(1),
+        const FP_Type init_out = static_cast<FP_Type>(0)) {
+        return this->graph.make_vertex_s_idx(type_end, neuron_type, actvn_resp, init_out);
+    }
+
+    // Returns the edge/link being disabled.
+    inline NLink& disable_link(const Index_Type link_idx) {
+        NLink retval = this->graph.get_edge(link_idx);
+        this->graph.disable_edge(retval);
+        //ASSERT(retval.weight * 1.0 == 0, "disabled link does not give 0 after multiplication");
+        //ASSERT(retval.weight * 0.0 == 0, "disabled link does not give 0 after multiplication");
+        //ASSERT(retval.weight * -1.0 == 0, "disabled link does not give 0 after multiplication");
+        //ASSERT(retval.weight * std::numeric_limits<FP_Type>::max() == 0, "disabled link does not give 0 after max multiplication");
+        //ASSERT(retval.weight * std::numeric_limits<FP_Type>::min() == 0, "disabled link does not give 0 after min multiplication");
+        return retval;
+    }
 
 };
 

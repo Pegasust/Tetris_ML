@@ -36,11 +36,11 @@ public:
         const Vertex* out; // Should have used index.
         // The weight of this edge
         FP_Type weight;
-        // Whether this link is recurrent.
+        // Whether this link is disabled.
         // IS THIS NEEDED? We can get info from last_output from Vertex.
-        bool is_recurrent;
-        Edge(const Vertex* in, const Vertex* out, FP_Type weight, bool recurrent = false)
-            : in(in), out(out), weight(weight), is_recurrent(recurrent) {
+        bool is_disabled;
+        Edge(const Vertex* in, const Vertex* out, FP_Type weight, bool disabled = false)
+            : in(in), out(out), weight(weight), is_disabled(disabled) {
 #ifndef NEURAL_NDEBUG
             std::cout << "New Edge created" << std::endl;
 #endif
@@ -55,7 +55,7 @@ public:
     // and holds activation_response and its last output.
     // Calculations to get output out of a graph should be made on a Vertex,
     // and auxilary data structure should store Vertices so that the calculation
-    // will not run into self-loop and recurrent.
+    // will not run into self-loop and disabled.
     class Vertex {
     public:
         using ArrowList = std::vector<Edge*>;
@@ -107,7 +107,7 @@ public:
     */
     // template <typename index_type = int>
     static void create_link(VertexList& v_list, std::vector<Edge>& out_edge, index_type in_Idx,
-                            index_type out_idx, FP_Type weight, bool recurrent = false);
+                            index_type out_idx, FP_Type weight, bool disabled = false);
     /*
      * The structure that contains instruction for creating one edge on a created
      * VertexList that supports indexing.
@@ -119,13 +119,13 @@ public:
         index_type out_idx;
         // The weight of the edge being created
         FP_Type weight;
-        // Whether this link is recurrent.
+        // Whether this link is disabled.
         // Not sure if this is needed.
-        bool is_recurrent;
+        bool is_disabled;
 
     public:
-        EdgeCreate(index_type in_idx, index_type out_idx, FP_Type weight, bool recurrent = false)
-            : in_idx(in_idx), out_idx(out_idx), weight(weight), is_recurrent(recurrent){};
+        EdgeCreate(index_type in_idx, index_type out_idx, FP_Type weight, bool disabled = false)
+            : in_idx(in_idx), out_idx(out_idx), weight(weight), is_disabled(disabled){};
 
         /*
          * Apply this instruction on the given VertexList. This creates a new Edge, which
@@ -577,7 +577,7 @@ using GraphD = Graph<double, NeuronType>;
 #undef _A_LIST_FIELD_
 // ============================= EXAMPLE USAGE ==============================
 /*
-bool graph_safe_ctor_recurrent_self_loop_test() {
+bool graph_safe_ctor_disabled_self_loop_test() {
     std::vector<GraphD::VertexCreate> vertices{
         GraphD::VertexCreate(NeuronType::INPUT), GraphD::VertexCreate(NeuronType::INPUT),
         GraphD::VertexCreate(NeuronType::INPUT), GraphD::VertexCreate(NeuronType::OUTPUT),
@@ -588,14 +588,14 @@ bool graph_safe_ctor_recurrent_self_loop_test() {
     double node5_out = 0;
     double node4_out = 0;
 
-    // recurrent:
-    std::vector<GraphD::EdgeCreate> recurrent_edges{{0, 3, 0.7}, {2, 3, 0.5}, {1, 4, 0.2},
+    // disabled:
+    std::vector<GraphD::EdgeCreate> disabled_edges{{0, 3, 0.7}, {2, 3, 0.5}, {1, 4, 0.2},
                                                     {4, 3, 0.4}, {0, 4, 0.6}, {3, 4, 0.6}};
-    GraphD recurrent_graph(vertices, recurrent_edges);
+    GraphD disabled_graph(vertices, disabled_edges);
     for (int i = 0; i < iterations; i++) {
         output.clear();
         std::cout << "\nIteration: " << i << std::endl;
-        recurrent_graph.calculate_outputs(inputs, output);
+        disabled_graph.calculate_outputs(inputs, output);
         node5_out = CZMath::sigmoid(node4_out * 0.6 + inputs[0] * 0.6 + inputs[1] * 0.2);
         node4_out = CZMath::sigmoid((node5_out * 0.4) + (inputs[0] * 0.7) + (inputs[2] * 0.5));
         TEST_EQ(node4_out, output[0]);

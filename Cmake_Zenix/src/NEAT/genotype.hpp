@@ -18,6 +18,7 @@ namespace NEAT {
 // The collection that the genotype uses to store genomic encoding. The key type is innovation
 // number.
 template <typename Index_Type = int, typename FP_Type = double>
+// Maps innov num to InnovLink
 using InnovationChain = std::map<Index_Type, InnovationLink<Index_Type, FP_Type>>;
 /* emplace example:
  * InnovationChain<> ic;
@@ -134,8 +135,9 @@ public:
     Index_Type unconnected_edges() const {
         return phenotype.possible_edges() - phenotype.graph.edges_count() - innovs_disabled;
     }
-    // *this is parent 1, other is parent 2. Returns the discourse between the two
-    FP_Type gene_compatibility(const Genotype& other, FP_Type disjoint_coef = 1,
+    // *this is parent 1, other is parent 2. Returns the discourse between the two.
+    // Min = 0.0; Max = FP_Type.Max
+    FP_Type gene_diff_score(const Genotype& other, FP_Type disjoint_coef = 1,
                                FP_Type excess_coef = 1, const FP_Type weight_coef = 1);
 };
 } // namespace NEAT

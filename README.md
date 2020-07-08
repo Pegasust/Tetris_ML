@@ -1,6 +1,20 @@
 # Tetris_ML
+
+## Description 
 Tetris project that highly ties with ML for this game
 
-I am imagining a project that uses OpenCL for accelerated learning with implementation of NEAT or ANN for machine learning program.
+## Vision
 
-Dec. 13, 2019: I am now more interested in optimizing parallel computing and real-time computing (the user-game aspect) than in implementing AI.
+- Tetris game rule: Classic RNG, bagged RNG, blind Tetris,...
+
+- Renderer: Text/console renderer, video renderer (OpenGL/Vulkan/Pixel lib)
+
+- Automated playing: Machine Learning (NEAT, LSTM,...)
+
+- Main platform: Windows 10 (x86-64)
+
+- Multi-platform (by priority in implementation): Linux (ARM 32-bit) [I have RPi 2b], Linux, Mac
+
+## Purpose
+
+A learning project to develop style in writing in C++ and to apply concepts from my CS classes.

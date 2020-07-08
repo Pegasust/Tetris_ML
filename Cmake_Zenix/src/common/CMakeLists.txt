@@ -19,6 +19,9 @@ string_manip.cpp
 string_manip.h
 common.hpp
 path_consts.hpp
+bi_map.cpp
+bi_map.hpp
+bi_map.ipp
 )
 
 add_executable(keyboard_test

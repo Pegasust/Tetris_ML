@@ -2,6 +2,7 @@
 #include <array>
 #include "../common/assertion.hpp"
 #include "genotype.hpp"
+#include "neural_info.hpp"
 namespace NEAT {
 // ===================================== INNOVATION_DATABASE =====================================
 template <typename Index_Type = int, typename FP_Type = double, typename Neuron_Type = NeuronType>

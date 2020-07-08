@@ -41,11 +41,11 @@ TEST_MSG(lhs == rhs, #lhs "(" <<lhs<< ") does not equal " #rhs "(" <<rhs<<") at 
 TEST_MSG(!(lhs == rhs), #lhs "(" << lhs << ") does not not equal(!(lhs==rhs)) " #rhs "(" << rhs << ") at line " << __LINE__)
 #define TEST_INITIALIZE bool __test_passed_42__ = false; std::vector<bool> __results_42__;
 #define DO_TEST(test_func)                                                                         \
-    std::cout << "\n\n\n\n\n" << #test_func << ":" << std::endl;                                   \
+    std::cout << "===================\nTest " << #test_func << ":" << std::endl;                                   \
     __test_passed_42__ = ##test_func(); __results_42__.push_back(__test_passed_42__);                                                                  \
-    std::cout << #test_func << (__test_passed_42__ ? " passed" : " failed") << std::endl;
+    std::cout << "===================\n"<< #test_func << (__test_passed_42__ ? " passed" : " failed") << std::endl;
 
-#define TEST_RESULTS bool __all_passed__ = true; std::cout <<"\n\n\n\n\n" << std::endl;\
+#define TEST_RESULTS bool __all_passed__ = true; std::cout <<"===================\nTest result:" << std::endl;\
 for (int i = 0; i < __results_42__.size(); i++) {                                                     \
 if(!__results_42__[i]){__all_passed__ = false; std::cout<< "Test " << i << " failed." << std::endl;}\
     }\

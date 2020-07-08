@@ -260,7 +260,7 @@ inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::create_link(
     // The following code couldn't be used because edge destructs itself upon
     // being out of scope.
     // Graph<FP_Type, NeuronType>::Edge edge(&v_list[in_idx], &v_list[out_idx], weight,
-    // is_recurrent); all_edges.push_back(edge);
+    // is_disabled); all_edges.push_back(edge);
     //_V_LIST_FIELD_(v_list[in_idx], outwards_arrows).push_back(&edge);
     //_V_LIST_FIELD_(v_list[out_idx], inwards_arrows).push_back(&edge);
 
@@ -290,7 +290,7 @@ void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::init(
 template <typename FP_Type, typename NeuronType, typename index_type>
 inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::EdgeCreate::apply_vertex_list(
     VertexList& v_list, std::vector<Edge>& all_edges, const std::vector<index_type>& lookup) const {
-    create_link(v_list, all_edges, lookup[in_idx], lookup[out_idx], weight, is_recurrent);
+    create_link(v_list, all_edges, lookup[in_idx], lookup[out_idx], weight, is_disabled);
 }
 template <typename FP_Type, typename NeuronType, typename index_type>
 inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::add_vertices(
@@ -398,7 +398,7 @@ inline void NeuralNetwork::Graph<FP_Type, Neuron_Type, index_type>::add_vertices
 template <typename FP_Type, typename NeuronType, typename index_type>
 inline void NeuralNetwork::Graph<FP_Type, NeuronType, index_type>::EdgeCreate::apply_vertex_list(
     VertexList& v_list, std::vector<Edge>& all_edges) const {
-    create_link(v_list, all_edges, in_idx, out_idx, weight, is_recurrent);
+    create_link(v_list, all_edges, in_idx, out_idx, weight, is_disabled);
 }
 
 template <typename FP_Type, typename NeuronType, typename index_type>

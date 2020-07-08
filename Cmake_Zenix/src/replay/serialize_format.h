@@ -112,7 +112,7 @@ inline void deserialize_replay(RandomSeed& out_initial_seed,
                                     std::istringstream(string));
 }
 /*
- * Takes in input stream from serialized_stream. This does not close the stream.
+ * Takes in input stream from serialized_stream. This, by default, does not close stream.
 
  * Params:
  *  out_initial_seed: the initial seed of the game

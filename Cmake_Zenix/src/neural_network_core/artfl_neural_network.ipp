@@ -24,7 +24,7 @@ void VolatileGraph<FP_Type, NeuronType //, Neuron_Enum
         .append(")]");
 }
 template <typename FP_Type, typename Neuron_Type, typename Index_Type>
-template <typename Vect_Resp, typename Vect_Out, bool has_resp, bool has_ini_out>
+template <typename Vect_Resp, typename Vect_Out, bool reserve, bool has_resp, bool has_ini_out>
 void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::make_vertices(
     const TypeEndArray& type_end, const Vect_Resp& data_response, const Vect_Out& data_ini_out,
     const FP_Type default_activation_response, const FP_Type default_initial_output) {
@@ -35,6 +35,10 @@ void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::make_vertices(
     }
     if (!has_ini_out) {
         ini_outp = default_initial_output;
+    }
+    if (reserve) {
+        // Reserve to store enough neurons in this add
+        this->vertices.reserve(this->vertices_count() + type_end[type_end.size() - 1]);
     }
     Index_Type i = 0;
     for (Index_Type type = 0; type < type_end.size(); type++) {
@@ -48,15 +52,40 @@ void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::make_vertices(
             if (has_ini_out) {
                 ini_outp = (i < data_ini_out.size() ? data_ini_out[i] : default_initial_output);
             }
-            //const FP_Type act_resp = (has_resp && i < data_response.size())
+            // const FP_Type act_resp = (has_resp && i < data_response.size())
             //                             ? data_response[i]
             //                             : default_activation_response;
-            //const FP_Type ini_outp =
-            //    (has_ini_out && i < data_ini_out.size()) ? data_ini_out[i] : default_initial_output;
+            // const FP_Type ini_outp =
+            //    (has_ini_out && i < data_ini_out.size()) ? data_ini_out[i] :
+            //    default_initial_output;
             make_vertex(NT_(type), act_resp, ini_outp);
         }
     }
 }
+
+template <typename FP_Type, typename Neuron_Type, typename Index_Type>
+Index_Type VolatileGraph<FP_Type, Neuron_Type, Index_Type>::disable_edge(Edge& edge) {
+    Index_Type enabled = !edge.disabled();
+    if (enabled) {
+        edge.toggle_disabled();
+    }
+    return 1;
+}
+
+template <typename FP_Type, typename Neuron_Type, typename Index_Type>
+Index_Type VolatileGraph<FP_Type, Neuron_Type, Index_Type>::enable_edge(Edge& edge) {
+    Index_Type disabled = edge.disabled();
+    if (disabled) {
+        edge.toggle_disabled();
+    }
+    return 1;
+}
+
+template <typename FP_Type, typename Neuron_Type, typename Index_Type>
+bool VolatileGraph<FP_Type, Neuron_Type, Index_Type>::toggle_edge(Edge& edge) {
+    return edge.toggle_disabled();
+}
+
 template <typename FP_Type, typename Neuron_Type, typename Index_Type>
 void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::clear_vertex_outputs(const bool set_bias_1) {
     for (Index_Type i = 0; i < vertices_count(); i++) {
@@ -81,6 +110,9 @@ inline void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::calculate_this_outp
         // weighted output = output of vertex of the incoming arrow * weight of
         // incoming arrow
         const Edge this_edge = get_edge(in_arrows[arrow_idx]);
+        if (this_edge.disabled()) {
+            continue;
+        }
         const Vertex last_vert = get_vertex(this_edge.in_vertex_indx);
         // The output of the vertex of the incoming arrow.
         const FP_Type& last_out = last_vert.last_output;
@@ -220,8 +252,8 @@ void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::append_str(std::string& st
             str2append.append(" ");
             // The weight of this inward arrow
             get_edge(in_arrows[arrow_idx]).append_str(str2append);
-                // Add this to sum
-                str2append.append("\n");
+            // Add this to sum
+            str2append.append("\n");
         }
         // if we want to extract output and the current vertex is the output node,
         // append this output to @param outputs.

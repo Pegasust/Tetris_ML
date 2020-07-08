@@ -3,7 +3,6 @@
 
 //#include "../../test_utils/test_utils.hpp"
 
-
 bool sample_code() {
     const char* hello_str = "__kernel void hello(void) { }";
     cl_int err = CL_SUCCESS;
@@ -16,6 +15,10 @@ bool sample_code() {
             return -1;
         }
         std::cout << "Found " << platforms.size() << " available platforms." << std::endl;
+
+        for (int i = 0; i < platforms.size(); i++) {
+            std::cout << i << ". " << platforms[i].getInfo<CL_PLATFORM_NAME>() <<std::endl;
+        }
         cl_context_properties properties[] = {CL_CONTEXT_PLATFORM,
                                               (cl_context_properties)(platforms[0](), 0)};
         // First device of CPU?
@@ -68,8 +71,9 @@ bool sample_compute() {
             exit(1);
         }
 
-        // use device[1] because that's a GPU; device[0] is the CPU
-        cl::Device default_device = all_devices[1];
+        //// use device[1] because that's a GPU; device[0] is the CPU;
+        // false, platform is GPU or CPU, device should be 0.
+        cl::Device default_device = all_devices[0];
         std::cout << "Using device: " << default_device.getInfo<CL_DEVICE_NAME>() << "\n";
 
         // a context is like a "runtime link" to the device and platform;
@@ -141,8 +145,8 @@ bool sample_compute() {
         simple_add_kernel.setArg(1, buffer_B);
         simple_add_kernel.setArg(2, buffer_C);
         simple_add_kernel.setArg(3, buffer_N);
-        queue.enqueueNDRangeKernel(simple_add_kernel, cl::NullRange,
-                                                              cl::NDRange(10), cl::NullRange);
+        queue.enqueueNDRangeKernel(simple_add_kernel, cl::NullRange, cl::NDRange(10),
+                                   cl::NullRange);
         queue.finish();
 
         // std::vector<int> C(n);

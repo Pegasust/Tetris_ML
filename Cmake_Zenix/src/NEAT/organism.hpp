@@ -7,6 +7,8 @@
 
  * In this file, you can find the calculations for DNA difference based on both the genotype
  * and the phenotype.
+
+ * TODO: make a version that keep track of the history of fitness.
  */
 #include "genotype.hpp"
 namespace NEAT {
@@ -44,6 +46,9 @@ public:
             return sum_fitness;
         }
     }
+
+    // Resets the records of this organism to be "replaced" by another organism with
+    // different params.
     inline void reset() {
         fitness_epochs = 0;
         // Let fitnesses be undefined behavior.
@@ -55,11 +60,15 @@ public:
     FP_Type get_fitness() {
         return fitness;
     }
+    // Functor that returns whether left org is less than right org in terms of shared
+    // fitness.
     struct less_than_shared {
         inline bool operator()(const T_Organism& left, const T_Organism& right) {
             return left.sharing_fitness < right.sharing_fitness;
         }
     };
+    // Functor that returns whether left org is less than right org in terms of the 
+    // raw fitness score
     struct less_than_raw {
         inline bool operator()(const T_Organism& left, const T_Organism& right) {
             return left.fitness < right.fitness;

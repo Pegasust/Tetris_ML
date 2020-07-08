@@ -7,7 +7,10 @@
 #include <vector>
 #include "../common/assertion.hpp"
 #include "organism.hpp"
+#include "neural_info.hpp"
 namespace NEAT {
+
+// Species should consist of many organisms that will do shared-fitness.
 template <typename FP_Type = double, typename Neuron_Type = NEAT::NeuronType,
           typename Index_Type = int>
 class Species {
@@ -34,7 +37,9 @@ private:
     // Assign shared fitness to each organism in this->organisms. Returns the total shared fitness
     // of this particular species.
     FP_Type assign_shared_fitness(const TParams& params);
-    // sort this by shared fitness by non-descending order (n+1 >= n)
+    // sort this by shared fitness by non-descending order (s_fitness[n+1] >= s_fitness[n]).
+    // This gives this->organisms.begin() the organism with the least shared fitness
+    // and this->organisms.end() the organism with the most shared fitness.
     void sort_by_shared_fitness();
 };
 template<typename FP_Type = double, typename Neuron_Type = NEAT::NeuronType, typename Index_Type = int>

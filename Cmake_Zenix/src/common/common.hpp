@@ -55,6 +55,7 @@
 #include "path_consts.hpp"
 #include "string_manip.h"
 #include "zmath.h"
+#include "bi_map.hpp"
 namespace Common {
 #define Z_NULL_PTR nullptr
 using SynchronousKeyboard = Common::KeyboardListener<false, 0, std::chrono::seconds>;
@@ -159,5 +160,6 @@ using namespace ZMath;
 using namespace GameClock;
 using namespace PathConsts;
 using namespace TemplateArgs;
+using namespace Structs;
 #endif
 } // namespace Common

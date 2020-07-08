@@ -16,9 +16,13 @@ template <typename FP_Type = double, typename Neuron_Type = NeuralNetwork::Neuro
 class VolatileGraph {
 public:
     static constexpr Neuron_Type TYPE_ARRAY_SIZE = Neuron_Type::UNDEFINED;
+    // For vertex2edge or any other retrievals, return the edge going in.
     static constexpr bool ARROW_IN = true;
+    // For vertex2edge or any other retrievals, return the edge going out.
     static constexpr bool ARROW_OUT = false;
+    // For edge2vertex or any other retrievals, return the source vertex.
     static constexpr bool SOURCE_VERTEX = true;
+    // For edge2vertex or any other retrievals, return the destination vertex.
     static constexpr bool DEST_VERTEX = false;
     using TypeEndArray = std::array<Index_Type, TYPE_ARRAY_SIZE>;
     // Cast to FP_Type
@@ -41,11 +45,21 @@ public:
         Index_Type in_vertex_indx;
         // The index in the graph's vertices vector of the outcoming vertex (to)
         Index_Type out_vertex_indx;
+        // is_disabled
+        bool is_disabled;
         inline bool is_recurrent() {
             return in_vertex_indx == out_vertex_indx;
         }
-        Edge(const Index_Type in, const Index_Type out, FP_Type weight)
-            : in_vertex_indx(in), out_vertex_indx(out), weight(weight) {
+        inline bool disabled() {
+            return is_disabled;
+        }
+        // Returns whether this edge is DISABLED AFTER the toggle.
+        inline bool toggle_disabled() {
+            is_disabled = !is_disabled;
+            return is_disabled;
+        }
+        Edge(const Index_Type in, const Index_Type out, FP_Type weight, bool disabled = false)
+            : in_vertex_indx(in), out_vertex_indx(out), weight(weight), is_disabled(disabled) {
 #ifndef NEURAL_NDEBUG
             std::cout << "New Edge create" << std::endl;
 #endif
@@ -176,15 +190,17 @@ private:
             return -1;
         }
     };
+
 public:
-    static inline Index_Type get_vertex_id(Index_Type displacement, const Neuron_Type type, const TypeEndArray& arr) {
+    static inline Index_Type get_vertex_id(Index_Type displacement, const Neuron_Type type,
+                                           const TypeEndArray& arr) {
         if (type == NT_(0)) {
             return displacement;
         }
         return (displacement += arr[type - 1]);
     }
-    static inline TypeEndArray make_end_array(Index_Type inputs=3, Index_Type biases=1,
-                                              Index_Type hiddens=0, Index_Type outputs=1) {
+    static inline TypeEndArray make_end_array(Index_Type inputs = 3, Index_Type biases = 1,
+                                              Index_Type hiddens = 0, Index_Type outputs = 1) {
         TypeEndArray arr;
         arr[Neuron_Type::INPUT] = inputs;
         arr[Neuron_Type::BIAS] = biases;
@@ -225,20 +241,53 @@ public:
     // Creates a new vertex, returns the iterator that contains the newly added element.
     // Params:
     // * loc_iter: the location iterator to the point that we want to insert a vertex to. This
-    // location
-    //           should be in the right position so that it conforms to the declared order of
-    //           Neuron_Type and all neurons of same types are stored contiguously.
+    // location should be in the right position so that it conforms to the declared order of
+    // Neuron_Type and all neurons of same types are stored contiguously.
+    // * neuron_type: the type of this vertex
+    // * activaiton_response: the activation response parameter of this vertex. [Default: 1.0]
+    // * initial_output: the initial output of this vertex. Setting this value to non-zero
+    // effectively emulates "memory from past life". [Default: 0.0 (no memory)]
+    inline typename std::vector<Vertex>::iterator make_vertex_s(
+        typename std::vector<Vertex>::const_iterator loc_iter, const Neuron_Type neuron_type,
+        const FP_Type actvn_resp = FP_(1), const FP_Type initial_output = FP_(0)) {
+        return vertices.emplace(loc_iter, neuron_type, actvn_resp, initial_output);
+    }
+    
+    // Creates a new vertex, returns the iterator that contains the newly added element.
+    // Params:
+    // * type_end: the TypeEndArray of for this graph
     // * neuron_type: the type of this vertex
     // * activaiton_response: the activation response parameter of this vertex. [Default: 1.0]
     // * initial_output: the initial output of this vertex. Setting this value to non-zero
     // effectively
     //              emulates "memory from past life". [Default: 0.0 (no memory)]
-    inline typename std::vector<Vertex>::iterator make_vertex_s(typename std::vector<Vertex>::const_iterator loc_iter,
-                                                       const Neuron_Type neuron_type,
-                                                       const FP_Type actvn_resp = FP_(1),
-                                                       const FP_Type initial_output = FP_(0)) {
-        return vertices.emplace(loc_iter, neuron_type, actvn_resp, initial_output);
+    inline typename std::vector<Vertex>::iterator make_vertex_s(const TypeEndArray& type_end,
+        const Neuron_Type neuron_type, const FP_Type actvn_resp = FP_(1),
+        const FP_Type initial_output = FP_(0)) {
+        Index_Type type_end_idx = type_end[neuron_type];
+        typename std::vector<Vertex>::const_iterator loc_iter = std::next(get_vertices().begin(),
+           type_end_idx);
+        return make_vertex_s(loc_iter, neuron_type, actvn_resp, initial_output);
     }
+
+    // Creates a new vertex, returns the displacement from the first vertex (idx).
+    // Params:
+    // * type_end: the TypeEndArray of for this graph
+    // * neuron_type: the type of this vertex
+    // * activaiton_response: the activation response parameter of this vertex. [Default: 1.0]
+    // * initial_output: the initial output of this vertex. Setting this value to non-zero
+    // effectively
+    //              emulates "memory from past life". [Default: 0.0 (no memory)]
+    inline Index_Type make_vertex_s_idx(
+        const TypeEndArray& type_end, const Neuron_Type neuron_type,
+        const FP_Type actvn_resp = FP_(1), const FP_Type initial_output = FP_(0)) {
+        Index_Type type_end_idx = type_end[neuron_type];
+        typename std::vector<Vertex>::const_iterator loc_iter =
+            std::next(get_vertices().begin(), type_end_idx);
+        make_vertex_s(loc_iter, neuron_type, actvn_resp, initial_output);
+        return type_end_idx;
+    }
+
     // Initializes vertices based on type_end.
     // Params:
     // * type_end: array that conforms to (type_end[i] = type_end[i-1] + num_neurons_type_i),
@@ -252,7 +301,7 @@ public:
     // * default_initial_output: the default initial output to use if data_ini_out is NO_ARGS or out
     // of size. Template Params: NONE, do not attempt to pass in any template argument, just let the
     // compiler deduct types.
-    template <typename Vect_Resp, typename Vect_Out,
+    template <typename Vect_Resp, typename Vect_Out, bool reserve = true,
               bool has_resp = std::is_same<Vect_Resp, std::vector<FP_Type>>::value,
               bool has_ini_out = std::is_same<Vect_Out, std::vector<FP_Type>>::value>
     void make_vertices(const TypeEndArray& type_end, const Vect_Resp& data_response,
@@ -267,16 +316,32 @@ public:
     // * default_activation_response: the default activition response to use
     // * default_initial_output: the default initial output to use
     inline void make_vertices(const TypeEndArray& type_end,
-                         const FP_Type default_activation_response = FP_(1),
-                         const FP_Type default_initial_output = FP_(0)) {
-        make_vertices(type_end, Common::TemplateArgs::no_args<>(), Common::TemplateArgs::no_args<>(),
-                      default_activation_response, default_initial_output);
+                              const FP_Type default_activation_response = FP_(1),
+                              const FP_Type default_initial_output = FP_(0)) {
+        make_vertices(type_end, Common::TemplateArgs::no_args<>(),
+                      Common::TemplateArgs::no_args<>(), default_activation_response,
+                      default_initial_output);
     }
+    // Marks the edge disabled, the calculation will not take this edge into account.
+    // The edge indices should not be changed as a result of disabled edge, so removing
+    // the edge entirely is not recommended.
+    // Returns 0 if operation ran unsuccessfully, returns non-zero if ran successfully.
+    inline Index_Type disable_edge(Edge& edge);
+
+    // Marks the edge enabled, the calculation will take this edge into account.
+    // The edge indices should not be changed as a result of toggling edge, so re-adding
+    // the edge is not recommended.
+    // Returns 0 if operation ran unsuccessfully, returns non-zero if ran successfully.
+    inline Index_Type enable_edge(Edge& edge);
+
+    // Returns whether the edge is DISABLED AFTER the toggle.
+    inline bool toggle_edge(Edge& edge);
+
     //    =============== SYNC ============= //
     /*
      * If Neuron_Type::INPUT == 0, vert_idx is simply the index from 0 to type_end[0]. If it is
      * not, this method requires the user to call get_vertex_id.
-    */
+     */
     inline void set_input(const Index_Type vert_idx, const FP_Type new_output) {
         get_vertex(vert_idx).last_output = new_output;
     }
@@ -286,8 +351,10 @@ public:
     inline const FP_Type get_output(const Index_Type vert_idx) const {
         return get_vertex(vert_idx).last_output;
     }
-    inline void set_input(const Index_Type input_disp, const FP_Type new_output, const TypeEndArray& type_end) {
-        get_vertex(get_vertex_id(input_disp, Neuron_Type::INPUT, type_end)).last_output = new_output;
+    inline void set_input(const Index_Type input_disp, const FP_Type new_output,
+                          const TypeEndArray& type_end) {
+        get_vertex(get_vertex_id(input_disp, Neuron_Type::INPUT, type_end)).last_output =
+            new_output;
     }
     inline FP_Type get_output(const Index_Type output_disp, const TypeEndArray& type_end) {
         return get_vertex(get_vertex_id(output_disp, Neuron_Type::OUTPUT, type_end)).last_output;
@@ -331,8 +398,7 @@ public:
     // A wrapper for calculate_outputs(NO_ARGS, NO_ARGS). Calling this wrapper function implies
     // synchronized inputs and outputs design.
     inline void update() {
-        calculate_outputs(Common::TemplateArgs::no_args<>(),
-            Common::TemplateArgs::no_args<>());
+        calculate_outputs(Common::TemplateArgs::no_args<>(), Common::TemplateArgs::no_args<>());
     }
     // NOT THREAD-SAFE!
     void append_str(std::string& str2append) const;

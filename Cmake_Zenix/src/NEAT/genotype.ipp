@@ -1,6 +1,6 @@
 #pragma once
 template <typename Index_Type, typename FP_Type, typename Neuron_Type>
-FP_Type NEAT::Genotype<Index_Type, FP_Type, Neuron_Type>::gene_compatibility(
+FP_Type NEAT::Genotype<Index_Type, FP_Type, Neuron_Type>::gene_diff_score(
     const Genotype& other, FP_Type disjoint_coef, FP_Type excess_coef, const FP_Type weight_coef) {
     iterator this_iter = c_link_chain().begin();
     iterator other_iter = other.c_link_chain().begin();
