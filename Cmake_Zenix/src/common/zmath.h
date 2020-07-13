@@ -16,9 +16,10 @@ int round_nearest(float f);
 
 // Fill all bits to the right of msb
 // 0b100 -> 0b111; 0b111 -> 0b111,...
-template<typename Int_Type = int>
+template<typename Int_Type = int, typename std::enable_if<std::is_integral<Int_Type>::value, int>::type = 0>
 Int_Type fill_right_msb(Int_Type val) {
     constexpr std::size_t bit_size = sizeof(Int_Type) * 8;
+    // Unroll maybe
     for (std::size_t i = 1; i != bit_size; i <<= 1) {
         val |= (val >> i);
     }
@@ -55,7 +56,7 @@ constexpr double long_bits_2_double(const std::uint64_t& bits) {
 }
 /*
  * Returns the output of the sigmoid(x/activation_curve).
- * This function returns (0, 1) for all double x, double activation_curve.
+ * This function returns [0, 1] for all double x, double activation_curve.
 */
 template <typename FP_Type>
 FP_Type sigmoid(FP_Type x, FP_Type activation_curve=1.0) {

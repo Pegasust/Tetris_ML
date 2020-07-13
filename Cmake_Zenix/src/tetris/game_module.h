@@ -15,10 +15,10 @@
 #include <ostream>
 namespace Tetris
 {
-	typedef unsigned long long Level;
+	using Level = unsigned long long;
 	constexpr Level MAX_LEVEL = std::numeric_limits<Level>::max();
 	constexpr Level MIN_LEVEL = std::numeric_limits<Level>::min();;
-
+    constexpr bool v = std::numeric_limits<Level>::is_integer;
 	constexpr double v_fall0 = 
 #ifdef V_FALL_0
 		V_FALL_0

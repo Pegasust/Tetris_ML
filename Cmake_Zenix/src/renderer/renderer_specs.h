@@ -14,7 +14,7 @@ constexpr int FRAMETIME_MILLIS =
 #else
 static_cast <int>(1000.0 / 240.0);
 #endif
-//#define USE_TXT_CONSOLE_RENDERER
+// #define USE_TXT_CONSOLE_RENDERER
 #define USE_REVISED_TXT_CONSOLE_RENDERER
 //#define USE_OPENCL_RENDERER //NOT IMPLEMENTED YET
 

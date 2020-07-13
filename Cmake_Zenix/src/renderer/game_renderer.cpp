@@ -1,7 +1,11 @@
 #include "game_renderer.h"
 
+#define BODY_TYPE_2_CHAR_ARRAY_LOOKUP
+
 #if defined(USE_TXT_CONSOLE_RENDERER) || defined(USE_REVISED_TXT_CONSOLE_RENDERER)
-char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body) {
+char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body)
+{
+#ifndef BODY_TYPE_2_CHAR_ARRAY_LOOKUP
     static const std::unordered_map<Tetris::BodyType, char> char_val{
         {Tetris::BLANK, ' '}, {Tetris::I, 'I'}, {Tetris::Z, 'Z'},
         {Tetris::S, 'S'},     {Tetris::O, 'O'}, {Tetris::T, 'T'},
@@ -15,12 +19,33 @@ char Renderer::StdTxtRenderer::body_type_2_char(Tetris::BodyType const& body) {
     //	}
     //#endif
     return char_val.at(body);
+#else
+    static constexpr int body_types = Tetris::BodyType::BORDER + 1;
+    static const std::array<char, body_types> char_val = {
+        ' ', // BLANK
+        'I', 'Z', 'S', 'O', 'T', 'L', 'J',
+        '#' // BORDER
+    };
+#ifdef __READABLE_CODE_REF__
+    if (static_cast<int>(body) >= body_types) {
+        return '?';
+    }
+    return char_val[static_cast<int>(body)];
+#else
+    // Branchless of above
+    const int int_body = static_cast<int>(body);
+    char retval = ('?' * (int_body >= body_types))
+                  + ((int_body < body_types) * char_val[int_body % body_types]);
+    return retval;
+#endif
+#endif
 }
 #endif
 
 #ifdef USE_TXT_CONSOLE_RENDERER
 #ifdef USE_TXT_CONSOLE_RENDERER
-void Renderer::StdTxtRenderer::clear_screen() {
+void Renderer::StdTxtRenderer::clear_screen()
+{
 #ifdef __cplusplus
     std::cout << std::string(100, '\n') << std::endl;
 #else
@@ -33,7 +58,8 @@ void Renderer::StdTxtRenderer::clear_screen() {
 #endif
 
 #if defined(USE_TXT_CONSOLE_RENDERER)
-bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, RenderData& new_data) {
+bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, RenderData& new_data)
+{
     // VERY SIMPLISTIC
     // clear_screen();
     // RenderStrings tetris_field = //tetris_field_string(mod.game_field, mod.controlling_piece);
@@ -42,11 +68,11 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
     // RenderStrings game_info = tetris_game_info(mod);
     // RenderStrings coming_pieces = tetris_upcoming_pieces(mod.coming_pieces);
 
-#define ITERATE(str_vec, empty_str)                                                                \
-    for (std::vector<std::string>::const_iterator it = str_vec.begin(); it != str_vec.end();       \
-         ++it) {                                                                                   \
-        empty_str += *it;                                                                          \
-        empty_str += '\n';                                                                         \
+#define ITERATE(str_vec, empty_str)                                                          \
+    for (std::vector<std::string>::const_iterator it = str_vec.begin(); it != str_vec.end(); \
+         ++it) {                                                                             \
+        empty_str += *it;                                                                    \
+        empty_str += '\n';                                                                   \
     }
 
     // ITERATE(tetris_field, new_str);
@@ -75,40 +101,46 @@ bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, Ren
 #endif // defined(USE_TXT_CONSOLE_RENDERER)
 
 #if defined(USE_TXT_CONSOLE_RENDERER)
-bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod,
-                                          RenderData& overriding_data) {
+bool Renderer::StdTxtRenderer::try_update(
+    Tetris::GameModule const& mod, RenderData& overriding_data)
+{
     return try_initialize(mod, overriding_data);
 }
 #endif // defined(USE_TXT_CONSOLE_RENDERER)
 
-bool Renderer::StdTxtRenderer::try_display(const RenderData& data) {
+bool Renderer::StdTxtRenderer::try_display(const RenderData& data)
+{
     std::cout << data << std::endl;
     return true;
 }
 
-void Renderer::StdTxtRenderer::assign_empty_render_string(Tetris::GameModule const& mod,
-                                                          const bool& shadow, std::string& str) {
-    auto r_d = tetris_array_renderstrings(mod);
+void Renderer::StdTxtRenderer::assign_empty_render_string(
+    Tetris::GameModule const& mod, const bool& shadow, std::string& str)
+{
+    RenderStrsArray r_d;
+    tetris_array_renderstrings(mod, r_d);
     // Merge r_d into str
     for (int i = 0; i < QUEUE_LENGTH; i++) {
         ITERATE(r_d[i], str);
     }
 }
 
-void Renderer::StdTxtRenderer::override_render_string(Tetris::GameModule const& mod,
-                                                      const bool& shadow, std::string& str) {
+void Renderer::StdTxtRenderer::override_render_string(
+    Tetris::GameModule const& mod, const bool& shadow, std::string& str)
+{
     // Impossible to implement with higher efficiency than
     // assign_empty_render_string.
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_string(
-    Tetris::GameModule const& mod) {
+    Tetris::GameModule const& mod)
+{
     const int n_lines = Tetris::TetrisField::HEIGHT;
     const int str_length = Tetris::TetrisField::WIDTH;
     int controlling_x0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.x);
     int controlling_y0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.y);
-    auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field) +
-                       mod.controlling_piece.current_position.y;
+    auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field)
+                       + mod.controlling_piece.current_position.y;
     int shadow_y0 = RoundingExt::position_round<int>(shadow_y0_d);
     RenderStrings rs;
     rs.reserve(n_lines);
@@ -126,19 +158,21 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
             unsigned char index = Tetris::TetrisField::xy2i(j, i);
             Tetris::BodyType this_type = mod.game_field.collider[index];
             // Shadow casting first
-            bool ctr_piece_in_x_range =
-                j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID;
+            bool ctr_piece_in_x_range
+                = j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID;
 
             // check for controlling piece
-            if (this_type == Tetris::BodyType::BLANK && i >= controlling_y0 &&
-                i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT && // within y range
+            if (this_type == Tetris::BodyType::BLANK && i >= controlling_y0
+                && i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT && // within y range
                 ctr_piece_in_x_range) {
-                if (mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(j - controlling_x0,
-                                                                            i - controlling_y0)]) {
+                if (mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(
+                        j - controlling_x0, i - controlling_y0)]) {
                     this_type = mod.controlling_piece.type;
                 }
-            } else if (i >= shadow_y0 && i < shadow_y0 + Tetris::T_COLLIDER_HEIGHT &&
-                       ctr_piece_in_x_range) {
+            }
+            else if (
+                i >= shadow_y0 && i < shadow_y0 + Tetris::T_COLLIDER_HEIGHT
+                && ctr_piece_in_x_range) {
                 if (mod.controlling_piece
                         .collider[Tetris::TetrisBody::xy2i(j - controlling_x0, i - shadow_y0)]) {
                     str += RendererExt::SHADOW_CHAR;
@@ -156,7 +190,8 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_string(
-    Tetris::TetrisField const& game_field, Tetris::TetrisBody const& controlling_piece) {
+    Tetris::TetrisField const& game_field, Tetris::TetrisBody const& controlling_piece)
+{
     const int n_lines = Tetris::TetrisField::HEIGHT;
     const int str_length = Tetris::TetrisField::WIDTH;
     int controlling_x0 = RoundingExt::position_round<int>(controlling_piece.current_position.x);
@@ -177,12 +212,12 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
             unsigned char index = Tetris::TetrisField::xy2i(j, i);
             Tetris::BodyType this_type = game_field.collider[index];
             // check for controlling piece
-            if (this_type == Tetris::BodyType::BLANK && i >= controlling_y0 &&
-                i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT &&                  // within y range
+            if (this_type == Tetris::BodyType::BLANK && i >= controlling_y0
+                && i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT &&               // within y range
                 j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID // within x range
             ) {
-                if (controlling_piece.collider[Tetris::TetrisBody::xy2i(j - controlling_x0,
-                                                                        i - controlling_y0)]) {
+                if (controlling_piece.collider[Tetris::TetrisBody::xy2i(
+                        j - controlling_x0, i - controlling_y0)]) {
                     this_type = controlling_piece.type;
                 }
             }
@@ -197,7 +232,8 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_field_s
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(
-    Tetris::GameModule::ComingPieces coming_pieces) {
+    Tetris::GameModule::ComingPieces coming_pieces)
+{
     RenderStrings rs;
     if (RendererExt::UPCOMING_PIECES::MODE == RendererExt::RenderMode::VERTICAL) {
         rs.reserve(RendererExt::UPCOMING_PIECES::MOD_Y); // the number of lines
@@ -213,7 +249,8 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
                 for (int k = 0; k < Tetris::T_COLLIDER_WID; k++) {
                     if ((Tetris::TetrisBody::colliders[cols_ind])[Tetris::TetrisBody::xy2i(k, j)]) {
                         str += c;
-                    } else {
+                    }
+                    else {
                         str += ' ';
                     }
                 }
@@ -221,7 +258,8 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
             }
             if (i != Tetris::GameModule::N_PIECE_AHEAD - 1) {
                 rs.push_back(""); // one line that separates the pieces
-            } else {
+            }
+            else {
                 rs.push_back("########");
             }
         }
@@ -230,12 +268,14 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcomin
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_upcoming_pieces(
-    Tetris::GameModule const& mod) {
+    Tetris::GameModule const& mod)
+{
     return tetris_upcoming_pieces(mod.coming_pieces);
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_scoreboard(
-    Tetris::GameModule const& mod) {
+    Tetris::GameModule const& mod)
+{
     RenderStrings rs;
     if (RendererExt::SCORE_BOARD::MODE == RendererExt::RenderMode::VERTICAL) {
         rs.reserve(12);
@@ -256,7 +296,8 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_scorebo
 }
 
 Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_info(
-    Tetris::GameModule const& mod) {
+    Tetris::GameModule const& mod)
+{
     RenderStrings rs;
     if (RendererExt::GAME_INFO::MODE == RendererExt::RenderMode::VERTICAL) {
 #ifdef DEBUG_DEFINED
@@ -285,12 +326,13 @@ Renderer::StdTxtRenderer::RenderStrings Renderer::StdTxtRenderer::tetris_game_in
     }
     return rs;
 }
-Renderer::StdTxtRenderer::RenderStrsArray& Renderer::StdTxtRenderer::tetris_array_renderstrings(
-    Tetris::GameModule const& mod) {
+void Renderer::StdTxtRenderer::tetris_array_renderstrings(
+    Tetris::GameModule const& mod, 
+    Renderer::StdTxtRenderer::RenderStrsArray& r_d)
+{
     // TODO: Positioning hasn't been implemented.
     // Use threads to generate each string
     std::thread th[QUEUE_LENGTH];
-    RenderStrsArray r_d;
     std::fill(r_d.begin(), r_d.end(), RenderStrings());
     // Fill r_d parallelly
     for (int i = 0; i < QUEUE_LENGTH; i++) {
@@ -307,10 +349,11 @@ Renderer::StdTxtRenderer::RenderStrsArray& Renderer::StdTxtRenderer::tetris_arra
             }
         }
     }
-    return r_d;
+    // return r_d;
 }
 Renderer::StdTxtRenderer::StringGetFunction Renderer::StdTxtRenderer::func_from_render_order(
-    const int& render_order) {
+    const int& render_order)
+{
     // Initializes a function mapping from
     // Priority to function
     static const get_func_map func_map{
@@ -318,21 +361,21 @@ Renderer::StdTxtRenderer::StringGetFunction Renderer::StdTxtRenderer::func_from_
         {RendererExt::GAME_INFO::PRIORITY, tetris_game_info},
         {RendererExt::SCORE_BOARD::PRIORITY, tetris_scoreboard},
         {RendererExt::UPCOMING_PIECES::PRIORITY, tetris_upcoming_pieces}};
-    static RendererExt::Priority priority_queue[] = {
-        RendererExt::GAME_FIELD::PRIORITY, RendererExt::GAME_INFO::PRIORITY,
-        RendererExt::SCORE_BOARD::PRIORITY, RendererExt::UPCOMING_PIECES::PRIORITY};
+    static RendererExt::Priority priority_queue[]
+        = {RendererExt::GAME_FIELD::PRIORITY, RendererExt::GAME_INFO::PRIORITY,
+           RendererExt::SCORE_BOARD::PRIORITY, RendererExt::UPCOMING_PIECES::PRIORITY};
     // Sort the priority queue only once (static)
     static bool sorted = false;
     if (!sorted) {
         // bubblesort is nlogn or 3+2+1 = 6 cycles
         // mergesort is 4 cycles
         // UNSAFE_SWAP works because there is nothing much on priority
-#define UNSAFE_SWAP(x, y)                                                                          \
-    x = x + y;                                                                                     \
-    y = x - y;                                                                                     \
+#define UNSAFE_SWAP(x, y) \
+    x = x + y;            \
+    y = x - y;            \
     x = x - y;
-#define UNSAFE_CONDITIONAL_SWAP(smaller, larger)                                                   \
-    if (smaller > larger)                                                                          \
+#define UNSAFE_CONDITIONAL_SWAP(smaller, larger) \
+    if (smaller > larger)                        \
         UNSAFE_SWAP(smaller, larger);
         // inline mergesort
         UNSAFE_CONDITIONAL_SWAP(priority_queue[0], priority_queue[1]);
@@ -351,11 +394,13 @@ Renderer::StdTxtRenderer::StringGetFunction Renderer::StdTxtRenderer::func_from_
 #endif
 
 #ifdef USE_REVISED_TXT_CONSOLE_RENDERER
-void Renderer::StdTxtRenderer::clear_screen() {
+void Renderer::StdTxtRenderer::clear_screen()
+{
 #ifdef __cplusplus
     // Do not flush. This improves visual update performance
     // by not flushing.
-    std::cout << std::string(100, '\n');
+    static const std::string clear_str = std::string(100, '\n');
+    std::cout << clear_str;
 #else
     int n;
     for (n = 0; n < 10; n++) {
@@ -365,32 +410,34 @@ void Renderer::StdTxtRenderer::clear_screen() {
 }
 
 #define LAZY_INITIALIZE static bool _function_initialized = false;
-#define LAZY_DO_ONCE(_1)                                                                           \
-    if (!_function_initialized) {                                                                  \
-        _1;                                                                                        \
+#define LAZY_DO_ONCE(_1)          \
+    if (!_function_initialized) { \
+        _1;                       \
     }
 #define LAZY_FUNCTION_END _function_initialized = true;
 
-bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, RenderData& new_data) {
+bool Renderer::StdTxtRenderer::try_initialize(Tetris::GameModule const& mod, RenderData& new_data)
+{
     // TODO: Make out contain constant fields.
     new_data = RenderData();
     return true;
 }
 
-void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod, RenderData& out) {
+void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod, RenderData& out)
+{
     const int N_LINES = Tetris::TetrisField::HEIGHT;
     const int WIDTH = Tetris::TetrisField::WIDTH;
     // Making shadow
     int controlling_x0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.x);
     int controlling_y0 = RoundingExt::position_round<int>(mod.controlling_piece.current_position.y);
-    auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field) +
-                       mod.controlling_piece.current_position.y;
+    auto shadow_y0_d = mod.down_cast(mod.controlling_piece, mod.game_field)
+                       + mod.controlling_piece.current_position.y;
     int shadow_y0 = RoundingExt::position_round<int>(shadow_y0_d);
 
     int render_x, render_y;
-    RendererExt::Math<int>::general_get(RendererExt::GAME_FIELD::POSITION, render_x, render_y,
-                                        RendererExt::GAME_FIELD::MOD_X,
-                                        RendererExt::GAME_FIELD::MOD_Y);
+    RendererExt::Math<int>::general_get(
+        RendererExt::GAME_FIELD::POSITION, render_x, render_y, RendererExt::GAME_FIELD::MOD_X,
+        RendererExt::GAME_FIELD::MOD_Y);
     for (int i = 0; i < N_LINES; i++) {   // y position of TetrisField
         for (int j = 0; j < WIDTH; j++) { // x position of TetrisField
             int render_i = RendererExt::xy2i<int>(render_x + j, render_y + i);
@@ -398,23 +445,25 @@ void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod
 
             Tetris::BodyType block_type = mod.game_field.collider[field_i];
             // Shadow casting and controlling piece appearance
-            bool ctr_piece_in_x_range =
-                j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID;
+            bool ctr_piece_in_x_range
+                = j >= controlling_x0 && j < controlling_x0 + Tetris::T_COLLIDER_WID;
 
             if (ctr_piece_in_x_range) {
                 if (block_type == Tetris::BodyType::BLANK &&
                     // i and j is within y of controlling piece
                     i >= controlling_y0 && i < controlling_y0 + Tetris::T_COLLIDER_HEIGHT &&
                     // There is collider at this position of controlling piece
-                    mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(j - controlling_x0,
-                                                                            i - controlling_y0)]) {
+                    mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(
+                        j - controlling_x0, i - controlling_y0)]) {
 
                     // Prioritize the controlling piece before shadow.
                     block_type = mod.controlling_piece.type;
-                } else if (i >= shadow_y0 && i < shadow_y0 + Tetris::T_COLLIDER_HEIGHT &&
-                           // There is shadow collider at this position of controlling piece
-                           mod.controlling_piece.collider[Tetris::TetrisBody::xy2i(
-                               j - controlling_x0, i - shadow_y0)]) {
+                }
+                else if (
+                    i >= shadow_y0 && i < shadow_y0 + Tetris::T_COLLIDER_HEIGHT &&
+                    // There is shadow collider at this position of controlling piece
+                    mod.controlling_piece
+                        .collider[Tetris::TetrisBody::xy2i(j - controlling_x0, i - shadow_y0)]) {
 
                     // Place a shadow character and move on.
                     out.render_data[render_i] = RendererExt::SHADOW_CHAR;
@@ -426,15 +475,16 @@ void Renderer::StdTxtRenderer::assign_tetris_field(Tetris::GameModule const& mod
     }
 }
 
-void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> coming_pieces,
-                                               RenderData& out) {
+void Renderer::StdTxtRenderer::assign_upcoming(
+    std::queue<Tetris::BodyType> coming_pieces, RenderData& out)
+{
 
     LAZY_INITIALIZE
     if (RendererExt::UPCOMING_PIECES::MODE == RendererExt::RenderMode::VERTICAL) {
         int render_x, render_y;
-        RendererExt::Math<int>::general_get(RendererExt::UPCOMING_PIECES::POSITION, render_x,
-                                            render_y, RendererExt::UPCOMING_PIECES::MOD_X,
-                                            RendererExt::UPCOMING_PIECES::MOD_Y);
+        RendererExt::Math<int>::general_get(
+            RendererExt::UPCOMING_PIECES::POSITION, render_x, render_y,
+            RendererExt::UPCOMING_PIECES::MOD_X, RendererExt::UPCOMING_PIECES::MOD_Y);
         // TODO: Constant field. Can be optimized by doing once in try_initialize.
         // Make first line to display UPCOMING
         int render_i = RendererExt::xy2i<int>(render_x, render_y);
@@ -455,7 +505,8 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> comi
             Tetris::BodyType front;
             if (coming_pieces.empty()) {
                 front = Tetris::BodyType::BLANK;
-            } else {
+            }
+            else {
                 front = coming_pieces.front();
                 coming_pieces.pop();
             }
@@ -474,7 +525,8 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> comi
                             k, j)]) {
                         // If there is collider at (j,k) in default state
                         out.render_data[render_i] = c;
-                    } else {
+                    }
+                    else {
                         out.render_data[render_i] = ' ';
                     }
                 }
@@ -492,7 +544,8 @@ void Renderer::StdTxtRenderer::assign_upcoming(std::queue<Tetris::BodyType> comi
     LAZY_FUNCTION_END
 }
 
-void Renderer::StdTxtRenderer::assign_upcoming(Tetris::GameModule const& mod, RenderData& out) {
+void Renderer::StdTxtRenderer::assign_upcoming(Tetris::GameModule const& mod, RenderData& out)
+{
     // TODO: It threw a read access violation once on copying
     // mod.coming_pieces. It was referring to 0xFFFF... on BodyType.
     // Exception thrown: read access violation.
@@ -503,72 +556,107 @@ void Renderer::StdTxtRenderer::assign_upcoming(Tetris::GameModule const& mod, Re
     return assign_upcoming(mod.coming_pieces, out);
 }
 
-void Renderer::StdTxtRenderer::assign_scoreboard(Tetris::GameModule const& mod, RenderData& out) {
+void Renderer::StdTxtRenderer::assign_scoreboard(Tetris::GameModule const& mod, RenderData& out)
+{
+    LAZY_INITIALIZE;
     int render_x, render_y;
-    RendererExt::Math<int>::general_get(RendererExt::SCORE_BOARD::POSITION, render_x, render_y,
-                                        RendererExt::SCORE_BOARD::MOD_X,
-                                        RendererExt::SCORE_BOARD::MOD_Y);
+    RendererExt::Math<int>::general_get(
+        RendererExt::SCORE_BOARD::POSITION, render_x, render_y, RendererExt::SCORE_BOARD::MOD_X,
+        RendererExt::SCORE_BOARD::MOD_Y);
     // TODO: Might need to go easy on the length of the string.
-    LAZY_INITIALIZE
     const int RENDER_WIDTH = 5;
 #ifndef ASSIGN
-#define ASSIGN(off_x, off_y, str)                                                                  \
-    out.render_data.replace(RendererExt::xy2i<int>(render_x + off_x, render_y + off_y),            \
-                            str.size(), str);
-    const int TITLE_OFFSET = 0;
-    const int NUM_OFFSET = 0;
+#define ASSIGN(off_x, off_y, str) \
+    out.render_data.replace(      \
+        RendererExt::xy2i<int>(render_x + off_x, render_y + off_y), str.size(), str);
+// determines buffer size, make static buffer, replace the render data,
+// then fill the supposedly empty buffers on render_data using std::string::replace.
+#define ASSIGN_C(off_x, off_y, mod_field)                                                       \
+    static constexpr std::size_t __buffer_sz_##mod_field                                        \
+        = Common::num_cstr_size<decltype(mod.##mod_field)>();                                   \
+    static char __buffer_##mod_field[__buffer_sz_##mod_field];                                  \
+    const int __filled_##mod_field = Common::num_2_cstr(mod.##mod_field, __buffer_##mod_field); \
+    out.render_data.replace(                                                                    \
+        RendererExt::xy2i<int>(render_x + off_x, render_y + off_y), __filled_##mod_field,       \
+        __buffer_##mod_field);                                                                  \
+    const int __space_##mod_field = __buffer_sz_##mod_field - __filled_##mod_field;             \
+    out.render_data.replace(                                                                    \
+        RendererExt::xy2i<int>(render_x + off_x + __filled_##mod_field, render_y + off_y),      \
+        __space_##mod_field, __space_##mod_field, ' ');
+
+    const int TITLE_OFFSET = 0; // Offset for the titles (Level, Score,...)
+    const int NUM_OFFSET = 0;   // Offset for the values of titles
     const int space = 1;
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 0 * space, std::string("Level"));)
-    ASSIGN(NUM_OFFSET, 1 * space, std::to_string(mod.current_level));
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 2 * space, std::string("Score"));)
-    ASSIGN(NUM_OFFSET, 3 * space, std::to_string(mod.score));
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 4 * space, std::string("Rows Remaining"));)
-    ASSIGN(NUM_OFFSET, 5 * space, std::to_string(mod.n_rows));
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 6 * space, std::string("Highest"));)
-    ASSIGN(NUM_OFFSET, 7 * space, std::to_string(mod.highest_score));
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 8 * space, std::string("Tetris Count"));)
-    ASSIGN(NUM_OFFSET, 9 * space, std::to_string(mod.tetris_scored));
-    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 10 * space, std::string("Rows Cleared"));)
-    ASSIGN(NUM_OFFSET, 11 * space, std::to_string(mod.n_rows_burned));
+    const int Y_OFFSET = 1;
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 0 * space + Y_OFFSET, std::string("Level")););
+    // ASSIGN(NUM_OFFSET, 1 * space + Y_OFFSET, std::to_string(mod.current_level));
+    ASSIGN_C(NUM_OFFSET, 1 * space + Y_OFFSET, current_level);
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 2 * space + Y_OFFSET, std::string("Score")););
+    // ASSIGN(NUM_OFFSET, 3 * space + Y_OFFSET, std::to_string(mod.score));
+    ASSIGN_C(NUM_OFFSET, 3 * space + Y_OFFSET, score);
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 4 * space + Y_OFFSET, std::string("Rows Remaining")););
+    // ASSIGN(NUM_OFFSET, 5 * space + Y_OFFSET, std::to_string(mod.n_rows));
+    ASSIGN_C(NUM_OFFSET, 5 * space + Y_OFFSET, n_rows);
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 6 * space + Y_OFFSET, std::string("Highest")););
+    // ASSIGN(NUM_OFFSET, 7 * space + Y_OFFSET, std::to_string(mod.highest_score));
+    ASSIGN_C(NUM_OFFSET, 7 * space + Y_OFFSET, highest_score);
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 8 * space + Y_OFFSET, std::string("Tetris Count")););
+    // ASSIGN(NUM_OFFSET, 9 * space + Y_OFFSET, std::to_string(mod.tetris_scored));
+    ASSIGN_C(NUM_OFFSET, 9 * space + Y_OFFSET, tetris_scored);
+    LAZY_DO_ONCE(ASSIGN(TITLE_OFFSET, 10 * space + Y_OFFSET, std::string("Rows Cleared")););
+    // ASSIGN(NUM_OFFSET, 11 * space + Y_OFFSET, std::to_string(mod.n_rows_burned));
+    ASSIGN_C(NUM_OFFSET, 11 * space + Y_OFFSET, n_rows_burned);
 #undef ASSIGN
+#undef ASSIGN_C
 #else
 #error(ASSIGN Macro is already defined! Find another name.)
 #endif
     LAZY_FUNCTION_END
 }
 
-void Renderer::StdTxtRenderer::assign_game_info(Tetris::GameModule const& mod, RenderData& out) {
-    static char conversion_buffer[Common::RYU_BUFFER_SIZE];
+void Renderer::StdTxtRenderer::assign_game_info(Tetris::GameModule const& mod, RenderData& out)
+{
+    // static char conversion_buffer[Common::ryu_buffer<double>()];
+    static char conversion_buffer[Common::num_cstr_size<double>()];
     // static char string_buffer[64];
     // string_buffer[63] = '\0';
     if (RendererExt::GAME_INFO::MODE == RendererExt::RenderMode::VERTICAL) {
         static const std::string s1 = std::string("Seed");
         static const std::string s2 = std::string("Fall Velocity");
         static const std::string s3 = std::string("Controlling Prop.");
-        static constexpr size_t MAX_DOUBLE_CHAR_BUFFER =
-            (16 + 2 + 17); // FFFFFFFFFFFFFFFF(largest_double_str)
+        static constexpr size_t MAX_DOUBLE_CHAR_BUFFER
+            = (16 + 2 + 17); // FFFFFFFFFFFFFFFF(largest_double_str)
         static const int RENDER_WIDTH = std::max(s3.length(), MAX_DOUBLE_CHAR_BUFFER);
         int y_offset = 0;
         int render_x, render_y;
-        RendererExt::Math<int>::general_get(RendererExt::GAME_INFO::POSITION, render_x, render_y,
-                                            RendererExt::GAME_INFO::MOD_X,
-                                            RendererExt::GAME_INFO::MOD_Y);
+        RendererExt::Math<int>::general_get(
+            RendererExt::GAME_INFO::POSITION, render_x, render_y, RendererExt::GAME_INFO::MOD_X,
+            RendererExt::GAME_INFO::MOD_Y);
 
 #ifndef PUSH_BACK
-#define PUSH_BACK(str)                                                                             \
-    out.render_data.replace(RendererExt::xy2i<int>(render_x, render_y + (y_offset++)), str.size(), \
-                            (str));
-#define PUSH_BACK_C(cstr)                                                                          \
-    out.render_data.replace(RendererExt::xy2i<int>(render_x, render_y + (y_offset++)),             \
-                            strlen(cstr), cstr)
+#define render_xy RendererExt::xy2i<int>(render_x, render_y + (y_offset++))
+#define PUSH_BACK(str) out.render_data.replace(render_xy, str.size(), (str));
+#define PUSH_BACK_C(cstr, cstrlen) out.render_data.replace(render_xy, cstrlen, cstr)
 #ifdef DEBUG_DEFINED
         PUSH_BACK(s1);
-        std::string result = std::move(Common::decimal2hex_str(mod.current_seed.seed));
-        size_t blanks = (sizeof(mod.current_seed.seed) * 8 / 4) - result.size();
-        result.append(blanks, ' ');
-        result.append("(").append(Common::ryu_d2s_buffered(
-            Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed), conversion_buffer));
-        result.append(")");
+        static auto last_seed = static_cast<decltype(mod.current_seed.seed)>(0);
+        static constexpr std::size_t seed_buffer_size
+            = Common::num_cstr_size<decltype(
+                  Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed))>()
+              + 2 + (sizeof(decltype(mod.current_seed.seed)) * 8 / 4);
+        static std::string result(seed_buffer_size, ')');
+        // result[result.size() - 1] = ')';
+        if (last_seed != mod.current_seed.seed) {
+            last_seed = mod.current_seed.seed;
+            std::string hex_seed = std::move(Common::decimal2hex_str(mod.current_seed.seed));
+            result.replace(0, hex_seed.length(), hex_seed);
+            const auto seed_d = Common::ZMath::UInt64RNG::to_double(mod.current_seed.seed);
+            const int seed_d_len = Common::num_2_cstr(seed_d, conversion_buffer);
+            size_t blanks = seed_buffer_size - hex_seed.size() - 2 - seed_d_len;
+            result.replace(hex_seed.length(), blanks, blanks, ' ');
+            result[hex_seed.length() + blanks] = '(';
+            result.replace(seed_buffer_size - 1 - seed_d_len, seed_d_len, conversion_buffer);
+        }
         PUSH_BACK(result);
         // PUSH_BACK_C(string_buffer);
         // PUSH_BACK((Common::decimal2hex_str(mod.current_seed.seed) + "(" +
@@ -576,22 +664,39 @@ void Renderer::StdTxtRenderer::assign_game_info(Tetris::GameModule const& mod, R
         //          ")"));
 #endif
         PUSH_BACK(s2);
-        PUSH_BACK_C(Common::ryu_d2s_buffered(Tetris::v_fall_at(mod.current_level), conversion_buffer));
+        PUSH_BACK_C(
+            conversion_buffer,
+            Common::num_2_cstr(Tetris::v_fall_at(mod.current_level), conversion_buffer));
         PUSH_BACK(s3);
-        PUSH_BACK(("{" + std::to_string(mod.controlling_piece.current_position.x) + ", " +
-                   std::to_string(mod.controlling_piece.current_position.y) + ", " +
-                   std::to_string(mod.controlling_piece.current_rot) + "}"));
+        static constexpr int ctrl_buffer = 32;
+        static char controlling_piece_buffer[ctrl_buffer];
+        const std::size_t ctrl_buff_sz = snprintf(
+            controlling_piece_buffer, ctrl_buffer, "{%f, %f, %i}",
+            mod.controlling_piece.current_position.x, mod.controlling_piece.current_position.y,
+            mod.controlling_piece.current_rot);
+        // PUSH_BACK(
+        //    ("{" + std::to_string(mod.controlling_piece.current_position.x) + ", "
+        //     + std::to_string(mod.controlling_piece.current_position.y) + ", "
+        //     + std::to_string(mod.controlling_piece.current_rot) + "}"));
+        PUSH_BACK_C(controlling_piece_buffer, ctrl_buff_sz);
+        // Flush trailing "}"
+        const std::size_t ctrl_blanks = ctrl_buffer - ctrl_buff_sz;
+        out.render_data.replace(
+            RendererExt::xy2i<int>(render_x + ctrl_buff_sz, render_y + (y_offset - 1)), ctrl_blanks,
+            ctrl_blanks, ' ');
 #undef PUSH_BACK
-
+#undef PUSH_BACK_C
+#undef render_xy
 #else
 #error(PUSH_BACK already defined. Find another name.)
 #endif
     }
 }
 
-void Renderer::StdTxtRenderer::assign_all(Tetris::GameModule const& mod, RenderData& out) {
-    static const AssignFunction funcs[] = {assign_tetris_field, assign_upcoming, assign_scoreboard,
-                                           assign_game_info};
+void Renderer::StdTxtRenderer::assign_all(Tetris::GameModule const& mod, RenderData& out)
+{
+    static const AssignFunction funcs[]
+        = {assign_tetris_field, assign_upcoming, assign_scoreboard, assign_game_info};
     constexpr int n_threads = sizeof(funcs) / sizeof(AssignFunction);
     // Use n_threads to assign different sections of
     // the game's engine to the render buffer.
@@ -619,17 +724,23 @@ void Renderer::StdTxtRenderer::assign_all(Tetris::GameModule const& mod, RenderD
 #endif
 }
 
-bool Renderer::StdTxtRenderer::try_update(Tetris::GameModule const& mod,
-                                          RenderData& overriding_data) {
+bool Renderer::StdTxtRenderer::try_update(
+    Tetris::GameModule const& mod, RenderData& overriding_data)
+{
     assign_all(mod, overriding_data);
     return true;
 }
 
-bool Renderer::StdTxtRenderer::try_display(RenderData const& data) {
+bool Renderer::StdTxtRenderer::try_display(RenderData const& data)
+{
     std::cout << data.render_data << std::flush;
     return true;
 }
 #undef LAZY_INITIALIZE
 #undef LAZY_DO_ONCE
 #undef LAZY_FUNCTION_END
+#endif
+
+#ifdef BODY_TYPE_2_CHAR_ARRAY_LOOKUP
+#undef BODY_TYPE_2_CHAR_ARRAY_LOOKUP
 #endif

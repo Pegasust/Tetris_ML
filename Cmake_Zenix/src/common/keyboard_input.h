@@ -13,6 +13,7 @@
 #include "game_clock.h"
 #include <string>
 #include <iostream>
+#include "assertion.hpp"
 namespace Common {
 using KeyID = int;
 using InputBufferQueue = std::queue<Common::KeyID>;
@@ -29,6 +30,7 @@ public:
     }
     /* This should wait for ChronoType(time_out) amount of time. If nothing is entered,
      * return default_value. Currently doesn't support waiting & timeout.
+     * Method is broken, there is no standard way for async std::cin I/O.
      */
     static std::string get_cin_line(const std::string& default_value);
 

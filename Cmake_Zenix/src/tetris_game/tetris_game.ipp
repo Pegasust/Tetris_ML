@@ -1,7 +1,8 @@
 #pragma once
 
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
-void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
+void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game()
+{
 
     INITIALIZE_VERBOSITY_LOGGER;
     const uint64_t ms_frame_dur = static_cast<uint64_t>(1000) / (target_framerate);
@@ -39,8 +40,8 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         // Get data from game data to draw into renderer buffer (visual update)
         if (threaded) {
             r_upd_th = std::thread([&, this]() {
-                static const auto sleep_duration =
-                    std::chrono::duration<int, std::milli>(std::max(1, FRAMETIME_MILLIS));
+                static const auto sleep_duration
+                    = std::chrono::duration<int, std::milli>(std::max(1, FRAMETIME_MILLIS));
                 while (!game.lost()) {
                     if (physics_updated) {
                         Renderer::MainRenderer::try_update(game.engine, videocore.display_data);
@@ -51,15 +52,17 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
                     std::this_thread::sleep_for(sleep_duration);
                 }
             });
-        } else {
+        }
+        else {
             Verbosity::FrameLogger::visual_tm().update_frame_count();
         }
         // Initialize performance log
         Verbosity::FrameLogger::get_perf_log();
+        char time_diff_buff[Common::num_cstr_size<double>()];
         while (!game.lost()) {
             int key = KeyboardModule::get_key();
-            ::Tetris::Input input =
-                TetrisGame::Tetris<threaded, target_framerate, rng_seed>::get_input(key);
+            ::Tetris::Input input
+                = TetrisGame::Tetris<threaded, target_framerate, rng_seed>::get_input(key);
 #ifndef ______________________________PROGRAM_EXIT______________________________________
             if (input == ::Tetris::Input::PROGRAM_EXIT) {
                 videocore.stop_displaying();
@@ -79,12 +82,16 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
             Verbosity::FrameLogger::physics_tm().update_frame_count();
             if (threaded) {
                 physics_updated = true;
-            } else {
+            }
+            else {
                 Renderer::MainRenderer::try_update(game.engine, videocore.display_data);
                 Verbosity::FrameLogger::visual_tm().update_frame_count();
             }
             if (time_diff * 1000.0 > (ms_frame_dur * 2)) {
-                VERBOSITY_LOG("Physics update took " + std::to_string(time_diff) + " s");
+                Common::num_2_cstr(time_diff, time_diff_buff);
+                // VERBOSITY_LOG("Physics update took " + Common::(time_diff) + " s");
+                Verbosity::VerbosityCore::get_rt_logger().format(
+                    "Physics update took %s s", time_diff_buff);
             }
             if (ms_frame_dur > 0) {
                 std::this_thread::sleep_until(game.last_update + next_frame_dur);
@@ -100,8 +107,8 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         VERBOSITY_LOG(
             "Attempting to create move directory if not existed. Dir: " _PP_RELATIVE_MOVE_ROOT_);
         Common::Paths::create_directory_if_not_existed(dummy_path);
-        dummy_path += (Common::Paths::format_move_filename(username.c_str(), game.initial_seed,
-                                                           "tetris_game_" __DATE__));
+        dummy_path += (Common::Paths::format_move_filename(
+            username.c_str(), game.initial_seed, "tetris_game_" __DATE__));
         std::string path;
         Common::Paths::next_available_filename(dummy_path, path);
         VERBOSITY_LOG("Saving replay path at " + path);
@@ -111,8 +118,8 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
         // Serialize this replay into string
         std::string serialize_str;
         // Do not retain the moves because user is lost.
-        TetrisReplay::serialize_replay<false>(serialize_str, game.initial_seed,
-                                              game.input_collection);
+        TetrisReplay::serialize_replay<false>(
+            serialize_str, game.initial_seed, game.input_collection);
         replay_file << serialize_str;
         VERBOSITY_LOG("Finished writing to file.");
         VERBOSITY_LOG("Closing file.");
@@ -125,22 +132,26 @@ void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start_game() {
 }
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
 void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::threaded_update(
-    bool& str_upd_done, const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd) {
+    bool& str_upd_done, const ::Tetris::GameModule& game, Renderer::MainRenderer::RenderData& rd)
+{
     str_upd_done = false;
     Renderer::MainRenderer::try_update(game, rd);
     str_upd_done = true;
 }
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
-TetrisGame::Tetris<threaded, target_framerate, rng_seed>::Tetris() : rng(rng_seed), exit(false) {
+TetrisGame::Tetris<threaded, target_framerate, rng_seed>::Tetris() : rng(rng_seed), exit(false)
+{
     videocore = VideoCore::VideoHandler();
 }
 
 template <bool threaded, uint64_t target_framerate, Common::ZMath::UInt64RNG::RNGSeed rng_seed>
-void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start() {
+void TetrisGame::Tetris<threaded, target_framerate, rng_seed>::start()
+{
     if (threaded) {
         std::thread new_thread = std::thread([this]() { start_game(); });
         new_thread.join();
-    } else {
+    }
+    else {
         start_game();
     }
 }

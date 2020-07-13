@@ -73,6 +73,7 @@ int main() {
     std::cout << "Test cases are being presented." << std::endl;
     TEST_INITIALIZE;
     DO_TEST(test_pointer);
+    TEST_RESULTS;
 }
 
 */

@@ -7,6 +7,7 @@
 #include "verbosity/verbosity_core.h"
 #include "renderer_specs.h"
 #include "common/common.hpp"
+#include <cstring>
 #ifdef __cplusplus
 #include <iostream>
 #include <string>
@@ -52,10 +53,10 @@ public:
      * Pre-condition:
      *  - str is newly created std::string (empty string).
      */
-    static void assign_empty_render_string(Tetris::GameModule const& mod, const bool& shadow,
-                                           std::string& str);
-    static void override_render_string(Tetris::GameModule const& mod, const bool& shadow,
-                                       std::string& str);
+    static void assign_empty_render_string(
+        Tetris::GameModule const& mod, const bool& shadow, std::string& str);
+    static void override_render_string(
+        Tetris::GameModule const& mod, const bool& shadow, std::string& str);
 
 private:
     typedef int CharPosition;
@@ -64,8 +65,8 @@ private:
     // This supports shadowing
     static RenderStrings tetris_field_string(Tetris::GameModule const& mod);
     // Does not support shadowing
-    static RenderStrings tetris_field_string(Tetris::TetrisField const& game_field,
-                                             Tetris::TetrisBody const& controlling_piece);
+    static RenderStrings tetris_field_string(
+        Tetris::TetrisField const& game_field, Tetris::TetrisBody const& controlling_piece);
     static RenderStrings tetris_upcoming_pieces(Tetris::GameModule::ComingPieces coming_pieces);
     static RenderStrings tetris_upcoming_pieces(Tetris::GameModule const& mod);
     static RenderStrings tetris_scoreboard(Tetris::GameModule const& mod);
@@ -73,7 +74,7 @@ private:
     /// The number of elements in priority_queue in func_from_render_order
     static constexpr int QUEUE_LENGTH = 4;
     typedef std::array<Renderer::StdTxtRenderer::RenderStrings, QUEUE_LENGTH> RenderStrsArray;
-    static RenderStrsArray& tetris_array_renderstrings(Tetris::GameModule const& mod);
+    static void tetris_array_renderstrings(Tetris::GameModule const& mod, RenderStrsArray& r_d);
 
     typedef RenderStrings (*StringGetFunction)(Tetris::GameModule const&);
     typedef std::unordered_map<RendererExt::Priority, StringGetFunction> get_func_map;
@@ -97,14 +98,24 @@ public:
             // The extra +1 is \n element.
             (RendererExt::TXT_RENDERER_WIDTH + 1) * RendererExt::TXT_RENDERER_HEIGHT;
 
-        RenderData() : render_data(RENDER_DATA_SIZE, ' ') {
+        RenderData() : render_data(RENDER_DATA_SIZE, ' ')
+        {
             int line_end;
+            int line_begin;
+            render_data.replace(
+                0, RendererExt::TXT_RENDERER_WIDTH, RendererExt::TXT_RENDERER_WIDTH, '-');
             for (int i = 0; i < RendererExt::TXT_RENDERER_HEIGHT; i++) {
                 // Assign \n at the end of each line
-                line_end =
-                    RendererExt::xy2i<int>(static_cast<int>(RendererExt::TXT_RENDERER_WIDTH), i);
+                line_begin
+                    = RendererExt::xy2i<int>(0, i);
+                line_end = line_begin + static_cast<int>(RendererExt::TXT_RENDERER_WIDTH);
                 render_data[line_end] = '\n';
+                render_data[line_end - 1] = '|';
+                render_data[line_begin] = '|';
             }
+            render_data.replace(
+                line_begin + 1, RendererExt::TXT_RENDERER_WIDTH - 2,
+                RendererExt::TXT_RENDERER_WIDTH - 2, '-');
         }
         std::string render_data;
     };
@@ -146,7 +157,8 @@ private:
      * Currently facing bottleneck due to std::to_string from double
      */
     static void assign_game_info(Tetris::GameModule const& mod, RenderData& out);
-    /// There are 4 render fields with 4 funcs: assign(tetris_field, upcoming, scoreboard, game_info)
+    /// There are 4 render fields with 4 funcs: assign(tetris_field, upcoming, scoreboard,
+    /// game_info)
     static constexpr int N_RENDER_FIELDS = 4;
     /**
      * Parallelly assign all render fields into RenderData& out.

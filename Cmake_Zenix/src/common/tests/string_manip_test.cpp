@@ -8,8 +8,9 @@
 #include "common/keyboard_input.h"
 #include "common/path_consts.hpp"
 #include "common/string_manip.h"
+#include "test_utils/test_utils.hpp"
 
-#define INCLUDE_RYU_TEST
+//#define INCLUDE_RYU_TEST
 union FloatAsBits {
     std::uint64_t bits;
     double fp;
@@ -22,7 +23,8 @@ struct Result {
     int result;
 };
 
-Result check(std::uint64_t bits, const double& to_str, const double& precise) {
+Result check(std::uint64_t bits, const double& to_str, const double& precise)
+{
     int result = 0;
     FloatAsBits f = {bits};
     double d = std::move(f.fp);
@@ -37,7 +39,8 @@ Result check(std::uint64_t bits, const double& to_str, const double& precise) {
 
 constexpr int PRINT_EVERY = 10000;
 
-void precision_test(int& to_string, int& precise) {
+void precision_test(int& to_string, int& precise)
+{
     std::uint64_t i = std::numeric_limits<std::uint64_t>::max();
     // std::vector<Result> incorrects;
     std::uint64_t to_str_incorrects = 0;
@@ -80,13 +83,15 @@ void precision_test(int& to_string, int& precise) {
         if (result.result & 1) {
             // precise correct
             // std::cout << "Precise\t";
-        } else {
+        }
+        else {
             precise_incorrects++;
         }
         if (result.result & (1 << 1)) {
             // to_str correct
             // std::cout << "To_str";
-        } else {
+        }
+        else {
             to_str_incorrects++;
         }
         if (precise != Common::precise_to_string(d_precise)) {
@@ -117,7 +122,8 @@ void precision_test(int& to_string, int& precise) {
     precise = precise_incorrects;
 }
 
-void precise_str() {
+void precise_str()
+{
     // const double test_values[] = {
     //    1.0,
     //    3.1415926535897932,
@@ -144,7 +150,8 @@ void precise_str() {
     }
 }
 
-void ryu_test() {
+void ryu_test()
+{
     // const double test_values[] = {
     //    1.0,
     //    3.1415926535897932,
@@ -171,29 +178,45 @@ void ryu_test() {
     }
 }
 
-void assert_format_move_filename(const char* expected, const char* const player,
-                             const Common::ZMath::UInt64RNG::RNGSeed& game_seed,
-                             const char* const suffix = "") {
+void assert_format_move_filename(
+    const char* expected, const char* const player,
+    const Common::ZMath::UInt64RNG::RNGSeed& game_seed, const char* const suffix = "")
+{
     std::string result = Common::PathConsts::format_move_filename(player, game_seed, suffix);
     std::cout << "format_move_filename gives: " << result << std::endl;
-    ASSERT(std::string(expected) ==
-               result,
-           "format mismatch!");
+    ASSERT(std::string(expected) == result, "format mismatch!");
 }
-void format_move_filename_test() {
+void format_move_filename_test()
+{
 #define ASSERT_FILENAME(...) assert_format_move_filename(__VA_ARGS__);
     ASSERT_FILENAME("username_deadbeef_", "username", 0xdeadbeef);
     ASSERT_FILENAME("username_12_human_player", "username", 0x12, "human_player");
 #undef ASSERT_FILENAME
 }
 
-void hex_str2decimal_test() {
+void hex_str2decimal_test()
+{
     std::uint64_t result = Common::hex_str2decimal<std::uint64_t>("ff");
-    ASSERT(result == Common::hex_str2decimal<std::uint64_t>("0xff"), "result doesn't match for 0x and not");
+    ASSERT(
+        result == Common::hex_str2decimal<std::uint64_t>("0xff"),
+        "result doesn't match for 0x and not");
     ASSERT(result == 0xff, "hex string parsed wrongly");
 }
-int main() {
 
+bool int_2_cstr_test()
+{
+    char buffer[64];
+
+    Common::int_2_cstr(static_cast<int>(42), buffer, 64);
+    TEST_EQ(strcmp(buffer, "42"), 0);
+    Common::int_2_cstr(static_cast<unsigned int>(4294967295), buffer);
+    TEST_EQ(strcmp(buffer, "4294967295"), 0);
+    Common::int_2_cstr(-420, buffer);
+    TEST_EQ(strcmp(buffer, "-420"), 0);
+    return true;
+}
+int main()
+{
     // for (auto i = incorrects.begin(); i != incorrects.end(); ++i) {
     //    std::cout << i->bits << "\tstd: " << i->d_from_to_string;
     //    std::cout << "\tprecise: " << i->d_from_precise;
@@ -201,11 +224,15 @@ int main() {
     //    std::cout << std::endl;
     //}
     // precise_str();
-    //int t, p;
-    //precision_test(t, p);
+    // int t, p;
+    // precision_test(t, p);
     // ryu_test();
     format_move_filename_test();
     hex_str2decimal_test();
+    TEST_INITIALIZE;
+    DO_TEST(int_2_cstr_test);
+
+    TEST_RESULTS;
     Common::KeyboardListener<false, 0, std::chrono::microseconds>::get_key();
 
     return 0;

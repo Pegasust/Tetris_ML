@@ -14,8 +14,9 @@ template <typename L_Type = int, typename R_Type = typename L_Type>
 using Pair = std::pair<L_Type, R_Type>;
 
 // Single map should implement access & insert by operator[], and and erase().
-template <typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
-          typename Single_Map = std::unordered_map<Num_Type, Num_Type>>
+template <
+    typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
+    typename Single_Map = std::unordered_map<Num_Type, Num_Type>>
 class GenericBiMap {
 public:
     using TNum = typename Num_Type;
@@ -36,25 +37,20 @@ public:
     // Returns 0 if not success, return any positive int (values removed) if success.
     TNum replace(const TNum left, const TNum new_right);
     // Number of elements
-    std::size_t size() const {
-        return data.size();
-    }
+    std::size_t size() const { return data.size(); }
     // Number of pairs
-    std::size_t pair_count() const {
-        return size() / 2;
-    }
+    std::size_t pair_count() const { return size() / 2; }
     // Number of elements that can possibly be stored
-    std::size_t max_size() const {
-        return data.max_size();
-    }
+    std::size_t max_size() const { return data.max_size(); }
     // Get syntactic sugar
-    typename Bi_Map::TNum operator|(typename Bi_Map::TNum in) {
-        return get(in);
-    }
+    typename Bi_Map::TNum operator|(typename Bi_Map::TNum in) { return get(in); }
+    // Get syntactic sugar
+    typename Bi_Map::TNum operator[](typename Bi_Map::TNum in) { return get(in); }
     // Add or replace syntactic sugar
     typename Bi_Map& operator<<=(typename Bi_Map::TPair&& in_pair) {
-        replace(std::forward<Bi_Map::TPair>(in_pair).first,
-                std::forward<Bi_Map::TPair>(in_pair).second);
+        replace(
+            std::forward<Bi_Map::TPair>(in_pair).first,
+            std::forward<Bi_Map::TPair>(in_pair).second);
         return *this;
     }
     // Strictly add syntactic sugar
@@ -70,8 +66,9 @@ public:
 // Great lookup time if BiMap is going to be as big as the domain/codomain.
 // Note that Max_Size also applies on the maximum value being stored.
 // For now, ArrayBiMap should only be used on unsigned values.
-template <typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
-          std::size_t Max_Size = std::numeric_limits<short>::max()>
+template <
+    typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
+    std::size_t Max_Size = std::numeric_limits<short>::max()>
 class ArrayBiMap {
 public:
     using TNum = typename Num_Type;
@@ -83,7 +80,8 @@ protected:
     std::size_t count;
 
 public:
-    ArrayBiMap() : count(0){};
+    ArrayBiMap()
+        : count(0){};
     bool contains(const TNum elem) const;
     TNum get(const TNum in);
     void add(const TNum x, const TNum y);
@@ -93,25 +91,20 @@ public:
     // Returns 0 if not success, return any positive int (values removed) if success.
     TNum replace(const TNum left, const TNum new_right);
     // Number of elements
-    std::size_t size() const {
-        return count;
-    }
+    std::size_t size() const { return count; }
     // Number of pairs
-    std::size_t pair_count() const {
-        return size() / 2;
-    }
+    std::size_t pair_count() const { return size() / 2; }
     // Number of elements that can possibly be stored
-    static constexpr std::size_t max_size() {
-        return Max_Size;
-    }
+    static constexpr std::size_t max_size() { return Max_Size; }
     // Get syntactic sugar
-    typename Bi_Map::TNum operator|(typename Bi_Map::TNum in) {
-        return get(in);
-    }
+    typename Bi_Map::TNum operator|(typename Bi_Map::TNum in) { return get(in); }
+    // Get syntactic sugar
+    typename Bi_Map::TNum operator[](typename Bi_Map::TNum in) { return get(in); }
     // Add or replace syntactic sugar
     typename Bi_Map& operator<<=(typename Bi_Map::TPair&& in_pair) {
-        replace(std::forward<Bi_Map::TPair>(in_pair).first,
-                std::forward<Bi_Map::TPair>(in_pair).second);
+        replace(
+            std::forward<Bi_Map::TPair>(in_pair).first,
+            std::forward<Bi_Map::TPair>(in_pair).second);
         return *this;
     }
     // Strictly add syntactic sugar
@@ -127,18 +120,19 @@ public:
 // TODO: TreeBiMap: Backed up my a type of tree, maps Num to Num.
 // O(n) space, O(logN) time.
 // Great "average" size case, also keeps data ordered.
-//template <typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
+// template <typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
 //          typename TreeStruct = std::map<Num_Type, Num_Type>>
-//class TreeBiMap {
-//public:
+// class TreeBiMap {
+// public:
 //    using TNum = typename Num_Type;
 //    using TPair = typename My_Pair;
 //    using TTree = typename TreeStruct;
 //    using Bi_Map = TreeBiMap<TNum, TPair, TTree>;
 //
 //};
-template<typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
-typename Tree_Struct = std::map<Num_Type, Num_Type>>
+template <
+    typename Num_Type = int, typename My_Pair = Pair<Num_Type>,
+    typename Tree_Struct = std::map<Num_Type, Num_Type>>
 using TreeBiMap = GenericBiMap<Num_Type, My_Pair, Tree_Struct>;
 
 // TODO: BiasedBiMap: Specializes when either left is very big, or very small,

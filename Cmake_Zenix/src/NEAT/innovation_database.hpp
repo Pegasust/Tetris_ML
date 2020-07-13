@@ -7,34 +7,30 @@ namespace NEAT {
 // ===================================== INNOVATION_DATABASE =====================================
 template <typename Index_Type = int, typename FP_Type = double, typename Neuron_Type = NeuronType>
 class InnovationDatabase {
+public:
     using Database = std::vector<InnovationInfo<Index_Type>>;
-    using AddLinkLookup =
-        std::unordered_map<InnovationInfo<Index_Type>, Index_Type, innov_info_hash_fn>;
+    using AddLinkLookup
+        = std::unordered_map<InnovationInfo<Index_Type>, Index_Type, innov_info_hash_fn>;
     using AddNodeLookup = std::unordered_map<Index_Type, std::array<Index_Type, 2>>;
 
-public:
     Database innov_db;
     std::vector<GenomeNeuron<Neuron_Type>> genotype_neurons;
-    // All of the add-node-mutations
+    // All of the add-node-mutations (maps innov edge to be disabled to the two innov_edge
+    // in replacement).
     AddNodeLookup add_node_innov_lookup;
     AddLinkLookup add_link_innov_lookup;
     Index_Type type_start[Neuron_Type::UNDEFINED];
-    inline Index_Type next_innov_idx() {
-        return innov_db.size();
-    }
+    inline Index_Type next_innov_idx() { return innov_db.size(); }
 
 protected:
-    void add_node(const Neuron_Type type) {
-        genotype_neurons.emplace_back(type);
-    }
-    void add_hidden_node() {
-        add_node(Neuron_Type::HIDDEN);
-    }
+    void add_node(const Neuron_Type type) { genotype_neurons.emplace_back(type); }
+    void add_hidden_node() { add_node(Neuron_Type::HIDDEN); }
     /*
      * This function assumes genotype_neurons stores neurons of the same type
      * contiguously and the first element is not of type NeuronType::UNDEFINED.
      */
-    void assign_type_start() {
+    void assign_type_start()
+    {
         Neuron_Type cur_type = Neuron_Type::UNDEFINED;
         for (Index_Type i = 0; genotype_neurons.size(); i++) {
             if (genotype_neurons[i].type != cur_type) {
@@ -53,14 +49,19 @@ protected:
         }
     }
     // Unsafely add new connection innovation to database and lookup
-    void add_new_innovation(InnovationInfo<Index_Type>& innov) {
-        add_link_innov_lookup[innov] = next_innov_idx();
+    // Returns the next innovation number (recently added innovation number)
+    Index_Type add_new_innovation(InnovationInfo<Index_Type>& innov)
+    {
+        Index_Type next_idx = next_innov_idx() add_link_innov_lookup[innov] = next_idx;
         innov_db.push_back(std::move(innov));
+        return next_idx;
     }
 
 public:
-    bool genotype_has_link(const Index_Type neuron_from, const Index_Type neuron_to,
-                           const Genotype<Index_Type, FP_Type>& genotype) {
+    bool genotype_has_link(
+        const Index_Type neuron_from, const Index_Type neuron_to,
+        const Genotype<Index_Type, FP_Type>& genotype)
+    {
         InnovationInfo<Index_Type> innov = {from, to};
         typename AddLinkLookup::const_iterator prev_innov = add_link_innov_lookup.find(innov);
         if (prev_innov == add_link_innov_lookup.end()) {
@@ -78,10 +79,14 @@ public:
      * (nor is it overwritten by the status of enabled). Either the link has already
      * been innovated, @param genome_innovs will have the innovation added, unless the
      * innovation has already existed in genome_innovs.
+     *
+     * Returns the innovation number from @param from, @param to.
      */
     template <bool add_to_genome_innovs = true>
-    void add_connection_innovation(const Index_Type from, const Index_Type to,
-                                   Genotype<Index_Type, FP_Type>& genome_innovs) {
+    Index_Type add_connection_innovation(
+        const Index_Type from, const Index_Type to, Genotype<Index_Type, FP_Type>& genome_innovs,
+        const FP_Type weight = static_cast<FP_Type>(1), const bool disable_link_genome = false)
+    {
         PRINT_DEBUG_WARNINGS("Untested func");
         InnovationInfo<Index_Type> innov = {from, to};
         typename AddLinkLookup::const_iterator previous_innov = add_link_innov_lookup.find(innov);
@@ -89,17 +94,16 @@ public:
         if (previous_innov == add_link_innov_lookup.end()) {
             // Not existed
             // The index after this innovation is added will be size before it is added.
-            if (add_to_genome_innovs) {
-                genome_innov = innov_db.size();
-            }
-            add_new_innovation(innov);
-        } else if (add_to_genome_innovs) {
+            genome_innov = add_new_innovation(innov);
+        }
+        else if (add_to_genome_innovs) {
             genome_innov = previous_innov->second;
         }
         if (add_to_genome_innovs) {
             // emplace iff !exist
-            genome_innovs.emplace_s(genome_innov);
+            genome_innovs.emplace_s(genome_innov, weight, disable_link_genome);
         }
+        return genome_innov;
     }
     /* Add 2 innovations regarding adding a new hidden node between the link
      * specified by @param innovation_num. This is the add node mutation. The 2
@@ -113,15 +117,22 @@ public:
      * of this structure, but is parallel with the current links dimensions. This is
      * to say, the structure can decide to whether add a new node on recurrent links
      * separately.
+     *
+     * Returns the innov neuron_idx being added.
      */
-    void add_node_between(const Index_Type innovation_num,
-                          Genotype<Index_Type, FP_Type>& genome_innovs) {
+    inline Index_Type add_node_between(
+        const Index_Type innovation_num, Genotype<Index_Type, FP_Type>& genome_innovs,
+        const FP_Type weight_in = static_cast<FP_Type>(1),
+        const FP_Type weight_out = static_cast<FP_Type>(1), const bool disabled_in = false,
+        const bool disabled_out = false)
+    {
         PRINT_DEBUG_WARNINGS("Untested func");
         using AddNodeLookupIter = typename AddNodeLookup::iterator;
         AddNodeLookupIter previous_innov = add_node_innov_lookup.find(innovation_num);
+        Index_Type new_node_index;
         if (previous_innov == add_node_innov_lookup.end()) { // Not exist yet.
             // The newly added node will at the index of genotype_neurons.size().
-            Index_Type new_node_index = genotype_neurons.size();
+            new_node_index = genotype_neurons.size();
             // Add a new node to the records
             add_hidden_node();
             // incoming -> new node, new node -> outcoming
@@ -130,29 +141,35 @@ public:
             // with stack frame?
             const Index_Type incoming = innov_db[innovation_num].in_node;
             const Index_Type outcoming = innov_db[innovation_num].out_node;
-            add_connection_innovation(incoming, new_node_index, genome_innovs);
-            add_connection_innovation(new_node_index, outcoming, genome_innovs);
+            Index_Type innov_in
+                = add_connection_innovation(incoming, new_node_index, genome_innovs);
+            Index_Type innov_out
+                = add_connection_innovation(new_node_index, outcoming, genome_innovs);
             // add_node_innov_lookup[innovation_num] ={static_cast<Index_Type>(innov_db.size() - 2),
             //                    static_cast<Index_Type>(innov_db.size() - 1)};
-            std::array<Index_Type, 2> arr = {static_cast<Index_Type>(innov_db.size() - 2),
-                                             static_cast<Index_Type>(innov_db.size() - 1)};
+            std::array<Index_Type, 2> arr = {innov_in, innov_out};
             CAN_BE_OPTIMIZED_MSG(
                 "We can possibly optimize this by having a structure that "
                 "can emplace instead of creating this array and copying into lookup");
             add_node_innov_lookup[innovation_num] = (arr);
-        } else { // already existed.
+        }
+        else { // already existed.
             // const std::array<Index_Type,2> & innovs = previous_innov->second;
-            genome_innovs.emplace_s(previous_innov->second[0]);
-            genome_innovs.emplace_s(previous_innov->second[1]);
+            genome_innovs.emplace_s(previous_innov->second[0], weight_in, disabled_in);
+            genome_innovs.emplace_s(previous_innov->second[1], weight_out, disabled_out);
+            new_node_index = innov_db[previous_innov->second[0]].out_node;
         }
         // Disable the old connection because there is a new node added between it.
-        typename Genotype<Index_Type, FP_Type>::iterator old_connection_loc =
-            genome_innovs.locate(innovation_num);
-        ASSERT(!genome_innovs.qnot_exist(old_connection_loc, innovation_num),
-               "Attempting to add node between not-yet-existed connection innov.");
-        ASSERT(genome_innovs[old_connection_loc].is_enabled(),
-               "Attempting to add node between disabled connection innov.");
-        genome_innovs.enable_unsafe(old_connection_loc;)
+        typename Genotype<Index_Type, FP_Type>::iterator old_connection_loc
+            = genome_innovs.locate(innovation_num);
+        ASSERT(
+            !genome_innovs.qnot_exist(old_connection_loc, innovation_num),
+            "Attempting to add node between not-yet-existed connection innov.");
+        ASSERT(
+            genome_innovs[old_connection_loc].is_enabled(),
+            "Attempting to add node between disabled connection innov.");
+        genome_innovs.disable_unsafe(old_connection_loc);
+        return new_node_index;
     }
 
 public:
@@ -161,15 +178,19 @@ public:
     // const throughout a problem. @param connect_all determines whether all inputs should
     // be connected to outputs (which is on by classic NEAT, but off on Feature-Select (FS)
     // NEAT. This also adds the innovations to @param genome_innovs (FS-NEAT will not add).
-    InnovationDatabase(const Index_Type n_inputs, const Index_Type n_outputs,
-                       Genotype<Index_Type, FP_Type>& genome_innovs, const bool connect_all = true,
-                       const Index_Type n_biases = 1)
-        : innov_db(), genotype_neurons(), add_node_innov_lookup(),
-          add_link_innov_lookup(), type_start{0, n_inputs, n_inputs + n_biases,
-                                              n_inputs + n_biases + n_outputs} {
+    InnovationDatabase(
+        const Index_Type n_inputs, const Index_Type n_outputs,
+        Genotype<Index_Type, FP_Type>& genome_innovs, const bool connect_all = true,
+        const Index_Type n_biases = 1) :
+        innov_db(),
+        genotype_neurons(), add_node_innov_lookup(),
+        add_link_innov_lookup(), type_start{0, n_inputs, n_inputs + n_biases,
+                                            n_inputs + n_biases + n_outputs}
+    {
         // input, bias, output
-        ASSERT(n_inputs > 0 && n_outputs > 0, "Attempting to make an innovation database with "
-                                              "non-positive integer.");
+        ASSERT(
+            n_inputs > 0 && n_outputs > 0, "Attempting to make an innovation database with "
+                                           "non-positive integer.");
         // for (int i = 0; i < n_inputs; i++) {
         //    add_node(Neuron_Type::INPUT);
         //}
@@ -199,14 +220,17 @@ public:
         }
     }
     // ========================= DEFAULT CTOR ============================
-    InnovationDatabase()
-        : innov_db(), genotype_neurons(), add_node_innov_lookup(), add_link_innov_lookup(),
-          type_start() {}
+    InnovationDatabase() :
+        innov_db(), genotype_neurons(), add_node_innov_lookup(), add_link_innov_lookup(),
+        type_start()
+    {
+    }
     /*
      * Returns the genotypic neuron at @param neuron_idx stored in the contiguous
      * neuron database.
      */
-    GenomeNeuron& neuron_at(const Index_Type neuron_idx) {
+    GenomeNeuron& neuron_at(const Index_Type neuron_idx)
+    {
         // Alternative: do ifs with type_start.
         return this->genotype_neurons[neuron_idx];
     }
@@ -214,7 +238,8 @@ public:
      * Returns the neuron type at @param neuron_idx stored in the contiguous
      * neuron database.
      */
-    const Neuron_Type& neurtype_at(const Index_Type neuron_idx) {
+    const Neuron_Type& neurtype_at(const Index_Type neuron_idx)
+    {
         // Alternative: do ifs with type_start.
         return this->genotype_neurons[neuron_idx].type;
     }
@@ -222,14 +247,16 @@ public:
      * Returns the innovation info at @param innov_idx stored in the contiguous
      * innovation database.
      */
-    InnovationInfo<Index_Type>& innov_at(const Index_Type innov_idx) {
+    InnovationInfo<Index_Type>& innov_at(const Index_Type innov_idx)
+    {
         return this->innov_db[neuron_idx];
     }
     /*
      * Returns the innovation info at @param innov_idx stored in the contiguous
      * innovation database.
      */
-    InnovationInfo<Index_Type>& innov_at(const InnovationLink<Index_Type, FP_Type> innov_link) {
+    InnovationInfo<Index_Type>& innov_at(const InnovationLink<Index_Type, FP_Type> innov_link)
+    {
         return this->innov_db[innov_link.innovation_number()];
     }
     // Helper functions later for implementation.

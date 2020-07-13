@@ -1,6 +1,7 @@
 #pragma once
 template <bool threaded, uint64_t time_out, typename ChronoType>
-int Common::KeyboardListener<threaded, time_out, ChronoType>::get_char() {
+int Common::KeyboardListener<threaded, time_out, ChronoType>::get_char()
+{
     if (time_out == 0) {
         // Block program
         return _getch();
@@ -29,9 +30,7 @@ private:
 
 public:
     static void exit_synchronously();
-    static inline int get_key() {
-        return get_char();
-    }
+    static inline int get_key() { return get_char(); }
     static std::string get_cin_line(const std::string& default_val);
 
 protected:
@@ -48,7 +47,8 @@ template <uint64_t time_out, typename ChronoType>
 std::thread Common::KeyboardListener<true, time_out, ChronoType>::input_thr = std::thread();
 
 template <uint64_t time_out, typename ChronoType>
-void Common::KeyboardListener<true, time_out, ChronoType>::exit_synchronously() {
+void Common::KeyboardListener<true, time_out, ChronoType>::exit_synchronously()
+{
     exit = true;
     initialized = false;
     if (input_thr.joinable()) {
@@ -57,7 +57,8 @@ void Common::KeyboardListener<true, time_out, ChronoType>::exit_synchronously() 
 }
 
 template <uint64_t time_out, typename ChronoType>
-int Common::KeyboardListener<true, time_out, ChronoType>::get_char() {
+int Common::KeyboardListener<true, time_out, ChronoType>::get_char()
+{
     static InputBufferQueue input_buffer;
     if (!initialized) {
         // Create a thread that keep on adding to the buffer queue.
@@ -67,7 +68,8 @@ int Common::KeyboardListener<true, time_out, ChronoType>::get_char() {
                     // The thread just blocks itself until it gets
                     // an input. (It is unclear if the thread sleeps or not).
                     input_buffer.push(_getch());
-                } else {
+                }
+                else {
                     // Just sleep until the next update comes
                     static const auto sleep_dur = ChronoType(time_out);
                     std::this_thread::sleep_for(sleep_dur);
@@ -92,16 +94,25 @@ int Common::KeyboardListener<true, time_out, ChronoType>::get_char() {
 
 template <bool threaded, uint64_t timeout, typename ChronoType>
 std::string Common::KeyboardListener<threaded, timeout, ChronoType>::get_cin_line(
-    const std::string& default_val) {
+    const std::string& default_val)
+{
     std::string retval;
     std::thread wait_thread = std::thread([&]() {
         // Wait some seconds
         auto unpause_timepoint = Common::GameClock::Clock::now();
         unpause_timepoint += ChronoType(timeout);
-        // std::cout << "Time out: " << timeout << std::endl;
+// std::cout << "Time out: " << timeout << std::endl;
+// Wait until the end of unpnause_timepoint or until the user typed something
+// in std::cin
+#ifdef DEBUG_DEFINED
+        int last = timeout;
+#endif
         do {
             // std::cout << "update" << std::endl;
             // std::this_thread::yield();
+            UNIMPLEMENTED_FEATURE_MSG(
+                "Replace std::cin.peek() with platform-dependent non-blocking check to whether "
+                "user pressed ENTER after writing their usernames.");
             if (std::cin.peek() != EOF) {
                 break;
             }
@@ -118,6 +129,7 @@ std::string Common::KeyboardListener<threaded, timeout, ChronoType>::get_cin_lin
 
 template <uint64_t timeout, typename ChronoType>
 std::string Common::KeyboardListener<true, timeout, ChronoType>::get_cin_line(
-    const std::string& default_val) {
+    const std::string& default_val)
+{
     return KeyboardListener<true, timeout, ChronoType>::get_cin_line(default_val);
 }

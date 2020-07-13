@@ -131,8 +131,10 @@ inline void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::calculate_this_outp
 #endif
     }
     // Apply the sigmoid function
-    const FP_Type& response = get_vertex(vert_idx).response;
-    output = Common::ZMath::sigmoid(sum, response);
+    Vertex v = get_vertex(vert_idx);
+    const FP_Type& response = v.response;
+    // output = Common::ZMath::sigmoid(sum, response);
+    output = v.activation(sum, response);
 #ifndef NEURAL_NDEBUG
     std::cout << "Index " << vert_idx << ": Calculate_output outputs: " << Common::ryu_d2s(output)
               << std::endl;
@@ -207,7 +209,6 @@ void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::calculate_outputs(
     }
 }
 template <typename FP_Type, typename Neuron_Type, typename Index_Type>
-
 void VolatileGraph<FP_Type, Neuron_Type, Index_Type>::append_str(std::string& str2append) const {
     //{
     str2append.append("Neurons:\n");

@@ -149,7 +149,11 @@ public:
         //ASSERT(retval.weight * std::numeric_limits<FP_Type>::min() == 0, "disabled link does not give 0 after min multiplication");
         return retval;
     }
-
+    inline NLink& toggle_link(const Index_Type link_idx) {
+        NLink retval = this->graph.get_edge(link_idx);
+        this->graph.toggle_edge(retval);
+        return retval;
+    }
 };
 
 template <typename FP_Type = double>

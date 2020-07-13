@@ -1,18 +1,21 @@
 #include "string_manip.h"
 
-std::string Common::ryu_d2s(const double& d) {
-    static char arr[Common::RYU_BUFFER_SIZE];
+std::string Common::ryu_d2s(const double& d)
+{
+    static char arr[ryu_buffer<double>()];
     d2s_buffered(d, arr);
     std::string retval = std::string(arr);
     return retval;
 }
 
-std::string Common::precise_to_string(double d) {
+std::string Common::precise_to_string(double d)
+{
     std::ostringstream stream;
     stream << std::setprecision(std::numeric_limits<double>::max_digits10) << d;
     return stream.str();
 }
-double Common::crack_atof(const char* num) {
+double Common::crack_atof(const char* num)
+{
     if (!num || !*num) {
         return 0;
     }
@@ -27,22 +30,26 @@ double Common::crack_atof(const char* num) {
     if (*num == '-') {
         ++num;
         sign = -1;
-    } else if (*num == '+') {
+    }
+    else if (*num == '+') {
         ++num;
     }
 
     while (*num != '\0') {
         if (*num >= '0' && *num <= '9') {
             integerPart = integerPart * 10 + (*num - '0');
-        } else if (*num == '.') {
+        }
+        else if (*num == '.') {
             hasFraction = true;
             ++num;
             break;
-        } else if (*num == 'e') {
+        }
+        else if (*num == 'e') {
             hasExpo = true;
             ++num;
             break;
-        } else {
+        }
+        else {
             return sign * integerPart;
         }
         ++num;
@@ -55,11 +62,13 @@ double Common::crack_atof(const char* num) {
             if (*num >= '0' && *num <= '9') {
                 fractionPart += fractionExpo * (*num - '0');
                 fractionExpo *= 0.1;
-            } else if (*num == 'e') {
+            }
+            else if (*num == 'e') {
                 hasExpo = true;
                 ++num;
                 break;
-            } else {
+            }
+            else {
                 return sign * (integerPart + fractionPart);
             }
             ++num;
@@ -73,7 +82,8 @@ double Common::crack_atof(const char* num) {
         if (*num == '-') {
             expSign = -1;
             ++num;
-        } else if (*num == '+') {
+        }
+        else if (*num == '+') {
             ++num;
         }
 
@@ -89,7 +99,8 @@ double Common::crack_atof(const char* num) {
     return sign * (integerPart + fractionPart) * expPart;
 }
 
-double Common::crack_atof(const char* num, const char* const end) {
+double Common::crack_atof(const char* num, const char* const end)
+{
     if (!num || !end || end <= num) {
         return 0;
     }
@@ -104,22 +115,26 @@ double Common::crack_atof(const char* num, const char* const end) {
     if (*num == '-') {
         ++num;
         sign = -1;
-    } else if (*num == '+') {
+    }
+    else if (*num == '+') {
         ++num;
     }
 
     while (num != end) {
         if (*num >= '0' && *num <= '9') {
             int_part = int_part * 10 + (*num - '0');
-        } else if (*num == '.') {
+        }
+        else if (*num == '.') {
             has_frac = true;
             ++num;
             break;
-        } else if (*num == 'e') {
+        }
+        else if (*num == 'e') {
             has_exp = true;
             ++num;
             break;
-        } else {
+        }
+        else {
             return sign * int_part;
         }
         ++num;
@@ -132,11 +147,13 @@ double Common::crack_atof(const char* num, const char* const end) {
             if (*num >= '0' && *num <= '9') {
                 frac_part += frac_exp * (*num - '0');
                 frac_exp *= 0.1;
-            } else if (*num == 'e') {
+            }
+            else if (*num == 'e') {
                 has_exp = true;
                 ++num;
                 break;
-            } else {
+            }
+            else {
                 return sign * (int_part + frac_part);
             }
             ++num;
@@ -150,7 +167,8 @@ double Common::crack_atof(const char* num, const char* const end) {
         if (*num == '-') {
             exp_sign = -1;
             ++num;
-        } else if (*num == '+') {
+        }
+        else if (*num == '+') {
             ++num;
         }
 
@@ -166,8 +184,24 @@ double Common::crack_atof(const char* num, const char* const end) {
     return sign * (int_part + frac_part) * exp_part;
 }
 
-std::vector<std::string> Common::split(const std::string& s, char delim) {
+std::vector<std::string> Common::split(const std::string& s, char delim)
+{
     std::vector<std::string> elems;
     split(s, delim, std::back_inserter(elems));
     return elems;
 }
+
+namespace Common {
+template <>
+int ryu_float_2_cstr(const double f, char* const buffer)
+{
+    return ryu_d2s_buffered_n(f, buffer);
+}
+template <>
+int ryu_float_2_cstr(const float f, char* const buffer)
+{
+    int retval = f2s_buffered_n(f, buffer);
+    buffer[retval] = '\0';
+    return retval;
+}
+} // namespace Common

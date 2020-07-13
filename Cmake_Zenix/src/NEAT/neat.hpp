@@ -6,6 +6,7 @@
 #include "innovation.hpp"
 #include "genotype.hpp"
 #include "innovation_database.hpp"
+#include "mutation.hpp"
 
 
 

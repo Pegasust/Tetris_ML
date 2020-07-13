@@ -36,7 +36,8 @@ namespace Tetris {
 /*
  * List of inputs supported by Tetris::GameModule.
  */
-enum GameInput : unsigned char {
+enum GameInput : unsigned char
+{
     NONE,
     DOWN,
     UP,
@@ -76,9 +77,7 @@ class InputCollection {
 protected:
     // A queue that needs to know its recently added element
     using Collection = std::deque<InputEntry>;
-    static inline bool str_entry_whitespace(const std::string& str) {
-        return str.length() <= 2;
-    }
+    static inline bool str_entry_whitespace(const std::string& str) { return str.length() <= 2; }
     // bool empty;
     // int count;
 
@@ -92,9 +91,7 @@ public:
      */
     InputCollection(const std::string& serialized_collection);
 
-    inline bool empty() {
-        return collection.empty();
-    }
+    inline bool empty() { return collection.empty(); }
     /*
      * The function takes in 2 args that are supposedly passed in to
      * the GameModule's update function. This method adds an entry to the
@@ -122,7 +119,8 @@ public:
      * Returns the amount of entries overwritten.
      */
     template <bool shrink = true>
-    size_t overwrite_entries(const std::string& serialized_collection) {
+    size_t overwrite_entries(const std::string& serialized_collection)
+    {
         size_t retval = overwrite_entries_no_shrink(serialized_collection);
         if (shrink) {
             collection.resize(retval);
